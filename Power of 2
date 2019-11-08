@@ -7,7 +7,18 @@ class Solution {
         return i==n;
     }
 }
---------------------------------------------------------------------
+---------------------------------------------------------------------------------
 if (n==0) return false;
         long x = (long) n;
-        return (x & (-x)) == x;
+        return (x & (-x)) == x; // binary numbers which are powers of 2 have only one 1 bit
+-------------------------------------------------------------------------------
+if (n==0) return false;
+        long x = (long) n;
+        return (x & (x-1)) ==0; //binary numbers which are powers of 2 have only one 1 bit
+------------------------------------------------------------------------------
+if(n==0) return false;
+        if(n==1) return true;
+        while(n %2 ==0){
+            n = n/2;
+        } return n==1;
+--------------------------------------------------------------------------------
