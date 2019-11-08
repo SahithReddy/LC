@@ -13,3 +13,8 @@ if (num==0) return false;
             num = num/4;
         } return num==1;
 ----------------------------------------------------------------------
+return (num>0) && ((num&(num-1))==0) && (num%3==1); Here a number which is power of 4 is power of 2 and leaves reminder 1 when divided by 3
+--------------------------------------------------------------------------
+return (num>0) && (Math.log(num)/Math.log(2) %2 ==0); Here log2x should be even number. As 4^a == X --> 2^2a = X --> 2a = log2^X
+--------------------------------------
+
