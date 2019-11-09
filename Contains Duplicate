@@ -1,0 +1,49 @@
+//HashMap
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashMap<Integer, Integer> duplicate = new HashMap<Integer, Integer>();
+            for(int i=0; i< nums.length; i++){
+                if(duplicate.containsKey(nums[i])){
+                    return true;
+                }
+                else duplicate.put(nums[i],i);
+            } return false;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------
+//HashSet
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        HashSet<Integer> duplicate = new HashSet<Integer>(nums.length);
+            for(int i=0; i< nums.length; i++){
+                if(duplicate.contains(nums[i])){
+                    return true;
+                }
+                else duplicate.add(nums[i]);
+            } return false;
+    }
+}
+--------------------------------------------------------------------------------------------------------------------
+// Most effiecient Solution - Sort and then compare with previous
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        int previous_number =0;
+        for(int i : nums){
+            if(nums.length==1) return false;
+            if (previous_number==i) return true;
+            previous_number=i;
+        } return false;
+    }
+}
+-------------------------------------------------------------------------------------------------------------
+// Above solution in a much more simple way
+class Solution {
+    public boolean containsDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for(int i=0; i< nums.length-1; i++){
+            if(nums[i]==nums[i+1]) return true;
+        } return false;
+    }
+}
+-----------------------------------------------------------------------------------------------------------------
