@@ -43,3 +43,29 @@ public class Solution {
     }
 }
 ---------------------------------------------------------------------------------------------------
+//Same as the above one but with different jargon
+public int maxProduct(int[] A) {
+    if (A.length == 0) {
+        return 0;
+    }
+    
+    int maxherepre = A[0];
+    int minherepre = A[0];
+    int maxsofar = A[0];
+    int maxhere, minhere;
+    
+    for (int i = 1; i < A.length; i++) {
+        maxhere = Math.max(Math.max(maxherepre * A[i], minherepre * A[i]), A[i]);
+        minhere = Math.min(Math.min(maxherepre * A[i], minherepre * A[i]), A[i]);
+        maxsofar = Math.max(maxhere, maxsofar);
+        maxherepre = maxhere;
+        minherepre = minhere;
+    }
+    return maxsofar;
+}
+Note:
+There's no need to use O(n) space, as all that you need is a minhere and maxhere. (local max and local min), 
+then you can get maxsofar (which is global max) from them.
+
+There's a chapter in Programming Pearls 2 that discussed the MaxSubArray problem, the idea is similar.
+--------------------------------------------------------------------------------------------------------
