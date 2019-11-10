@@ -43,7 +43,7 @@ public class Solution {
     }
 }
 ---------------------------------------------------------------------------------------------------
-//Same as the above one but with different jargon
+//Same as the above one but with different jargon and without temp variable
 public int maxProduct(int[] A) {
     if (A.length == 0) {
         return 0;
