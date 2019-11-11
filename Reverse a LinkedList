@@ -1,0 +1,27 @@
+Recursive Method
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        if(head == null || head.next == null) return head;
+        ListNode p = reverseList(head.next);
+        head.next.next=head;
+        head.next = null;
+        return p;
+    }
+}
+
+https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
+------------------------------------------------------------------------------------------------------------
+Iterative Method
+class Solution {
+    public ListNode reverseList(ListNode head) {
+        ListNode prev = null;
+        while(head!=null){
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        } return prev; 
+    }
+}
+https://www.youtube.com/watch?v=O0By4Zq0OFc
+----------------------------------------------------------------------------------------------------------------
