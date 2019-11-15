@@ -74,6 +74,36 @@ class Solution {
     }
 }
     }
+-----------------------------------------------------------------------------------------------------------------
+Nice solution!
+Another java version using heap to record max 3 and min 2. FYI
+
+class Solution {
+    public int maximumProduct(int[] nums) {
+        PriorityQueue<Integer> poheap = new PriorityQueue<>();
+        PriorityQueue<Integer> neheap = new PriorityQueue<>(Collections.reverseOrder());
+        for (int num : nums) {
+            poheap.offer(num);
+            neheap.offer(num);
+            if (poheap.size() > 3) {
+                poheap.poll();
+            }
+            if (neheap.size() > 2) {
+                neheap.poll();
+            }
+        }
+        int c1 = 1;
+        int max = 0;
+        while (!poheap.isEmpty()) {
+            max = poheap.poll();
+            c1 *= max;
+        }
+        while (!neheap.isEmpty()) {
+            max *= neheap.poll();
+        }
+        return Math.max(c1, max);
+    }
+}
 --------------------------------------------------------------------------------------------------------------------------------
 This is the first solution that can be used to solve the problem, Maximum Prodoct of K Numbers.
 Hope it can help others when encountering a follow up question.
