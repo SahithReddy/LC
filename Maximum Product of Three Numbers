@@ -74,3 +74,33 @@ class Solution {
     }
 }
     }
+--------------------------------------------------------------------------------------------------------------------------------
+This is the first solution that can be used to solve the problem, Maximum Prodoct of K Numbers.
+Hope it can help others when encountering a follow up question.
+
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        // if signs of the minimum and maximum number are the same, simply return this.
+        // Assume no overflow problem will occur.
+        if(nums[0]*nums[nums.length-1] >= 0) return nums[nums.length-1]*nums[nums.length-2]*nums[nums.length-3];
+        int l = 0, r = nums.length-1;
+        int product = 1;
+        // k = 3 in this case. But it should be extended to any number.
+        // if count is odd, we should take the rightmost number. Otherwise, we should take the maximum product by comparing
+        // the product of two leftmost elements and that of two rightmost elements.
+        int count = 3;
+        while(count > 0) {
+            if(count % 2 == 1) {
+                product *= nums[r--];
+            }
+            else {
+                if(nums[r]*nums[r-1] > nums[l]*nums[l+1])
+                    product *= nums[r--] * nums[r--];
+                else
+                    product *= nums[l++] * nums[l++];
+                count--;
+            }
+            count--;
+        }
+        return product;
+    }
