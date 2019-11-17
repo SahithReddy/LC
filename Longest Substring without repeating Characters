@@ -27,3 +27,51 @@ class Solution {
     }
 }
 ---------------------------------------------------------------------------------------------------
+// Did not understood this
+The idea is use a hash set to track the longest substring without repeating characters so far, use a fast pointer 
+j to see if character j is in the hash set or not, if not, great, add it to the hash set, move j forward and update 
+the max length, otherwise, delete from the head by using a slow pointer i until we can put character j to the hash set.
+
+public int lengthOfLongestSubstring(String s) {
+    int i = 0, j = 0, max = 0;
+    Set<Character> set = new HashSet<>();
+    
+    while (j < s.length()) {
+        if (!set.contains(s.charAt(j))) {
+            set.add(s.charAt(j++)); //Why j++? when there is no first element at j why adding j++ instead of j? Am I missing somehting?
+            max = Math.max(max, set.size());
+        } else {
+            set.remove(s.charAt(i++));
+        }
+    }
+    
+    return max;
+}
+
+-------------------------------------------------------------------------------------------------------------------
+// Did not understood this
+The previous implements all have no assumption on the charset of the string s.
+
+If we know that the charset is rather small, we can replace the Map with an integer array as direct access table.
+
+Commonly used tables are:
+
+int[26] for Letters 'a' - 'z' or 'A' - 'Z'
+int[128] for ASCII
+int[256] for Extended ASCII
+
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int n = s.length(), ans = 0;
+        int[] index = new int[128]; // current index of character
+        // try to extend the range [i, j]
+        for (int j = 0, i = 0; j < n; j++) {
+            i = Math.max(index[s.charAt(j)], i);
+            ans = Math.max(ans, j - i + 1);
+            index[s.charAt(j)] = j + 1;
+        }
+        return ans;
+    }
+}
+---------------------------------------------------------------------
