@@ -9,6 +9,19 @@ The reason is that if s[j]s[j] have a duplicate in the range [i, j)[i,j) with in
  ] and let ii to be j' + 1j 
 ′
  +1 directly.
+ 
+ 
+ //HashMap look up is O(1) only if the keys are amortized and we use consistent hashing. In worst case, a HashMap has an O(n) 
+ lookup. But for simple keys like individual character it is O(1) anyway as the hash is always unique for characters ASCII 
+ value.
+
+Also, by default hashmap starts with size 16 and keeps doubling its size in case the map is loaded by more than 75% of its 
+capacity. So, if we have a character set of many characters then we are unnecessarily doing some extra computation for 
+resizing the hashmap.
+
+One solution is that we instantiate hashMap with capacity equals the number of characters in the character set.
+ 
+ 
 
 class Solution {
     public int lengthOfLongestSubstring(String s) {
