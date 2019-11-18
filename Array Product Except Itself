@@ -23,6 +23,7 @@ class Solution {
 }
 ----------------------------------------------------------------------------------------------------------
 // O(1) space as used only one array apart form the the answer array
+// Follow the below one. It is much simple.
 class Solution {
     public int[] productExceptSelf(int[] nums) {
         int length = nums.length;
