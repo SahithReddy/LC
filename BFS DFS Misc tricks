@@ -1,0 +1,66 @@
+Many comments here are questioning the space complexity of the iterative approach, and I agree this should be reviewed 
+by the experts. I believe the space complexity is dependent on using an iterative DFS (stack) vs BFS (queue). Here’s what 
+I think, with code samples/test cases below:
+
+BFS
+Fully Skewed Tree – O(1)
+
+Size of queue is never greater than 3 regardless of N
+Perfectly Balanced Tree – O(N)
+
+If tree height is 5, there are 16 nodes. The last level of the BFS is when all 8 leaf nodes’ children are being checked, 
+making its size equal to N.
+DFS
+Fully Skewed Tree – O(N) or O(H)
+
+Stack processes all left children until the leaf node, at which point all right children in the tree are in the stack 
+making it size N.
+Perfectly Balanced Tree – O(logN) or O(H)
+
+Size of stack never passes height of the tree
+Code Samples and Test Cases:
+
+    # Iterative DFS
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        stack = [(p, q)]
+        max_stack_size = 0
+        while stack:
+            max_stack_size = max(max_stack_size, len(stack))
+            p, q = stack.pop()
+            if not p and not q:
+                continue
+            elif (not p or not q) or (p.val != q.val):
+                return False
+            stack.extend([(q.right, p.right), (q.left, p.left)])
+        print(max_stack_size)
+        return True
+    
+    # Iterative BFS
+    def isSameTree(self, p: TreeNode, q: TreeNode) -> bool:
+        queue = collections.deque([(p, q)])
+        max_queue_size = 0
+        while queue:
+            max_queue_size = max(max_queue_size, len(queue))
+            p, q = queue.popleft()
+            if not p and not q:
+                continue
+            elif (not p or not q) or (p.val != q.val):
+                return False
+            queue.extend([(q.left, p.left), (q.right, p.right)])
+        print(max_queue_size)
+        return True
+
+# Fully Skewed
+[1,2,null,3,null,4,null,5,null,6,null,7,null,8,null,9,null,10,null,11,null,12,null,13,null,14,null,15]
+[1,2,null,3,null,4,null,5,null,6,null,7,null,8,null,9,null,10,null,11,null,12,null,13,null,14,null,15]
+# Results:
+# max_stack_size == 16
+# max_queue_size == 3
+
+
+# Perfectly Balanced
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
+# Results:
+# max_stack_size == 5
+# max_queue_size == 16
