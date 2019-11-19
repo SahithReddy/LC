@@ -2,6 +2,7 @@
 
 Height of a tree - No of edges in the longest path from the root node to the leaf node.
 Height of a node - No of edges in the longest path from that particular node to the leaf node.
+Height of a tree with one node is 0.
 
 class Solution {
     public int maxDepth(TreeNode root) {
