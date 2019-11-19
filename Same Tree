@@ -103,3 +103,5 @@ public boolean isSameTree(TreeNode p, TreeNode q) {
         return true;
     }
 ----------------------------------------------------------------------------------------------------------------------
+Both of the above are here in the first 2 comments:
+https://leetcode.com/problems/same-tree/discuss/32733/Simple-java-solution-both-recurison-and-iteration
