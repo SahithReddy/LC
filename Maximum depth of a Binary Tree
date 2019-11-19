@@ -21,3 +21,11 @@ class Solution {
     }
 }
 -----------------------------------------------------------------------------------------
+// See these Later. Involves iterative, BFS and DFS which I'm not aware of now.
+https://leetcode.com/problems/maximum-depth-of-binary-tree/discuss/34195/Two-Java-Iterative-solution-DFS-and-BFS
+
+-----------------------------------------------------------------------------------------
+
+https://leetcode.com/problems/maximum-depth-of-binary-tree/discuss/34238/Clean-Java-Iterative-Solution
+
+-----------------------------------------------------------------------------------------
