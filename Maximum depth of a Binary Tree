@@ -1,8 +1,12 @@
-// MAximujm Depth or Height is same. We just use a different jargon.
+// MAXIMUM DEPTH OR HEIGHT is same. We just use a different jargon.
 
 Height of a tree - No of edges in the longest path from the root node to the leaf node.
 Height of a node - No of edges in the longest path from that particular node to the leaf node.
 Height of a tree with one node is 0.
+
+
+DEPTH of a node - No of edges in the path from the root to that node. 
+
 
 class Solution {
     public int maxDepth(TreeNode root) {
