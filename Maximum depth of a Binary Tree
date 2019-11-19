@@ -1,3 +1,5 @@
+// MAximujm Depth or Height is same. We just use a different jargon.
+
 class Solution {
     public int maxDepth(TreeNode root) {
         if(root==null){
