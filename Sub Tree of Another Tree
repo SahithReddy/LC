@@ -14,4 +14,7 @@ class Solution {
         return (isSubtree(s.left, t) || isSubtree(s.right,t));
     }
 }
+
+Runtime is O(|n| * |m|)
+Here n nodes are present in given tree s and m nodes are present in given tree t.
 ----------------------------------------------------------------------------------------------------------------------
