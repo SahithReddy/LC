@@ -1,0 +1,17 @@
+// This one is using isSameTree function from other question, for each node(assuming it as root node) 
+this algo was applying isSameTree function and then go on to checking left and right trees recursively applying isSubTree function
+
+class Solution {
+    public boolean isSameTree(TreeNode a, TreeNode b){
+        if(a==null && b==null) return true;
+        if(a==null || b==null) return false;
+        return (a.val==b.val && isSameTree(a.left, b.left) && isSameTree(a.right, b.right));
+    }
+    public boolean isSubtree(TreeNode s, TreeNode t) {
+        if(s==null) return false;
+        if(t==null) return true;
+        if(isSameTree(s,t)) return true;
+        return (isSubtree(s.left, t) || isSubtree(s.right,t));
+    }
+}
+----------------------------------------------------------------------------------------------------------------------
