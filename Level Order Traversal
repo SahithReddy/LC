@@ -1,0 +1,37 @@
+// Recursion Easy
+
+Such a brilliant solution! To be more specific than stating it uses DFS, I would like to say that it implements 
+pre-order traversal to realize level-order traversal. Each time we add root.val into the list, and then look at 
+left and right child.
+
+class Solution {
+    
+    List<List<Integer>> result = new ArrayList<>();
+    
+    public void helper(TreeNode node, int level){
+        if(result.size() == level){
+            result.add(new ArrayList());
+        }
+        
+        result.get(level).add(node.val);
+        
+        if(node.left!=null){
+            helper(node.left, level+1);
+        }
+        
+        if(node.right!=null){
+            helper(node.right, level+1);
+        }
+    }
+    
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if(root==null) return result;
+        helper(root,0);
+        return result;
+    }
+}
+
+The BELOW LINK HAS SOLUTIONS FOR 5 MORE SIMILAR PROBLEMS LIKE THIS FOLLOWING THE SAME PATTERN. PLEASE HAVE A LOOK, IT WILL COBVER MANY.
+https://leetcode.com/problems/binary-tree-level-order-traversal/discuss/114449/A-general-approach-to-level-order-traversal-questions-in-Java
+---------------------------------------------------------------------------------------
+//Iterative
