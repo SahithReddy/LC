@@ -30,3 +30,31 @@ public boolean isValidBST(TreeNode root) {
     return help(root, null, null);
 }
 -------------------------------------------------------------------------------------------------------------------
+//ITERATVE
+The best solution for iterative. With this we can solve 3 more questions. Understand
+
+https://leetcode.com/problems/validate-binary-search-tree/discuss/32112/Learn-one-iterative-inorder-traversal-apply-it-to-multiple-tree-questions-(Java-Solution)
+
+I add another case to above: https://leetcode.com/problems/sum-of-left-leaves/
+
+    public int sumOfLeftLeaves(TreeNode root) {
+        int res = 0;
+        if (root == null) return res;
+        Stack<TreeNode> stack = new Stack<>();        
+        while (root != null || !stack.isEmpty()) {
+            while (root != null) {
+                stack.push(root);
+                root = root.right;
+            }
+            root = stack.pop();
+            root = root.left;
+            if (root != null && root.left == null && root.right == null) res += root.val;
+        }
+        return res;
+    }
+
+Explanation: https://www.youtube.com/watch?v=WZwNoTm_9d8
+
+https://www.youtube.com/watch?v=nzmtCFNae9k
+
+All orders related trick to solve theroitically: https://www.youtube.com/watch?v=eL8NZ-21lqI                                              
