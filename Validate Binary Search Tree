@@ -1,0 +1,32 @@
+// RECURSIVE
+THE BEST AND EASY ONE
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+        
+        public boolean isBST(TreeNode n, long min, long max){
+            if(n==null) return true;
+            if(n.val<=min || n.val>=max) return false;
+            return isBST(n.left, min, n.val) && isBST(n.right, n.val, max);
+        }
+    
+}
+
+https://leetcode.com/problems/validate-binary-search-tree/discuss/32109/My-simple-Java-solution-in-3-lines
+
+https://www.youtube.com/watch?v=MILxfAbIhrE NICE EXPLANATION
+-------------------------------------------------------------------------------------------------------------------
+We can use Object Integer and null pointer to avoid the corner cases (when node has value Integer.MIN_VALUE or 
+Integer.MAX_VALUE ).
+
+private boolean help(TreeNode p, Integer low, Integer high) {
+    if (p == null) return true;
+    return (low == null || p.val > low) && (high == null || p.val < high) && help(p.left, low, p.val) && help(p.right, p.val, high);
+}
+
+public boolean isValidBST(TreeNode root) {
+    return help(root, null, null);
+}
+-------------------------------------------------------------------------------------------------------------------
