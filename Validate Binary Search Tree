@@ -53,8 +53,12 @@ I add another case to above: https://leetcode.com/problems/sum-of-left-leaves/
         return res;
     }
 
-Explanation: https://www.youtube.com/watch?v=WZwNoTm_9d8
 
-https://www.youtube.com/watch?v=nzmtCFNae9k
 
-All orders related trick to solve theroitically: https://www.youtube.com/watch?v=eL8NZ-21lqI                                              
+All orders related trick to solve theroitically(freefall & cutting off leaves): https://www.youtube.com/watch?v=eL8NZ-21lqI 
+
+https://www.youtube.com/watch?v=nzmtCFNae9k TUshar Roy Inorder Traversal explanation with diagrams
+
+Explanation: https://www.youtube.com/watch?v=WZwNoTm_9d8 Nick White Inorder Traversal
+
+                                             
