@@ -31,3 +31,17 @@ nums[i] in the current set, or we exclude nums[i]. This array nums is of size n 
 We need to create a copy of the current set because we reuse the original one to build all the valid subsets. This copy 
 costs O(n) and it is performed at each call of the recursive function, which is called 2^n times as mentioned in above. 
 So total time complexity is O(n x 2^n)
+
+For space complexity:
+
+For recursion: max depth the call stack is going to reach at any time is length of nums, n.
+
+For output: we're creating 2^n subsets where the average set size is n/2 (for each A[i], half of the subsets will 
+include A[i], half won't) = n/2 * 2^n = O(n * 2^n). Or in a different way, the total output size is going to be the 
+summation of the binomial coefficients, the total number of r-combinations we can make at each r size * r elements 
+from 0..n which evaluates to n*2^n. More informally, at size 0, how many empty sets can we make from n elements, 
+then at size 1 how many subsets of 1 elements can we make from n elements, at size 2, how many subsets of 2 elements 
+can we make ... at size n, etc.
+
+So total is call stack of n + output of n2^n = O(n2^n). If we don't include the output (eg if just asked to print in an 
+interview) then just O(n) of course.
