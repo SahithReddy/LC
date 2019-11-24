@@ -22,4 +22,13 @@ class Solution {
         }
     
 }
+
+
+The recursive function is called 2^n times. Because we have 2 choices at each iteration in nums array. Either we include 
+nums[i] in the current set, or we exclude nums[i]. This array nums is of size n = number of elements in nums.
+
+
+We need to create a copy of the current set because we reuse the original one to build all the valid subsets. This copy 
+costs O(n) and it is performed at each call of the recursive function, which is called 2^n times as mentioned in above. 
+So total time complexity is O(n x 2^n)
 --------------------------------------------------------------------------------------------------
