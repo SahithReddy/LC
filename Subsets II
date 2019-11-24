@@ -24,6 +24,9 @@ class Solution {
     
 }
 
+T=O(2^n) as total 2^n possible subsets can be there for n items.
+S=O(n+n)=O(n) is the (maximum depth of recursion tree+ 'num' list space)
+
 The recursive function is called 2^n times. Because we have 2 choices at each iteration in nums array. Either we include 
 nums[i] in the current set, or we exclude nums[i]. This array nums is of size n = number of elements in nums.
 
