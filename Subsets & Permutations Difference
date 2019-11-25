@@ -1,0 +1,109 @@
+There are many good posts explaining the backtrack idea of these two topics.
+
+The subset and permutation problems all have similar code. However, I did not find one that explains the difference between them. And despite the fact that they have similar code, actually they are very different.
+
+subset I, II
+My codes are similar to many others: push one element into the vector and then recursively call the function. After that pop that element out.
+Explanation: The subset problem is all about choice, whether you want certain element inside the vector or not. For example, [1, 2, 3], starting with pos = 0. At pos = 0, you push 1 into temp, then recursively call the function. Then this reclusive call is a "crossroad". Inside the call (with all other calls inside), you have the "1" chosen and every vector you produce will begin with 1. When the call returns (ie. you pop 1 out), you are on the other road of the crossroad, which does not contain 1. These are just the first "choice" you are faced. And after that you face with other similar choices.
+class Solution {
+    void helper(vector<vector<int>>& res, vector<int>& temp, vector<int>& nums, int pos){
+        res.push_back(temp);
+
+        for(int i=pos; i<nums.size(); ++i){
+            temp.push_back(nums[i]);
+            helper(res, temp, nums, i + 1);
+            temp.pop_back();
+        }
+
+    }
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> temp;
+        helper(res, temp, nums, 0);
+        return res;
+    }
+};
+subset II : Eliminate the dup with sort and then the condition: do not put this element inside, if it has same element before && the former dup has not been put into it. Because otherwise, you better off put the former dup into the vector instead of this (latter dup) one.
+
+class Solution {
+    void helper(vector<vector<int>>& res, vector<int>& temp, vector<int>& nums, int pos){
+        res.push_back(temp);
+        
+        for(int i=pos; i<nums.size(); ++i){
+            if(i != pos && nums[i] == nums[i - 1]) continue;
+            temp.push_back(nums[i]);
+            helper(res, temp, nums, i + 1);
+            temp.pop_back();
+            
+        }
+    }
+    
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<int> temp;
+        sort(nums.begin(), nums.end());
+        helper(res, temp, nums, 0);
+        return res;
+    }
+};
+Permutation I, II
+Permutation I is a very typical problem.
+Note: the pos here is different with the pos in subset. The pos in subset is more like choice in front of crossroad while the pos in permutation is the "digit" you are considering. In other words, you you consider the elements one by one: which one should be the first? which one should be the second? ...and so on. The pos is just the "first", "second"...
+
+When you consider the nth element, you swap the nth with element from nth to the last one, so that every element after that will have a chance to stay in the nth position. You recursively call, after each case.
+
+class Solution {
+    void helper(vector<vector<int>>& res, vector<int>& nums, int pos){
+        if(nums.size() == pos){
+            res.push_back(nums);
+            return ;
+        }
+        for(int i=pos; i < nums.size(); ++i){
+            swap(nums[i], nums[pos]);
+            helper(res, nums, pos + 1);
+            swap(nums[i], nums[pos]);
+        }
+    }
+    
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        helper(res, nums, 0);
+        return res;
+    }
+};
+permutation II
+I prefer to use the unordered_map to solve the dup problem. How does it solve the problem? because it treats all the dup as one element with several copies.
+
+For example, [1, 1, 2], when you iterate, in the same "level", the 1 will only be put once. We only put the other 1 into the vector in the recursive call in next levels.
+
+class Solution {
+    void helper(unordered_map<int, int>& bar, vector<int>& temp, vector<vector<int>>& res, int n){
+        if(temp.size() == n){
+            res.push_back(temp);
+            return ;
+        }
+        for(auto &i : bar){
+            if(i.second <= 0) continue;
+            i.second --;
+            temp.push_back(i.first);
+            helper(bar, temp, res, n);
+            temp.pop_back();
+            i.second ++;
+        }
+    }
+    
+public:
+    vector<vector<int>> permuteUnique(vector<int>& nums) {
+        vector<vector<int>> res;
+        unordered_map<int, int> bar;
+        for(int i : nums){
+            bar[i] ++;
+        }
+        vector<int> temp;
+        helper(bar, temp, res, nums.size());
+        return res;
+    }
+};
