@@ -30,3 +30,7 @@ class Solution {
 Refer this : https://changhaz.wordpress.com/2014/10/15/leetcode-find-minimum-in-rotated-sorted-array/
 -----------------------------------------------------------------------------------------------------
 
+You use while (start <= end) if you are returning the match from inside the loop.
+
+You use while (start < end) if you want to exit out of the loop first, and then use the result of start or end 
+to return the match.
