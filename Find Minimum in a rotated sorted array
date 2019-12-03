@@ -22,7 +22,7 @@ class Solution {
         
         
         while(start < end){
-            int mid = (start + end)/2; 
+            int mid = (start + end)/2; or int mid = start + (end - start)/2;
             if(nums[start] < nums[end]) return nums[start];            
             else if(nums[mid] >= nums[start]){
                 start = mid +1; // the mininum is in the right part
