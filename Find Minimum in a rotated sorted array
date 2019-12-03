@@ -45,7 +45,7 @@ would never be the same as mid, making right = mid will assure the interval is s
 (5) if nums[mid] > nums[right], minimum should be in the right part, so we are moving left. Since nums[mid] > nums[right],
 mid can't be the minimum, we can safely move left to mid + 1, which also assure the interval is shrinking
 -----------------------------------------------------------------------------------------------------
-
+When to use start<end and start<=end?
 You use while (start <= end) if you are returning the match from inside the loop.
 
 You use while (start < end) if you want to exit out of the loop first, and then use the result of start or end 
