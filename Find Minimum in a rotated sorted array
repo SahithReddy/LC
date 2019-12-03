@@ -14,20 +14,36 @@ class Solution {
         
         int start = 0;
         int end = nums.length-1;
+        // loop invariant: 1. low < high
+        //                 2. mid != high and thus A[mid] != A[high] (no duplicate exists)
+        //                 3. minimum is between [low, high]
+        // The proof that the loop will exit: after each iteration either the 'high' decreases
+        // or the 'low' increases, so the interval [low, high] will always shrink.
+        
         
         while(start < end){
             int mid = (start + end)/2; 
             if(nums[start] < nums[end]) return nums[start];            
             else if(nums[mid] >= nums[start]){
-                start = mid +1;
+                start = mid +1; // the mininum is in the right part
             }
-            else end = mid;
+            else end = mid; // the mininum is in the left part
         }
         return nums[start];
     }
 }
 
-Refer this : https://changhaz.wordpress.com/2014/10/15/leetcode-find-minimum-in-rotated-sorted-array/
+Really the BEST solution!! Binary search always bothers me, thanks for sharing. Followings are my understanding from the 
+comments as others reference.
+
+(1) loop is left < right, which means inside the loop, left always < right
+(2 ) since we use round up for mid, and left < right from (1), right would never be the same as mid
+(3) Therefore, we compare mid with right, since they will never be the same from (2)
+(4) if nums[mid] < nums[right], we will know the minimum should be in the left part, so we are moving right.
+We can always make right = mid while we don't have to worry the loop will not ends. Since from (2), we know right 
+would never be the same as mid, making right = mid will assure the interval is shrinking.
+(5) if nums[mid] > nums[right], minimum should be in the right part, so we are moving left. Since nums[mid] > nums[right],
+mid can't be the minimum, we can safely move left to mid + 1, which also assure the interval is shrinking
 -----------------------------------------------------------------------------------------------------
 
 You use while (start <= end) if you are returning the match from inside the loop.
