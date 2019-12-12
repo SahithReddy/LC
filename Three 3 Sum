@@ -1,0 +1,34 @@
+// Explanation is here https://www.youtube.com/watch?v=qJSPYnS35SE
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> answer = new LinkedList();
+        for(int i=0;i<nums.length;i++){
+            if(i == 0 || nums[i]!=nums[i-1]){
+                int front = i+1;
+                int back = nums.length-1;
+                int target = 0-nums[i];
+                
+                while(front<back){
+                    if(nums[front] + nums[back] == target){
+                        answer.add(Arrays.asList(nums[i],nums[front],nums[back]));
+                    while(front<back && nums[front]==nums[front+1]) front++;
+                    while(front<back && nums[back] ==nums[back-1]) back--;
+                    front++;
+                    back--;
+                    }
+                    else if(nums[front] + nums[back]>target){
+                        while(front<back && nums[back] ==nums[back-1]) back--;
+                        back--;
+                    }
+                    else {
+                        while(front<back && nums[front]==nums[front+1]) front++;
+                        front++;
+                    }
+                }
+            }
+        } return answer;
+    }
+}
+------------------------------------------------------------------------------------------------------------------
