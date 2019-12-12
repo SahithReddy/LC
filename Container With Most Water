@@ -1,0 +1,34 @@
+//This is my solution: o(n^2)
+
+class Solution {
+    public int maxArea(int[] height) {
+            int area=0;
+        for(int i=0; i<height.length-1;i++){
+            int j = i+1;
+            while(j<height.length){
+                area = Math.max(area,(Math.min(height[i],height[j])*(j-i)));
+                j++;
+            }
+            
+        } return area;
+    }
+}
+-----------------------------------------------------------------------------------------
+Better Solution:
+
+// https://leetcode.com/problems/container-with-most-water/solution/ -Official solution has good explanation
+// https://leetcode.com/problems/container-with-most-water/discuss/6100/Simple-and-clear-proofexplanation - better explanation
+
+public class Solution {
+    public int maxArea(int[] height) {
+        int maxarea = 0, l = 0, r = height.length - 1;
+        while (l < r) {
+            maxarea = Math.max(maxarea, Math.min(height[l], height[r]) * (r - l));
+            if (height[l] < height[r])
+                l++;
+            else
+                r--;
+        }
+        return maxarea;
+    }
+}
