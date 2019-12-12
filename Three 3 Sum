@@ -38,6 +38,8 @@ class Solution {
         } return answer;
     }
 }
+
+time O(n^2), space O(n)
 ------------------------------------------------------------------------------------------------------------------
 Below is the same solution but with small names and better to understand
 
