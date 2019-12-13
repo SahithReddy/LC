@@ -12,5 +12,25 @@ class Solution {
     }
 }
 
-Time : O(n) Space: O(1)
+Time : O(n) Space: O(n) - Character Array
+This code is creating a new character array to store s for easy indexing, which uses O(n) space,
 ------------------------------------------------------------------------------------------------------------
+public class Solution {
+    public boolean isPalindrome(String s) {
+        int start = 0;
+        int end = s.length()-1;
+        while(start<end){
+            if (!Character.isLetterOrDigit(s.charAt(start)))
+                start++;
+            else if (!Character.isLetterOrDigit(s.charAt(end)))
+                end--;
+            else if (Character.toLowerCase(s.charAt(start++)) != Character.toLowerCase(s.charAt(end--)))
+                return false;
+        }
+        return true;
+    }
+}
+Time : O(n) Space: O(1)
+does not create new space for arrays and leverages charAt() method to index s, so the original code space complexity is O(1).
+------------------------------------------------------------------------------------------------------------
+
