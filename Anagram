@@ -25,7 +25,11 @@ public boolean isAnagram(String s, String t) {
     Arrays.sort(str2);
     return Arrays.equals(str1, str2);
 }
+Time complexity : O(n \log n)O(nlogn). Assume that nn is the length of ss, sorting costs O(n \log n)O(nlogn) and comparing
+two strings costs O(n)O(n). Sorting time dominates and the overall time complexity is O(n \log n)O(nlogn).
 
+Space complexity : O(1)O(1). Space depends on the sorting implementation which, usually, costs O(1)O(1) auxiliary space 
+if heapsort is used.
 ----------------------------------------------------------------------------
 class Solution {
     public boolean isAnagram(String s, String t) {
