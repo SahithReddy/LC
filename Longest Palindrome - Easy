@@ -1,0 +1,35 @@
+class Solution {
+    public int longestPalindrome(String s) {
+        HashSet<Character> answer = new HashSet<Character>();
+        int count = 0;
+        for (int i=0; i<s.length();i++){
+            if(answer.contains(s.charAt(i))){
+                answer.remove(s.charAt(i));
+                    count++;
+            }
+            else answer.add(s.charAt(i));
+            
+        }
+        if(!answer.isEmpty()) return count*2 +1;
+        return count*2;
+    }
+}
+Time:O(n) Space: O(n) 
+--------------------------------------------------------------------------------------------------------------------
+// This is faster
+
+class Solution {
+    public int longestPalindrome(String s) {
+    int[] count = new int[128]; //128 ASCII character for all capital and small leters
+        int length = 0;
+        for(char c: s.toCharArray()){
+            if(++count[c] == 2){ //if twice found
+                length+=2;
+                count[c]=0; //again return to zero
+            }
+            
+        }
+        return (length==s.length()? length: length+1);
+    }
+}
+Time:O(n) Space: O(1) counter of length 128 
