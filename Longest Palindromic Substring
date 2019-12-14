@@ -8,6 +8,7 @@ public String longestPalindrome(String s) {
 		return s;
 	
     for (int i = 0; i < len-1; i++) {
+    	if (len - i < maxLen / 2) break; // Since this help skip the long tail in "aaaaaaaaaaaaaaaa..." test case.
      	extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
      	extendPalindrome(s, i, i+1); //assume even length.
     }
