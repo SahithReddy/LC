@@ -23,6 +23,19 @@ public class Codec {
     }
 }
 
+String indexOf(char ch, int strt ) : This method returns the index within this string of the first 
+occurrence of the specified character, starting the search at the specified index or -1, if the character does not occur.
+
+The java.lang.Integer.valueOf(String str) is an inbuilt method which is used to return an Integer object, 
+holding the value of the specified String str.
+
+Input: str = "65"
+Output: 65
+
+Input: str = "-452"
+Output: 452
+
+
 Excellent solution! I doubted about it as well in the beginning. It turned out it is 100% correct. 
 It does not matter at all if there is any / in the string, or any combinations of number with slash. 
 In fact, we can use anything to replace the /, as long as it is not a number. Just try to replace it with 'a'.
