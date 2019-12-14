@@ -66,3 +66,33 @@ class Solution {
  
  Time - O(n^2) Space: O(1)
  -------------------------------------------------------------------------------------------------------
+// DIVYA's Solution
+class Solution {
+    int length = 0;
+    String result = "";
+    public String longestPalindrome(String s) {
+        
+        for(int i=0; i<s.length(); i++){
+            palindrome(i,i,s);
+            palindrome(i,i+1,s);
+        }
+        
+        return result;
+    }
+    
+    public void palindrome(int i, int j, String str){
+        
+        if(i<0 || i>=str.length() || j<0 || j>=str.length() || str.charAt(i) != str.charAt(j))
+            return;
+        
+        
+        if((j-i+1) >= length){
+            result = str.substring(i,j+1);
+            length = j-i+1;
+        }
+        
+        palindrome(i-1,j+1,str);
+        
+    }
+}
+ -------------------------------------------------------------------------------------------------------
