@@ -27,6 +27,8 @@ private void extendPalindrome(String s, int j, int k) {
 }}
 Here it is: https://leetcode.com/problems/longest-palindromic-substring/discuss/2928/Very-simple-clean-java-solution
 Time - O(n^2) Space: O(1)
+Solution:
+https://leetcode.com/problems/palindromic-substrings/discuss/105688/Very-Simple-Java-Solution-with-Detail-Explanation
 -------------------------------------------------------------------------------------------------------
 // Without Global variables
 
