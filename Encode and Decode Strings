@@ -23,3 +23,10 @@ public class Codec {
     }
 }
 ---------------------------------------------------------------------------------------------------
+Excellent solution! I doubted about it as well in the beginning. It turned out it is 100% correct. 
+It does not matter at all if there is any / in the string, or any combinations of number with slash. 
+In fact, we can use anything to replace the /, as long as it is not a number. Just try to replace it with 'a'.
+
+It is because the slash here is just used as a separator, between the length and the actually string.
+It is act as a boundary to show where the length string ends, when the length has multiple digits. 
+If we know all substring has less than 10 length, we in fact don't have to use any separator like /.
