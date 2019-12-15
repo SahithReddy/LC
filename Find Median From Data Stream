@@ -3,3 +3,38 @@ Watch this wonderful explanation: https://www.youtube.com/watch?v=1CxyVdA_654
 One more : https://www.youtube.com/watch?v=6N6QQpoU7H4
 
 
+// VERY INTELLIGENT SOLUTION
+Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/  (has a picture)
+
+class MedianFinder {
+
+    /** initialize your data structure here. */
+    PriorityQueue<Integer> min = new PriorityQueue<>(); //MIN HEAP Holds the larger half of the numbers
+    PriorityQueue<Integer> max =  new PriorityQueue<>(Collections.reverseOrder()); //MAX HEAP holds the smaller half of the numbers
+    public MedianFinder() {
+        
+    }
+    
+    // we know the large will gain one more item and small will remain the same size, but we cannot just push 
+    the item into large. What we should do is we push the new number into small and pop the maximum item from small 
+    then push it into large
+    Therefore to add a number, we have 3 O(log n) heap operations
+    
+    public void addNum(int num) {
+        min.offer(num); --->(1)
+        max.offer(min.poll()); ----> (2)
+        if(max.size() > min.size()){
+            min.offer(max.poll());  ------>(3)
+        }
+    }
+    
+    public double findMedian() {
+        if(max.size() == min.size()){
+            return (max.peek() + min.peek())/2.0;
+        }
+        else return min.peek();
+    }
+}
+
+
+------------------------------------------------------------------------------
