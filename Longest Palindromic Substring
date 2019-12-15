@@ -98,3 +98,45 @@ class Solution {
     }
 }
  -------------------------------------------------------------------------------------------------------
+DP - Watch this video. This has a good basic explanation of understanding this problem in DP
+https://www.youtube.com/watch?v=Fi5INvcmDos
+
+public class Solution {
+    public static String longestPalindrome(String s) {
+        int n = s.length();
+        String res = null;
+        int palindromeStartsAt = 0, maxLen = 0;
+
+        boolean[][] dp = new boolean[n][n];
+        // dp[i][j] indicates whether substring s starting at index i and ending at j is palindrome
+        
+        for(int i = n-1; i >= 0; i--) { // keep increasing the possible palindrome string
+            for(int j = i; j < n; j++) { // find the max palindrome within this window of (i,j)
+                
+                //check if substring between (i,j) is palindrome
+                dp[i][j] = (s.charAt(i) == s.charAt(j)) // chars at i and j should match
+                           && 
+                           ( j-i < 3  // if window is less than or equal to 3, just end chars should match
+                             || dp[i+1][j-1]  ); // if window is > 3, substring (i+1, j-1) should be palindrome too
+                
+                //update max palindrome string
+                if(dp[i][j] && (j-i+1 > maxLen)) {
+                    palindromeStartsAt = i;
+                    maxLen = j-i+1;
+                }
+            }
+        }
+        return s.substring(palindromeStartsAt, palindromeStartsAt+maxLen);
+    }
+}
+
+A little explanation for why the indices in the for loops are set the way they are (I was really confused for a long time):
+
+j must be greater than or equal i at all times. Why? i is the start index of the substring, 
+j is the end index of the substring. It makes no sense for i to be greater than j. 
+Visualization helps me, so if you visualize the dp 2d array, think of a diagonal that cuts from top left to bottom right. 
+We are only filling the top right half of dp.
+
+Why are we counting down for i, but counting up for j? Each sub-problem dp[i][j] depends on dp[i+1][j-1] 
+(dp[i+1][j-1] must be true and s.charAt(i) must equal s.charAt(j) for dp[i][j] to be true).
+ -------------------------------------------------------------------------------------------------------
