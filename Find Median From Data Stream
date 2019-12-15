@@ -3,7 +3,7 @@ Watch this wonderful explanation: https://www.youtube.com/watch?v=1CxyVdA_654
 One more : https://www.youtube.com/watch?v=6N6QQpoU7H4
 
 
-// VERY INTELLIGENT SOLUTION
+// VERY INTELLIGENT/CLEVER/SHORT SOLUTION
 Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/  (has a picture)
 
 class MedianFinder {
@@ -40,3 +40,7 @@ class MedianFinder {
 // Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
 
 ------------------------------------------------------------------------------
+// IF FACEING PROBLEM TO UNDERSTAND OR JUSTIFY ABOVE SOLUTION TO OTHERS FOLLOW TH EBELOW ONE. MORE INTUTIVE, EASY BUT 
+ALSO VEY FAST
+
+Find it here: https://leetcode.com/problems/find-median-from-data-stream/discuss/74144/Easy-to-understand-double-heap-solution-in-Java
