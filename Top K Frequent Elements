@@ -27,4 +27,6 @@ class Solution {
         } return res.subList(0,k); //Gives the output list only until the K 
     }
 }
+
+Timne: O(n) Space: O(n)
 -----------------------------------------------------------------------------------------------
