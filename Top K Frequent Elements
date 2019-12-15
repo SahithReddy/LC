@@ -29,4 +29,6 @@ class Solution {
 }
 
 Timne: O(n) Space: O(n)
+
+Similar Questions: Top K Frequent Words, Sort Characters By Frequency
 -----------------------------------------------------------------------------------------------
