@@ -1,0 +1,13 @@
+class Solution {
+    public boolean isRectangleOverlap(int[] rec1, int[] rec2) {
+        return !(rec1[2]<= rec2[0] ||
+                rec1[3] <= rec2[1] ||
+                rec2[2] <= rec1[0] ||
+                rec2[3] <= rec1[1]);
+    } // All this checking is for they do not overlap and then negating it. 
+    That means even if one condition out of 4 fails then the rectangles overlap.
+}
+The condition "rec1 is to the left of rec2" is rec1[2] <= rec2[0], that is the right-most x-coordinate of 
+rec1 is left of the left-most x-coordinate of rec2. The other cases are similar.
+
+similar we have to check if the rec1 is to the total right of rec2.
