@@ -1,0 +1,30 @@
+// Idea is simple. Build a array of list to be buckets
+Excellent Video Explanation: https://www.youtube.com/watch?v=flZ0hwcJetc
+
+class Solution {
+    public List<Integer> topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> map = new HashMap<Integer,Integer>();
+        
+        for(int i=0; i<nums.length;i++){
+            int freq = map.getOrDefault(nums[i],0)+1;
+            map.put(nums[i],freq);
+        }
+        
+        List<Integer>[] bucket = new List[nums.length+1];
+        for(int key : map.keySet()){
+            int freq = map.get(key);
+            if(bucket[freq] == null){
+                bucket[freq] = new ArrayList();
+            }
+            bucket[freq].add(key);
+        }
+        
+        List<Integer> res = new ArrayList();
+        for(int i=bucket.length-1; i>=0 && k>0; i--){
+            if(bucket[i]!=null){
+                res.addAll(bucket[i]);
+            }
+        } return res.subList(0,k); //Gives the output list only until the K 
+    }
+}
+-----------------------------------------------------------------------------------------------
