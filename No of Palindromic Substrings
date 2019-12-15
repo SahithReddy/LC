@@ -42,7 +42,7 @@ class Solution {
         return count;
     }
 }
-Time: O(n^2), Space O(n);
+Time: O(n^2), Space O(n^2) for table;
 
 Let me explain more.
 If you are confused about dp[i + 1][j - 1], the best way to understand it is to refer to longest palindromic substring problem
