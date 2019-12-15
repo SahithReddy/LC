@@ -139,4 +139,7 @@ We are only filling the top right half of dp.
 
 Why are we counting down for i, but counting up for j? Each sub-problem dp[i][j] depends on dp[i+1][j-1] 
 (dp[i+1][j-1] must be true and s.charAt(i) must equal s.charAt(j) for dp[i][j] to be true).
+
+All this explanations are here in below:
+https://leetcode.com/problems/longest-palindromic-substring/discuss/2921/Share-my-Java-solution-using-dynamic-programming
  -------------------------------------------------------------------------------------------------------
