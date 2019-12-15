@@ -28,6 +28,7 @@ class MedianFinder {
         }
     }
     
+    // Alltogether, the add operation is O(logn), The findMedian operation is O(1).
     public double findMedian() {
         if(max.size() == min.size()){
             return (max.peek() + min.peek())/2.0;
@@ -36,5 +37,6 @@ class MedianFinder {
     }
 }
 
+// Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
 
 ------------------------------------------------------------------------------
