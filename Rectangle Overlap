@@ -11,3 +11,5 @@ The condition "rec1 is to the left of rec2" is rec1[2] <= rec2[0], that is the r
 rec1 is left of the left-most x-coordinate of rec2. The other cases are similar.
 
 similar we have to check if the rec1 is to the total right of rec2.
+
+Time O(1);
