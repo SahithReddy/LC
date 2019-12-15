@@ -27,4 +27,33 @@ Time: O(n^2), Space O(1);
 Very Good Explanation: 
 https://leetcode.com/problems/palindromic-substrings/discuss/105688/Very-Simple-Java-Solution-with-Detail-Explanation
 ------------------------------------------------------------------------------------------------
+DP solution based on Longest Palindromic Substring
+class Solution {
+    public int countSubstrings(String s) {
+    int n = s.length();
+    int count = 0;
+    boolean dp[][] = new boolean[n][n];
+    for(int i=n-1;i>=0;i--){
+        for(int j=i;j<n;j++){
+            dp[i][j] = (s.charAt(i) == s.charAt(j)) && (j-i<3 || dp[i+1][j-1]);
+            if(dp[i][j]) count++;
+         }
+        }
+        return count;
+    }
+}
+Time: O(n^2), Space O(n);
+
+Let me explain more.
+If you are confused about dp[i + 1][j - 1], the best way to understand it is to refer to longest palindromic substring problem
+in lc.
+dp[i + 1][j - 1] is referred to the string in between dp[i][j], which is the last status before expanding to dp[i][j], 
+that's why we are using dp.
+For j - i < 3, think that you have a string AXA, and j-i here is 2, since A is matched with A, X does not matter here.
+So when the strings in between is less than or equal to 1 char, we can ignore it.
+
+DP is more favorable than the expansion algorithm in my opinion. But here, you should explain why you use
+dp[i+1][j-1] to calculate dp[i][j]. The reason is that i is in descending order and j is in ascending order. 
+Then we know before d[i][j], the value of d[i+1][j-1] is already know.
+------------------------------------------------------------------------------------------------
 
