@@ -1,3 +1,12 @@
+// Great Video: Freefall - Inorder, Leafbreak - PostOrder tricks
+https://www.youtube.com/watch?v=eL8NZ-21lqI
+
+Construct Binary Tree
+https://www.youtube.com/watch?v=cGlNehp57Y0
+
+
+------------------------------------------------------------------------------------------------------------------
+
 //Recursion
 
 I did not understood it. Pay more concentration next time.
@@ -32,6 +41,9 @@ public TreeNode helper(int preStart, int inStart, int inEnd, int[] preorder, int
     root.right = helper(preStart + inIndex - inStart + 1, inIndex + 1, inEnd, preorder, inorder);
     return root;
 }
+
+//Time complexity : O(n)
+//Space complexity : O(n)
 
 ------------------------------------------------------------------------------------------------------------------
 
