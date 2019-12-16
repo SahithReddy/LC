@@ -1,1 +1,33 @@
+// Using Priority Queue
+Watch this video: https://www.youtube.com/watch?v=zLcNwcR6yO4
 
+class Solution {
+    public ListNode mergeKLists(ListNode[] lists) {
+        PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+        for(ListNode x : lists){
+            while(x!=null){
+            minHeap.add(x.val);
+            x = x.next;
+            }
+        }
+        
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy;
+        while(!minHeap.isEmpty()){
+            current.next = new ListNode(minHeap.remove());
+            current = current.next;
+        }
+        return dummy.next;
+    }
+}
+
+Time complexity : O(Nlogk) is the number of linked lists.
+
+The comparison cost will be reduced to O(logk) for every pop and insertion to priority queue. 
+But finding the node with the smallest value just costs O(1) time.
+There are NN nodes in the final linked list.
+
+Space complexity :
+O(n) Creating a new linked list costs O(n) space.
+And the priority queue (often implemented with heaps) costs O(k)O(k) space (it's far less than N in most situations).
+------------------------------------------------------------------------------------------------
