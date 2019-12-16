@@ -14,6 +14,9 @@ class Solution {
         } return new ArrayList(answer.values());
     }
 }
+
+The java string valueOf() method converts different types of values into string. By the help of string valueOf() method,
+you can convert int to string, long to string, boolean to string, character to string, float to string, double to string,
 ---------------------------------------------------------------------------------------------------------------
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
