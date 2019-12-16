@@ -31,3 +31,6 @@ Space complexity :
 O(n) Creating a new linked list costs O(n) space.
 And the priority queue (often implemented with heaps) costs O(k)O(k) space (it's far less than N in most situations).
 ------------------------------------------------------------------------------------------------
+This also has a more faster solution. Refer it later in the comments here:
+
+https://leetcode.com/problems/merge-k-sorted-lists/discuss/10528/A-java-solution-based-on-Priority-Queue
