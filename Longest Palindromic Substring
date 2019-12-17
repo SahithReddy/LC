@@ -129,6 +129,7 @@ public class Solution {
         return s.substring(palindromeStartsAt, palindromeStartsAt+maxLen);
     }
 }
+Time - O(n^2) Space: O(n^2)
 
 A little explanation for why the indices in the for loops are set the way they are (I was really confused for a long time):
 
