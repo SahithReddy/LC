@@ -1,4 +1,4 @@
-    //DFS for serializing  and QUEUE for deserializing
+    //DFS for serializing  and QUEUE for deserializing using recursion
     
     public String serialize(TreeNode root) {
         return serial(new StringBuilder(), root).toString();
