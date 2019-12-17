@@ -1,0 +1,35 @@
+    //DFS for serializing  and QUEUE for deserializing
+    
+    public String serialize(TreeNode root) {
+        return serial(new StringBuilder(), root).toString();
+    }
+    
+    // Generate preorder string
+    private StringBuilder serial(StringBuilder str, TreeNode root) {
+        if (root == null) return str.append("#");
+        else{
+        str.append(root.val).append(",");
+        serial(str, root.left).append(",");
+        serial(str, root.right);
+        return str;
+        }
+    }
+
+    public TreeNode deserialize(String data) {
+        return deserial(new LinkedList<>(Arrays.asList(data.split(","))));
+    }
+    
+    // Use queue to simplify position move
+    private TreeNode deserial(Queue<String> q) {
+        String val = q.poll();
+        if ("#".equals(val)) return null;
+        else{
+        TreeNode root = new TreeNode(Integer.valueOf(val));
+        root.left = deserial(q);
+        root.right = deserial(q);
+        return root;
+        }
+    }
+
+Time O(n) && Space O(n)
+-----------------------------------------------------------------------------------------------------------------
