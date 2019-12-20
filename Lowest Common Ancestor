@@ -1,1 +1,66 @@
-Dont leave this
+// Recursion
+
+Video: https://www.youtube.com/watch?v=py3R23aAPCA - Back to Back SWE
+
+class Solution {
+        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if(root==null) return null;
+        if(root.val == p.val || root.val == q.val) return root;
+            
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+        if(left == null)
+            return right;
+        else if (right == null)
+            return left;
+        else
+            return root;
+    }
+
+}
+
+Time: O(n) Space: O(n) beacuse of recursion.
+---------------------------------------------------------------------------------------------------
+
+if both p and q exist in Tree rooted at root, then return their LCA
+if neither p and q exist in Tree rooted at root, then return null
+if only one of p or q (NOT both of them), exists in Tree rooted at root, return it
+---------------------------------------------------------------------------------------------------
+It’s always not easy to explain recursive solutions but I will try..
+
+There is an assumption that p and q nodes exist and are part of the tree.
+
+Let’s start from the beginning, from the root node.
+If root of the tree is p or q then line
+
+if(root == p || root == q) return root;
+
+returns real root which is LCA since it’s doesn’t matter where second (p or q) is – root is LCA anyway.
+
+Let’s say root node is not p or q then it checks left branch first
+
+TreeNode left = lowestCommonAncestor(root.left, p, q);
+
+And then right branch:
+
+TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+If it found p or q on the left it stops and returns that node and doesn’t check the rest of the left sub tree.
+Why? Because if second node (p or q) is somewhere below in the current left sub tree – then current node is LCA 
+and it already has it. How does it know whether second node is below in the current sub tree or not? It goes to check a 
+right branch.
+If right branch doesn’t have second node then it’s somewhere below in the left sub tree where we found first p or q 
+and it’s below the node we already found so the node we found on the left is LCA.
+If second node is on the right branch then LCA is a node for which both lines
+
+TreeNode left = lowestCommonAncestor(root.left, p, q); and
+
+TreeNode right = lowestCommonAncestor(root.right, p, q);
+
+return != null left and right
+
+It checks this here:
+return left != null && right != null ? root
+Hopefully this helps.
