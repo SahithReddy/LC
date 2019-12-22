@@ -1,3 +1,5 @@
+// Elegant solution: https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/39875/Elegant-Java-solution
+
 class Solution {
     int maxValue = Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
