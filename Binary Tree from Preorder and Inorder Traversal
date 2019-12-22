@@ -9,7 +9,7 @@ https://www.youtube.com/watch?v=cGlNehp57Y0
 
 //Recursion
 
-I did not understood it. Pay more concentration next time.
+Pay more concentration
 
 1.MOST VOTED SOLUTION: BUT PREFER 2ND ONE AS IT IS BIT EASY
 
@@ -47,6 +47,10 @@ class Solution {
 
 //Time complexity : O(n)
 //Space complexity : O(n)
+The time complexity of this solution is O(n), n is the number of node, since we need do the operation in every node.
+The space complexity is O(n), since build a hashtable need O(n), recursion need the O(depth of the tree), 
+the depth of tree is logN in best case
+and n in worst case. Therefore it is O(n).
 
 ------------------------------------------------------------------------------------------------------------------
 
@@ -80,60 +84,6 @@ relative start of the root + left + right tree (preStart) + left sub tree size (
 
 (inIndex - inStart) is the size of root's left subtree.
 
-------------------------------------------------------------------------------------------------------------------
-
-SAME IDEA, BUT EASIER TO UNDERSTAND
-
- public TreeNode buildTree(int[] preorder, int[] inorder) {
-    if(preorder.length!=inorder.length) return null;
-    return build(preorder, 0, preorder.length-1, inorder, 0, inorder.length-1);
-}
-
-public TreeNode build(int [] preorder, int preLow, int preHigh, int[] inorder, int inLow, int inHigh){
-    if(preLow>preHigh || inLow>inHigh) return null;
-    TreeNode root = new TreeNode(preorder[preLow]);
-   
-    int inorderRoot = inLow;
-    for(int i=inLow;i<=inHigh;i++){
-        if(inorder[i]==root.val){ inorderRoot=i; break; }
-    }
-   
-    int leftTreeLen = inorderRoot-inLow;
-    root.left = build(preorder, preLow+1, preLow+leftTreeLen, inorder, inLow, inorderRoot-1);
-    root.right = build(preorder, preLow+leftTreeLen+1, preHigh, inorder, inorderRoot+1, preHigh);       
-    return root;        
-}
-
-------------------------------------------------------------------------------------------------------------------
-2. Using HashMap - Most voted comment: Look into this
-Nice solution! One improvement: remember to use HashMap to cache the inorder[] position. This can reduce 
-your solution from 20ms to 5ms.
-
-Here is the my Java solution:
-
-public TreeNode buildTree(int[] preorder, int[] inorder) {
-    Map<Integer, Integer> inMap = new HashMap<Integer, Integer>();
-
-    for(int i = 0; i < inorder.length; i++) {
-        inMap.put(inorder[i], i);
-    }
-
-    TreeNode root = buildTree(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1, inMap);
-    return root;
-}
-
-public TreeNode buildTree(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd, Map<Integer, Integer> inMap) {
-    if(preStart > preEnd || inStart > inEnd) return null;
-
-    TreeNode root = new TreeNode(preorder[preStart]);
-    int inRoot = inMap.get(root.val);
-    int numsLeft = inRoot - inStart;
-
-    root.left = buildTree(preorder, preStart + 1, preStart + numsLeft, inorder, inStart, inRoot - 1, inMap);
-    root.right = buildTree(preorder, preStart + numsLeft + 1, preEnd, inorder, inRoot + 1, inEnd, inMap);
-
-    return root;
-}
 ------------------------------------------------------------------------------------------------------------------
 //ITERATIVE
 I din't find iterative solutions discussed in the old Discuss. So, I thought, I will add my solution in here.
