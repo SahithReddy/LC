@@ -6,7 +6,7 @@ class Solution {
         return maxValue;
         
     }
-    
+    // helper returns the max branch plus current node's value
     public int helper(TreeNode node){
         if(node==null) return 0;
         int left = Math.max(0, helper(node.left));
@@ -15,7 +15,11 @@ class Solution {
         return Math.max(left, right) + node.val;
     }
 }
+-----------------------------------------------------------------------------------------------------------------
+you can imagine the helper( ) function goes from the bottom of the tree to the top, it's in post-order manner.
 
+At every node, we need to make a decision, if the sum comes from the left path larger than the right path, 
+we pick the left path and plus the current node's value, this recursion goes all the way up to the root node
 -----------------------------------------------------------------------------------------------------------------
 
 Each node actually has two roles when it comes to function maxPathDown. When processing the final result maxValue, 
