@@ -17,6 +17,10 @@ class Solution {
         return Math.max(left, right) + node.val;
     }
 }
+
+Time complexity : O(N) where N is number of nodes, since we visit each node not more than 2 times.
+Space complexity : O(log(N)). We have to keep a recursion stack of the size of the tree height, 
+which is O(log(N)) for the binary tree.
 -----------------------------------------------------------------------------------------------------------------
 you can imagine the helper( ) function goes from the bottom of the tree to the top, it's in post-order manner.
 
