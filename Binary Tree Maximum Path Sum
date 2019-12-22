@@ -1,0 +1,97 @@
+class Solution {
+    int maxValue = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        if(root == null) return 0;
+        helper(root);
+        return maxValue;
+        
+    }
+    
+    public int helper(TreeNode node){
+        if(node==null) return 0;
+        int left = Math.max(0, helper(node.left));
+        int right = Math.max(0, helper(node.right));
+        maxValue = Math.max(maxValue, left + right + node.val);
+        return Math.max(left, right) + node.val;
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------------
+
+Each node actually has two roles when it comes to function maxPathDown. When processing the final result maxValue, 
+the node is treated as the highest point of a path. When calculating its return value, it is only part of a path 
+(left or right part), and this return value will be used to calculate path sum of other paths with some other 
+nodes(above the current one) as their highest point.
+-----------------------------------------------------------------------------------------------------------------
+Just want to add a explanation about the last two lines based on my comprehension.
+
+maxValue = Math.max(maxValue, left + right + node.val);
+return Math.max(left, right) + node.val;
+maxValue is the value which recording whether this current root is the final root, 
+so we use left + right + node.val. But to the upper layer(after return statement), 
+we cannot choose both left and right brunches, so we need to select the larger one, 
+so we use max(left, right) + node.val to prune the lower brunch.
+In the end, very elegant solution, thank you for your sharing!
+
+
+-----------------------------------------------------------------------------------------------------------------
+
+My approach to avoid global variable
+
+public class Solution {
+public int maxPathSum(TreeNode root) {
+    int[] max = new int[1];
+    max[0] = Integer.MIN_VALUE;
+    maxPathSum(max, root);
+    return max[0];
+}
+private int maxPathSum(int[] max, TreeNode root){
+    if(root == null)
+        return 0;
+    int leftMax =  Math.max(0, maxPathSum(max, root.left));
+    int rightMax = Math.max(0, maxPathSum(max, root.right));
+    max[0] = Math.max(max[0],  root.val+leftMax+rightMax);
+    return root.val+Math.max(leftMax,rightMax);
+}
+
+int is one of the 8 basic variables, and int[] is reference variable.
+In a Java method, method arguments(MA) are passed by by value.
+if basic variables are in MA, the value is copied, and the initial variable remain unchanged.
+if reference variable is in MA, the address is copied (and passed as value), and the initial variable will be changed.
+
+-----------------------------------------------------------------------------------------------------------------
+
+Nice trick to make left/right 0 if negative to avoid if/else. My version w/o this trick.
+
+class Solution {
+    int ret = Integer.MIN_VALUE;
+    
+    public int maxPathSum(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        helper(root);
+        return ret;
+    }
+    
+    private int helper(TreeNode root) {
+        if (root == null) {
+            return 0;
+        }
+        
+        int left = helper(root.left);
+        int right = helper(root.right);
+        // Computes the max ret it could get in current recursion
+        if (left < 0) {
+            ret = Math.max(ret, Math.max(root.val, root.val+right));
+        } else if (right < 0) {
+            ret = Math.max(ret, Math.max(root.val, root.val+left));
+        } else {
+            ret = Math.max(ret, left+root.val+right);
+        }
+        
+        // Returns the largest path starting with current node,
+        // It could be the single node, or the node + left or right path
+        return Math.max(root.val, Math.max(root.val+left, root.val+right));
+    }
+}
