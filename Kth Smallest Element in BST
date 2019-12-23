@@ -1,0 +1,25 @@
+// Here it is:
+https://leetcode.com/problems/validate-binary-search-tree/discuss/32112/Learn-one-iterative-inorder-traversal-apply-it-to-multiple-tree-questions-(Java-Solution)
+
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        Stack<TreeNode> s = new Stack<>();
+        if(root == null) return 0;
+        while(root!=null || !s.isEmpty()){
+            while(root!=null){
+                s.push(root);
+                root=root.left;
+            }
+            root = s.pop();
+            if(--k == 0) break;
+            root=root.right;
+        } return root.val;
+    }
+}
+Time complexity : O(H+k), where H is a tree height. This complexity is defined by the stack, which contains at 
+least H+k elements, since before starting to pop out one has to go down to a leaf. 
+This results in O(logN+k) for the balanced tree and O(N+k) for completely unbalanced tree 
+with all the nodes in the left subtree.
+
+Space complexity : O(H+k), the same as for time complexity, O(N+k) in the worst case, and O(logN+k) in the average case.
+-----------------------------------------------------------------------------------------------------------------
