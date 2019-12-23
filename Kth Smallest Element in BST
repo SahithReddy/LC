@@ -23,3 +23,24 @@ with all the nodes in the left subtree.
 
 Space complexity : O(H+k), the same as for time complexity, O(N+k) in the worst case, and O(logN+k) in the average case.
 -----------------------------------------------------------------------------------------------------------------
+Recursive: https://www.youtube.com/watch?v=C6r1fDKAW_o
+
+class Solution {
+    public int kthSmallest(TreeNode root, int k) {
+        int[] nums = new int[2]; //0 index indicates where we are(lowest, 2nd lowest) & 1 index tell what that number is
+        helper(root, nums, k);
+        return nums[1];
+    }
+        
+        public void helper(TreeNode node, int[] nums, int k){
+            if(node==null) return;
+            
+            helper(node.left, nums,k);
+            if(++nums[0] == k){
+                nums[1]=node.val;
+                return;
+            }
+            helper(node.right,nums,k);
+        }
+    
+}
