@@ -27,3 +27,5 @@ class Solution {
     }
 }
 -------------------------------------------------------------------------------
+Time Comolexity: O(n) where 
+Space Complexity: O(N) where N is the number of nodes in the tree.N is the number of nodes in the tree.
