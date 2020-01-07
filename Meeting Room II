@@ -1,0 +1,29 @@
+Crazy Explanation:
+https://leetcode.com/problems/meeting-rooms-ii/solution/
+
+class Solution {
+    public int minMeetingRooms(int[][] intervals) {
+        if(intervals.length == 0) return 0;
+        Comparator<int []> c = (int[] a, int[] b) -> (a[0]-b[0]);
+        Arrays.sort(intervals, c);
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>();
+        queue.offer(intervals[0][1]);
+        for(int i=1; i<intervals.length; i++){
+          if(intervals[i][0] >= queue.peek()){
+              queue.poll();
+          }
+            queue.offer(intervals[i][1]);
+        } return queue.size();
+    }
+}
+
+Time Complexity: O(NlogN).
+
+There are two major portions that take up time here. One is sorting of the array that takes O(NlogN) 
+considering that the array consists of NN elements.
+Then we have the min-heap. In the worst case, all NN meetings will collide with each other. 
+In any case we have NN add operations on the heap. In the worst case we will have NN extract-min operations as well. 
+Overall complexity being (NlogN)(NlogN) since extract-min operation on a heap takes O(\log N)O(logN).
+
+Space Complexity: O(N) because we construct the min-heap and that can contain NN elements in the worst case as described 
+above in the time complexity section. Hence, the space complexity is O(N)O(N).
