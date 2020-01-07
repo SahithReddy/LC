@@ -1,6 +1,11 @@
 // here approach 5
 https://leetcode.com/problems/non-overlapping-intervals/solution/
 
+
+"While traversing, if there is no overlapping between the previous interval and the current interval, 
+we need not remove any interval. But, if an overlap exists between the previous interval and the current 
+interval, we always drop the current interval."
+
 class Solution {
     public int eraseOverlapIntervals(int[][] intervals) {
         if(intervals.length==0) return 0;
