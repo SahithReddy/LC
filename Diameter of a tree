@@ -1,0 +1,32 @@
+//
+
+public class Solution {
+    int max = 0;
+    
+    public int diameterOfBinaryTree(TreeNode root) {
+        maxDepth(root);
+        return max;
+    }
+    
+    private int maxDepth(TreeNode root) {
+        if (root == null) return 0;
+        
+        int left = maxDepth(root.left);
+        int right = maxDepth(root.right);
+        
+        max = Math.max(max, left + right);
+        
+        return Math.max(left, right) + 1;
+    }
+}
+
+although the longest path doesn't have to go through the root node, 
+it has to pass the root node of some subtree of the tree (because it has to be from one leaf node to 
+another leaf node, otherwise we can extend it for free). The longest path that passes a given node as 
+the ROOT node is T = left_height+right_height. So you just calculate T for all nodes and output the max T.
+--------------------------------------------------------------------------------------------------------------------
+another "trap version" of "get the height of a tree"...
+Pay attention that we define The diameter of a binary tree is the length of the longest path 
+between any two nodes in a treein the problem, that is why we update withmax = Math.max(max, left + right); 
+instead of max = Math.max(max, left + right + 1);...
+--------------------------------------------------------------------------------------------------------------------
