@@ -1,0 +1,27 @@
+Refer here:  https://leetcode.com/problems/trapping-rain-water/discuss/17391/Share-my-short-solution.
+Solution {
+    public int trap(int[] height) {
+       int a = 0;
+        int b = height.length-1;
+        int area=0;
+        int leftMax = height[a];
+        int rightMax = height[b];
+        while(a<=b){
+            leftMax = Math.max(leftMax,height[a]);
+            rightMax = Math.max(rightMax, height[b]);
+            if(leftMax<rightMax){
+                area+=(leftMax - height[a]);
+                a++;
+            }
+            else{
+                area+=(rightMax - height[b]);
+                b--;
+            }
+        } return area;
+    } 
+}
+
+Time complexity: O(n). Single iteration of O(n)O(n).
+Space complexity: O(1) extra space. Only constant space required for \text{left}left, \text{right}right, \text{left\_max}left_max and \text{right\_max}right_max.
+
+-------------------------------------------------------------------------------------------------------
