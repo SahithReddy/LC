@@ -1,4 +1,4 @@
-//
+// https://leetcode.com/problems/sqrtx/discuss/25047/A-Binary-Search-Solution -- First comment here
 The sequence 1, 2, ... , n has no duplication.
 
 Near the very end, closest step, before while loop, left = mid = right.
