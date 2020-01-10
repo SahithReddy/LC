@@ -1,0 +1,18 @@
+// put attention on the parentheses -(n/2). As we know MAX_INT32 < -MIN_INT32, 
+so if we directly write like this n = -n then overflow will happen. However, 
+if we write n = n/2, n = -n or just n = -(n/2), then we will avoid overflow :-)
+
+//Recursive Solution
+
+class Solution {
+    public double myPow(double x, int n) {
+        if(n==0) return 1;
+        if(n<0){
+            x=1/x;
+            return (n%2==0)? myPow(x*x, -(n/2)): x*myPow(x*x, -(n/2));
+        }
+            return (n%2==0)? myPow(x*x, n/2): x*myPow(x*x, n/2);
+    }
+}
+--------------------------------------------------------------------------------------
+//Iterative but I didn't understand
