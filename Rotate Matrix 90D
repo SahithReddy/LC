@@ -1,1 +1,33 @@
+// Video:
+https://www.youtube.com/watch?v=SA867FvqHrM
 
+//Solution:
+https://leetcode.com/problems/rotate-image/discuss/18879/AC-Java-in-place-solution-with-explanation-Easy-to-understand.
+
+class Solution {
+    public void rotate(int[][] matrix) {
+        int N = matrix.length;
+        // Transpose
+        for(int i=0; i<N; i++){
+            for(int j=i+1; j<N; j++){ .  // With j=i+1 because it will iterate over only the upper triangle in matrix and swap it. No need to check lower trianglr
+                int temp = matrix[i][j];
+                matrix[i][j]=matrix[j][i];
+                matrix[j][i]=temp;
+            }
+        }
+        
+        // Reverse horizontally
+    for(int i=0; i<N; i++){
+        for(int j=0; j<N/2; j++){ // N/2 because we iterate every row like a two pointer from both ends so N/2 is sufficient
+            int temp = matrix[i][N-1-j]; // --> column <--- This is how the iteration goes
+            matrix[i][N-1-j]=matrix[i][j];
+            matrix[i][j]=temp;
+            }
+        }
+    }
+}
+
+
+
+TIP: For Anticlockwise rotation, transpose step would remain the same. In the last step instead of flipping the columns, 
+flip the rows vertically.
