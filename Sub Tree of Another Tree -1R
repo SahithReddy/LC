@@ -4,14 +4,16 @@ this algo was applying isSameTree function and then go on to checking left and r
 class Solution {
     public boolean isSameTree(TreeNode a, TreeNode b){
         if(a==null && b==null) return true;
-        if(a==null || b==null) return false;
-        return (a.val==b.val && isSameTree(a.left, b.left) && isSameTree(a.right, b.right));
+        else if(a==null || b==null) return false;
+        else if(a.val!=b.val) return false;
+        else return (isSameTree(a.left, b.left) && isSameTree(a.right, b.right));
     }
+    
     public boolean isSubtree(TreeNode s, TreeNode t) {
         if(s==null) return false;
-        if(t==null) return true;
-        if(isSameTree(s,t)) return true;
-        return (isSubtree(s.left, t) || isSubtree(s.right,t));
+        else if(t==null) return true;
+        else if (isSameTree(s,t)) return true;
+        else return (isSubtree(s.left, t) ||isSubtree(s.right, t));
     }
 }
 
