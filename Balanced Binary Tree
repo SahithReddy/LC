@@ -1,0 +1,26 @@
+// Recursion
+
+class Solution {
+    public boolean isBalanced(TreeNode root) {
+        if(root==null) return true;
+           // Check if subtrees have height within 1. If they do, check if the
+    // subtrees are balanced
+        if (Math.abs((helper(root.left)) - (helper(root.right))) <=1 && isBalanced(root.left)  && isBalanced(root.right)) return true;
+        else return false;
+    }
+    
+    public int helper(TreeNode node){
+        if(node==null) return 0;
+        
+        int left = helper(node.left);
+        int right = helper(node.right);
+        
+        return Math.max(left, right)+1;
+        
+    }
+}
+
+Time: A bit complex: O(nlogn). log n if the tree is balanced and n is the upper bound till when we check the height. 
+Space: O(n). The recursion stack may contain all nodes if the tree is skewed.
+
+---------------------------------------------------------------------------------------------------------------------
