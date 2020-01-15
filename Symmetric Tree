@@ -7,7 +7,8 @@ class Solution {
     public boolean isMirror(TreeNode a, TreeNode b){
         if(a==null && b==null) return true;
         else if(a==null || b==null) return false;
-        else return (a.val==b.val) && isMirror(a.left, b.right) && isMirror(a.right, b.left);
+        else if(a.val != b.val) return false;
+        else return isMirror(a.left, b.right) && isMirror(a.right, b.left);
         
     }
 }
