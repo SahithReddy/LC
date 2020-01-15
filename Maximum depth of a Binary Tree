@@ -15,7 +15,7 @@ class Solution {
         }
         int left = maxDepth(root.left);
         int right = maxDepth(root.right);
-        return Math.max(right,left)+1;
+        return Math.max(right,left)+1; //+1 here because description says no of nodes. If it was edges then ther would no +1.
         
     }
 }
