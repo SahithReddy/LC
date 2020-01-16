@@ -1,0 +1,13 @@
+class Solution {
+    public int minDepth(TreeNode root) {
+        if(root==null) return 0;
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        // first comndition is for the cases like [1,2] where one side doesn't have a leaf node at all.
+        return (left==0 || right ==0)? left+right+1: Math.min(left, right)+1;
+    }
+}
+Time: O(n)
+Space: O(n). Log(N) is best case when the tree is in balanced way.
+------------------------------------------------------------------
+
