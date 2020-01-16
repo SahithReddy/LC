@@ -1,24 +1,18 @@
-// Recursion
+// Recursion Easy
 
 Video: https://www.youtube.com/watch?v=py3R23aAPCA - Back to Back SWE
 
 class Solution {
-        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if(root==null) return null;
-        if(root.val == p.val || root.val == q.val) return root;
-            
-        TreeNode left = lowestCommonAncestor(root.left, p, q);
-
-        TreeNode right = lowestCommonAncestor(root.right, p, q);
-
-        if(left == null)
-            return right;
-        else if (right == null)
-            return left;
-        else
-            return root;
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        
+        if(p.val<root.val && q.val<root.val ){
+            return lowestCommonAncestor(root.left, p, q);
+        }
+        else if(p.val>root.val && q.val>root.val){
+            return lowestCommonAncestor(root.right, p, q);
+        }
+        else return root;
     }
-
 }
 
 Time: O(n) Space: O(n) beacuse of recursion.
