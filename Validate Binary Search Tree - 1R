@@ -37,21 +37,24 @@ https://leetcode.com/problems/validate-binary-search-tree/discuss/32112/Learn-on
 
 I add another case to above: https://leetcode.com/problems/sum-of-left-leaves/
 
-    public int sumOfLeftLeaves(TreeNode root) {
-        int res = 0;
-        if (root == null) return res;
-        Stack<TreeNode> stack = new Stack<>();        
-        while (root != null || !stack.isEmpty()) {
-            while (root != null) {
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root==null) return true;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode pre = null;
+        while(root!=null || !stack.isEmpty()){
+            if(root!=null){
                 stack.push(root);
-                root = root.right;
+                root=root.left;
+            } else{
+            root=stack.pop();
+            if(pre!=null && root.val<=pre.val) return false;
+            pre=root;
+            root=root.right;
             }
-            root = stack.pop();
-            root = root.left;
-            if (root != null && root.left == null && root.right == null) res += root.val;
-        }
-        return res;
+        } return true;
     }
+}
 
 
 
