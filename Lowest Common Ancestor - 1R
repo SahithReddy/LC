@@ -17,6 +17,31 @@ class Solution {
 
 Time: O(n) Space: O(n) beacuse of recursion.
 ---------------------------------------------------------------------------------------------------
+// Iterative - almost same
+difference is here we have while loop to continue the iteration and conditions like root=root.right and root=root.left to
+direct our iterations based on conditions.
+
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while(root!=null){
+            if(p.val<root.val && q.val<root.val){
+                root=root.left; // here we call a function again in recursion
+            }
+            else if(p.val>root.val && q.val>root.val){
+                root=root.right;
+            }
+            else{
+                return root;
+            }
+        } return null;
+    }
+}
+
+Time: O(n) Space: O(1) as there is no stack
+---------------------------------------------------------------------------------------------------
+
+
+
 
 if both p and q exist in Tree rooted at root, then return their LCA
 if neither p and q exist in Tree rooted at root, then return null
