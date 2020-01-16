@@ -45,4 +45,7 @@ class Solution {
     
 }
 
+Time: O(n);
+Space: O(n);
+
 // Look at the follow up question answer. Whenever you free.
