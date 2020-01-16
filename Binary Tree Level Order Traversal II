@@ -1,0 +1,31 @@
+// Same as level order traversal just one line difference to print them in reverse
+
+class Solution {
+        List<List<Integer>> answer = new ArrayList();
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        if(root==null) return answer;
+        helper(root, 0);
+        Collections.reverse(answer); // . This line****
+        return answer;
+        
+    }
+    public void helper(TreeNode node, int level){
+        if(answer.size()==level){
+            answer.add(new ArrayList());
+        }
+        
+        answer.get(level).add(node.val);
+        
+        if(node.left!=null){
+            helper(node.left, level+1);
+        }
+        
+        if(node.right!=null){
+            helper(node.right, level+1);
+        }
+    }
+}
+
+Time : O(n)
+Space: O(n) . Same as the other one.
+--------------------------------------------------------------------
