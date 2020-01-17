@@ -1,0 +1,36 @@
+// Easy
+
+class Solution {
+    public TreeNode searchBST(TreeNode root, int val) {
+        if(root==null) return null;
+        if(root.val==val) return root;
+        
+        if(val<root.val){
+            return searchBST(root.left, val);
+        }
+        else if(val>root.val){
+            return searchBST(root.right, val);
+        }
+        return null;
+    }
+}
+Time complexity : \mathcal{O}(H)O(H), where HH is a tree height. That results in \mathcal{O}(\log N)O(logN) 
+in the average case, and \mathcal{O}(N)O(N) in the worst case.
+
+Space complexity : \mathcal{O}(H)O(H) to keep the recursion stack, i.e. \mathcal{O}(\log N)O(logN) 
+in the average case, and \mathcal{O}(N)O(N) in the worst case.
+--------------------------------------------------------------------------------------------------------------
+//iterative
+
+class Solution {
+  public TreeNode searchBST(TreeNode root, int val) {
+    while (root != null && val != root.val)
+      root = val < root.val ? root.left : root.right;
+    return root;
+  }
+}
+
+Time complexity : \mathcal{O}(H)O(H), where HH is a tree height. That results in \mathcal{O}(\log N)O(logN) 
+in the average case, and \mathcal{O}(N)O(N) in the worst case.
+
+Space: O(1);
