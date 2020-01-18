@@ -23,19 +23,9 @@ class Solution {
             } return false;
     }
 }
---------------------------------------------------------------------------------------------------------------------
-// Most effiecient Solution - Sort and then compare with previous
-class Solution {
-    public boolean containsDuplicate(int[] nums) {
-        Arrays.sort(nums);
-        int previous_number =0;
-        for(int i : nums){
-            if(nums.length==1) return false;
-            if (previous_number==i) return true;
-            previous_number=i;
-        } return false;
-    }
-}
+Time complexity : O(n)O(n). We do search() and insert() for nn times and each operation takes constant time.
+
+Space complexity : O(n)O(n). The space used by a hash table is linear with the number of elements in it.
 -------------------------------------------------------------------------------------------------------------
 // Above solution in a much more simple way
 class Solution {
@@ -46,4 +36,8 @@ class Solution {
         } return false;
     }
 }
+
+Time complexity : O(n \log n)O(nlogn). Sorting is O(n \log n)O(nlogn) and the sweeping is O(n)O(n). The entire algorithm is dominated by the sorting step, which is O(n \log n)O(nlogn).
+
+Space complexity : O(1)O(1). Space depends on the sorting implementation which, usually, costs O(1)O(1) auxiliary space if heapsort is used.
 -----------------------------------------------------------------------------------------------------------------
