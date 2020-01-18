@@ -11,3 +11,6 @@ class Solution {
         return max_so_far;
     }
 }
+Time complexity : \mathcal{O}(N)O(N) since it's one pass along the array.
+
+Space complexity : \mathcal{O}(1)O(1), since it's a constant space solution.
