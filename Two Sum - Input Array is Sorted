@@ -1,0 +1,26 @@
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+    int l = 0, r = numbers.length - 1;
+    while (numbers[l] + numbers[r] != target) {
+        if (numbers[l] + numbers[r] > target) r--;
+        else l++;
+        if (r == l) return new int[]{}; // this one is nit required as per the question as it assumes there is a pair.
+    }
+    return new int[]{l + 1, r + 1};
+    }
+}
+we use l and r to denote the first index and second index respectively.
+
+When the sum is:
+
+smaller than the target:
+
+we move l to the right by 1. we can't make r smaller because that's gonna make the sum even smaller.
+bigger than target:
+
+move r to the left by 1. we can't make l bigger because that's gonna make the sum even bigger.
+equal to the target:
+
+we found the answer and return.
+
+-----------------------------------------------------------------------------------------------------
