@@ -4,7 +4,7 @@ class Solution {
     while (numbers[l] + numbers[r] != target) {
         if (numbers[l] + numbers[r] > target) r--;
         else l++;
-        if (r == l) return new int[]{}; // this one is nit required as per the question as it assumes there is a pair.
+        if (r == l) return new int[]{}; // this one is not required as per the question as it assumes there is a satisfying pair.
     }
     return new int[]{l + 1, r + 1};
     }
@@ -24,3 +24,17 @@ equal to the target:
 we found the answer and return.
 
 -----------------------------------------------------------------------------------------------------
+// Better solution taking care of all cases but this one just return true or false
+
+
+int l = 0, r = list.size() - 1;
+while (l < r) { // Iterate until l==r and even after that if we dont find any answer return false;
+            int sum = list.get(l) + list.get(r);
+            if (sum == k)
+                return true;
+            if (sum < k)
+                l++;
+            else
+                r--;
+        }
+        return false;
