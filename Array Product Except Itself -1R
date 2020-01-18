@@ -68,6 +68,8 @@ class Solution {
         } return answer;
 }
 }
+
+Time: O(n), Space: O(1)
 ------------------------------------------------------------------------------------------------
 https://leetcode.com/problems/product-of-array-except-self/discuss/65667/My-one-pass-Java-solution-without-extra-spaces
 
