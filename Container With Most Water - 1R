@@ -48,4 +48,8 @@ class Solution {
             } return area;    
         } 
     }
+    
+    Time complexity : O(n)O(n). Single pass.
+
+Space complexity : O(1)O(1). Constant space is used.
     -------------------------------------------------------------------------------------------------
