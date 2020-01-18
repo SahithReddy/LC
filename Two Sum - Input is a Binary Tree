@@ -29,3 +29,8 @@ public class Solution {
         inorder(root.right, list); // then right
     }
 }
+
+Time complexity : O(n)O(n). We need to traverse over the whole tree once to do the inorder traversal. 
+Here, nn refers to the number of nodes in the given tree.
+
+Space complexity : O(n)O(n). The sorted listlist will contain nn elements.
