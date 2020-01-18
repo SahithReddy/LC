@@ -1,0 +1,15 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int maxProfit=0;
+        for(int i=1; i<prices.length; i++){
+            if(prices[i]> prices[i-1]){
+                maxProfit+=(prices[i]-prices[i-1]);
+            }
+        } return maxProfit;
+    }
+}
+Selling first and then buying later on the same day is allowed.
+
+Time complexity : O(n)O(n). Single pass.
+
+Space complexity: O(1)O(1). Constant space needed.
