@@ -1,0 +1,31 @@
+// Expected. Do Inorder Traversal. We will get an array in ascending order. and then use the same 2 pointer technique used in
+the problem of 2 sum where input array is sorted.
+
+// For inorder. Refer/ try to remmeber the common pattern used to solve the kth smallest, validate BST.
+
+// Solution here has recursive versiomn of inorder.
+
+public class Solution {
+    public boolean findTarget(TreeNode root, int k) {
+        List < Integer > list = new ArrayList();
+        inorder(root, list);
+        int l = 0, r = list.size() - 1;
+        while (l < r) {
+            int sum = list.get(l) + list.get(r);
+            if (sum == k)
+                return true;
+            if (sum < k)
+                l++;
+            else
+                r--;
+        }
+        return false;
+    }
+    public void inorder(TreeNode root, List < Integer > list) {
+        if (root == null)
+            return;
+        inorder(root.left, list); // go to full left first
+        list.add(root.val); // add it
+        inorder(root.right, list); // then right
+    }
+}
