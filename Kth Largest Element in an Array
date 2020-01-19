@@ -1,0 +1,33 @@
+// https://leetcode.com/problems/kth-largest-element-in-an-array/solution/
+
+// Brute Force
+Naive Solution:
+Approach 0: Sort
+The naive solution would be to sort an array first and then return kth element from the end, 
+something like sorted(nums)[-k] on Python. That would be an algorithm of \mathcal{O}(N \log N)O(NlogN) t
+ime complexity and \mathcal{O}(1)O(1) space complexity. This time complexity is not really exciting so let's 
+check how to improve it by using some additional space.
+
+Time : NlogN, Space:O(n)
+--------------------------------------------------------------------------------------
+// Min Heap Solution:
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        // init heap 'the smallest element first'
+        PriorityQueue<Integer> heap =
+            new PriorityQueue<Integer>((n1, n2) -> n1 - n2);
+
+        // keep k largest elements in the heap
+        for (int n: nums) {
+          heap.add(n);
+          if (heap.size() > k)
+            heap.poll();
+        }
+
+        // output
+        return heap.poll();        
+  }
+}
+Time: NlogK -- log is for insert operation in a min heap and doing it N times
+Space: O(K)
+--------------------------------------------------------------------------------------
