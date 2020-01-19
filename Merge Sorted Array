@@ -1,0 +1,56 @@
+// All solutions https://leetcode.com/problems/merge-sorted-array/solution/
+
+class Solution {
+  public void merge(int[] nums1, int m, int[] nums2, int n) {
+    System.arraycopy(nums2, 0, nums1, m, n);
+    Arrays.sort(nums1);
+  }
+}
+arraycopy explanation below.
+// ar
+public static void arraycopy(Object source_arr, int sourcePos,
+                            Object dest_arr, int destPos, int len)
+Parameters : 
+source_arr : array to be copied from
+sourcePos : starting position in source array from where to copy
+dest_arr : array to be copied in
+destPos : starting position in destination array, where to copy in
+len : total no. of components to be copied.
+
+
+Time complexity : \mathcal{O}((n + m)\log(n + m))O((n+m)log(n+m)).
+Space complexity : \mathcal{O}(1)O(1).
+---------------------------------------------------------------------------------------------------
+class Solution {
+        public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int tail1 = m - 1;  //last index of nums1that has valid number
+        int tail2 = n - 1; // last index of nums2
+        int finalTail = m + n - 1; //last index of nums array
+        while(tail1 >= 0 && tail2 >= 0){
+            if(nums1[tail1] > nums2[tail2]){ //compare two numbers
+                //if nums1[i1] is bigger, then place it in the last index in nums1
+                nums1[finalTail] = nums1[tail1];
+                tail1 --;
+            } else {
+                nums1[finalTail] = nums2[tail2];
+                tail2 --;
+            }
+            finalTail --;
+        }
+        // if i1 is greater than 0 but i2 is not, we don't need to do anything becuase it's a sorted array.
+       // However, if i2 is greater than 0, this means the rest of spot is only n2.
+        while( tail2 >= 0){
+            nums1[finalTail] = nums2[tail2];
+            tail2 --;
+            finalTail --;
+        }
+    }
+}
+
+Time complexity : \mathcal{O}(n + m)O(n+m).
+Space complexity : \mathcal{O}(1)O(1).
+
+---------------------------------------------------------------------------------------------------
+
+
+
