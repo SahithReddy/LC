@@ -40,6 +40,10 @@ class Solution {
 }
 
 time O(n^2), space O(n)
+// (1) Sort the array - O(nlogn)
+// (2) Iterate the array - O(n)
+// (3) Find valid triplets - O(n)
+// Overall time complexity: O(n^2)
 ------------------------------------------------------------------------------------------------------------------
 Below is the same solution but with small names and better to understand
 
