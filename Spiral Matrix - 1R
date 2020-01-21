@@ -1,5 +1,7 @@
 // Crazy Logic and Problem. All about iteration and indexing
 
+//https://leetcode.com/problems/spiral-matrix/solution/ - see the picture in tthe first comment 
+
 
 // Solution is here in the main comment:
 https://leetcode.com/problems/spiral-matrix/discuss/20599/Super-Simple-and-Easy-to-Understand-Solution
@@ -62,3 +64,8 @@ public class Solution {
         return res;
     }
 }
+
+Time Complexity: O(N), where NN is the total number of elements in the input matrix. 
+We add every element in the matrix to our final answer.
+
+Space Complexity: O(N), the information stored in ans.
