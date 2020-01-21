@@ -21,6 +21,6 @@ class Solution {
     }
 }
 
-Time complexity : O\big(n \log(n)\big)O(nlog(n)). Sorting takes O\big(n \log(n)\big)O(nlog(n)) time.
+Time complexity : (nlog(n)). Sorting takes O(nlog(n)) time.
 
-Space complexity : O(1)O(1). No extra space is used.
+Space complexity : O(1). No extra space is used.
