@@ -39,6 +39,11 @@ class MedianFinder {
 
 // Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
 
+At worst, there are three heap insertions and two heap deletions from the top. Each of these takes about O(logn) time.
+Finding the mean takes constant O(1)O(1) time since the tops of heaps are directly accessible. So O(logN).
+
+Space complexity: O(n) linear space to hold input in containers.
+
 ------------------------------------------------------------------------------
 // IF FACEING PROBLEM TO UNDERSTAND OR JUSTIFY ABOVE SOLUTION TO OTHERS FOLLOW TH EBELOW ONE. MORE INTUTIVE, EASY BUT 
 ALSO VEY FAST
