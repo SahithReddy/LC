@@ -27,7 +27,9 @@ class Solution {
     }
 }
 
+Time complexity : }(N^2)
 
+Space complexity : O(1) since we do a rotation in place.
 
 TIP: For Anticlockwise rotation, transpose step would remain the same. In the last step instead of flipping the columns, 
 flip the rows vertically.
