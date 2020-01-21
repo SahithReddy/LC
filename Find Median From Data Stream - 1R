@@ -9,8 +9,8 @@ Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-fr
 class MedianFinder {
 
     /** initialize your data structure here. */
-    PriorityQueue<Integer> min = new PriorityQueue<>(); //MIN HEAP Holds the larger half of the numbers
-    PriorityQueue<Integer> max =  new PriorityQueue<>(Collections.reverseOrder()); //MAX HEAP holds the smaller half of the numbers
+    PriorityQueue<Integer> min = new PriorityQueue<>(); //MIN HEAP Holds the upper half of the numbers
+    PriorityQueue<Integer> max =  new PriorityQueue<>(Collections.reverseOrder()); //MAX HEAP holds the lower half of the numbers
     public MedianFinder() {
         
     }
