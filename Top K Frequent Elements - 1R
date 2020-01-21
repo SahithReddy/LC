@@ -37,6 +37,8 @@ Similar Questions: Top K Frequent Words, Sort Characters By Frequency
 For maxheap both would be N. and complexity id NlogN.
  K and N different But Big-O doesn't care that k<=n. Constant factors are not relevant to the complexity analysis. 
  
+ Spae: O(n) to store the hashmap
+ 
  //however implementing maxHeap
  
  class Solution {
