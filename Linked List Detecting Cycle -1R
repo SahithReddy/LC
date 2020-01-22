@@ -1,3 +1,5 @@
+// Usimg SET
+
 public class Solution {
     public boolean hasCycle(ListNode head) {
         Set<ListNode> seenNode = new HashSet<ListNode>();
@@ -10,7 +12,12 @@ public class Solution {
         } return false;
     }
 }
+
+Time: O(n) adn Space: O(n)
 -----------------------------------------------------------------------------------------
+// Iterative
+
+
 public class Solution {
     public boolean hasCycle(ListNode head) {
     ListNode fast = head;
@@ -24,4 +31,6 @@ public class Solution {
     } return false;
 }
 }
+
+Time: O(n) Space: O(1);
 ---------------------------------------------------------------------------------------------
