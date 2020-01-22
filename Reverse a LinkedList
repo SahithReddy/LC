@@ -11,17 +11,29 @@ class Solution {
 
 https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
 ------------------------------------------------------------------------------------------------------------
-Iterative Method
-class Solution {
-    public ListNode reverseList(ListNode head) {
-        ListNode prev = null;
-        while(head!=null){
-            ListNode next = head.next;
-            head.next = prev;
-            prev = head;
-            head = next;
-        } return prev; 
+// Iterative Method . - https://www.youtube.com/watch?v=O0By4Zq0OFc
+
+Really a genius solution! Here I focused on the iterative one, and I slightly change the naming of variables to make 
+it easier to understand (for newbies like me!).
+
+I use three pointers: prevHead, head, recordNext.
+
+Basic idea here is that there are always three pointers, which are represented in sequence as prevHead, head, recordNext. 
+Everytime in loop just make head.next points to prevHead, and then move all these three pointers to one next step.
+
+Since when we exit the while loop, head is pointing to null, so prevHead points to the end node of original list, 
+and thus we return prevHead.
+
+public ListNode reverseList(ListNode head) {
+        ListNode prevHead = null;
+        while(head != null){
+            ListNode recordNext = head.next;
+            head.next = prevHead;
+            prevHead = head;
+            head = recordNext;
+        }
+        return prevHead;
     }
-}
-https://www.youtube.com/watch?v=O0By4Zq0OFc
+
+Time: O(n) Space: O(1);
 ----------------------------------------------------------------------------------------------------------------
