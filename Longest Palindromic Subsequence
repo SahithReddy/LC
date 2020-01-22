@@ -1,0 +1,30 @@
+https://www.youtube.com/watch?v=_nCsPn7_OgI - Crazy video solution and final formula at the last.
+
+
+https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99101/Straight-forward-Java-DP-solution -- See the first comment
+
+  public int LongestPalindromeSub (string s) {
+        int[,] dp = new int[s.Length, s.Length];
+        
+        for(int i = 0; i< s.Length; i++)
+        {
+            dp[i,i] = 1;
+            for(int j = i-1; j>=0; j--)
+            {
+                if(s[i] == s[j])
+                {
+                    dp[i,j] = 2 + dp[i-1,j+1];
+                }
+                else
+                {
+                    dp[i,j] = Math.Max(dp[i-1,j], dp[i,j+1]);
+                }
+            }
+        }
+        return dp[s.Length-1,0];
+    }
+    
+    ------------------------------------------------------------------------------------------------------------------------
+    // https://leetcode.com/problems/longest-palindromic-subsequence/discuss/99111/Evolve-from-brute-force-to-dp
+    
+    above one is good too
