@@ -1,15 +1,39 @@
-Recursive Method
+// Recursive Method
+
+Watch it: https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
+
+Much easier, intuitive recursive method and concise code:
+Key: reverse remaining linked list headed at head.next first, then operate on head
+
+initial:
+1 -> 2 -> 3 -> 4 -> 5
+
+after reverseList(2):
+1 -> 2 <- 3 <- 4 <- 5
+     |
+     v
+    null
+	
+after operate on 1:
+null <- 1 <- 2 <- 3 <- 4 <- 5
+Code:
+
 class Solution {
     public ListNode reverseList(ListNode head) {
+        // base case
         if(head == null || head.next == null) return head;
-        ListNode p = reverseList(head.next);
-        head.next.next=head;
+        
+        ListNode newHead = reverseList(head.next);
+        
+        head.next.next = head;
         head.next = null;
-        return p;
+
+        return newHead;
     }
 }
 
-https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
+
+Time: O(n) Space: O(N) becusae of recursion stack;
 ------------------------------------------------------------------------------------------------------------
 // Iterative Method . - https://www.youtube.com/watch?v=O0By4Zq0OFc
 
