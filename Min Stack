@@ -1,1 +1,50 @@
-// Do it now
+// https://leetcode.com/problems/min-stack/discuss/49010/Clean-6ms-Java-solution . - 4th comment here
+
+class MinStack {
+
+    /** initialize your data structure here. */
+    private Node head;
+    public MinStack() {
+        head = null;
+    }
+    
+    public void push(int x) {
+        if(head==null){
+            head = new Node(x,x,null);
+        } else{
+            head = new Node(x, Math.min(x, head.min), head);
+        }
+    }
+    
+    public void pop() {
+        head = head.prev;
+    }
+    
+    public int top() {
+        return head.val;
+    }
+    
+    public int getMin() {
+        return head.min;
+    }
+    
+    private class Node{
+        int val;
+        int min;
+        Node prev;
+        
+        private Node(int val, int min, Node prev){
+            this.val = val;
+            this.min = min;
+            this.prev = prev;
+        }
+    }
+}
+
+Q&A
+can u track next min value after u pop current min value?
+Sol: I think it can. Because all nodes stores the min from itself downwards. 
+New nodes added to the head may have smaller values, but won't change the stored value down the stack
+
+How do you keep track of min value if its popped?
+Sol: Each node stores the min value at or below it.
