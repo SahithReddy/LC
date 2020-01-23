@@ -73,4 +73,8 @@ Time complexity : O(1) both for put and get. DLL remove(at any position) is O(1)
 Space complexity : O(capacity) since the space is used only for a hashmap and double linked list with at 
 most capacity + 1 elements.
 
+Just for reference: 
+https://leetcode.com/problems/lru-cache/discuss/45911/Java-Hashtable-%2B-Double-linked-list-(with-a-touch-of-pseudo-nodes)
+https://leetcode.com/problems/lru-cache/discuss/45922/JAVA-Easy-Version-To-Understand!!!!
+
 
