@@ -1,2 +1,76 @@
 Good Theory: // https://www.interviewcake.com/concept/java/lru-cache
 
+
+// Solution from this video: https://www.youtube.com/watch?v=NDpwj0VWz1U 
+
+class LRUCache {
+    
+    final Node head  = new Node();
+    final Node tail = new Node();
+    HashMap<Integer, Node> map;
+    int capacity;
+    
+    public LRUCache(int capacity) {
+        map = new HashMap(capacity);
+        this.capacity = capacity;
+        head.next = tail;
+        tail.prev= head;
+    }
+    
+    public int get(int key) {
+        int result = -1;
+        Node node = map.get(key);
+          if(node!=null){
+              result = node.val;
+              remove(node);
+              insertToHead(node);
+          } return result;  
+    }
+    
+    public void put(int key, int value) {
+        Node node = map.get(key);
+        if(node!=null){
+                  remove(node);
+            node.val = value;
+            insertToHead(node);
+        }else{
+            if(map.size()==capacity){
+                map.remove(tail.prev.key);
+                remove(tail.prev);
+            }
+            Node new_node = new Node();
+            new_node.key = key;
+            new_node.val = value;
+            map.put(key, new_node);
+            insertToHead(new_node);
+        }
+    }
+    
+    private void remove(Node node){
+      Node next_node = node.next;
+        Node prev_node = node.prev;
+        
+        next_node.prev = prev_node;
+        prev_node.next = next_node;
+    }
+    
+    private void insertToHead(Node node){
+      Node head_next = head.next;
+        head.next = node;
+        node.prev = head;
+        node.next = head_next;
+        head_next.prev = node;
+    }
+    
+    class Node{
+      Node prev, next;
+      int key, val;
+    }
+}
+
+Time complexity : O(1) both for put and get. DLL remove(at any position) is O(1). Also, inserting/removing at head/tail is O(1)
+
+Space complexity : O(capacity) since the space is used only for a hashmap and double linked list with at 
+most capacity + 1 elements.
+
+
