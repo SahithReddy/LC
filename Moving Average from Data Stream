@@ -1,0 +1,28 @@
+// https://leetcode.com/problems/moving-average-from-data-stream/discuss/81491/Java-O(1)-time-solution.  - First Comment
+
+
+class MovingAverage {
+    Queue<Integer> q;
+    double sum=0;
+    int s;
+    /** Initialize your data structure here. */
+    public MovingAverage(int size) {
+        q = new LinkedList();
+        s = size;
+    }
+    
+    public double next(int val) {
+        if(s == q.size()){
+            sum = sum - q.poll();
+        }
+        
+        q.offer(val);
+        sum+=val;
+        return sum/q.size();
+    }
+}
+
+Time Complexity: \mathcal{O}(N)O(N) where NN is the size of the moving window, since we need to retrieve NN 
+elements from the queue at each invocation of next(val) function.
+Space Complexity: \mathcal{O}(M)O(M), where MM is the length of the queue which would grow at each invocation 
+of the next(val) function.
