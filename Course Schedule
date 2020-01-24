@@ -1,0 +1,70 @@
+// https://leetcode.com/problems/course-schedule/discuss/58669/Concise-JAVA-solutions-based-on-BFS-and-DFS-with-explanation
+
+BFS Solution: (Topological sorting)
+
+The basic idea is to use Topological algorithm: put NODE with 0 indgree into the queue, then make indegree of NODE's successor dereasing 1. Keep the above steps with BFS.
+
+Finally, if each node' indgree equals 0, then it is validated DAG (Directed Acyclic Graph), which means the course schedule can be finished.
+
+public boolean canFinish(int numCourses, int[][] prerequisites) {
+    if (numCourses == 0 || prerequisites.length == 0) return true;
+
+    // Convert graph presentation from edges to indegree of adjacent list.
+    int indegree[] = new int[numCourses];
+    for (int i = 0; i < prerequisites.length; i++) // Indegree - how many prerequisites are needed.
+        indegree[prerequisites[i][0]]++;    
+
+    Queue<Integer> queue = new LinkedList<Integer>();
+    for (int i = 0; i < numCourses; i++) 
+        if (indegree[i] == 0)
+            queue.add(i);
+
+    // How many courses don't need prerequisites.
+    int canFinishCount = queue.size();  
+    while (!queue.isEmpty()) {
+        int prerequisite = queue.remove(); // Already finished this prerequisite course.
+        for (int i = 0; i < prerequisites.length; i++)  {
+            if (prerequisites[i][1] == prerequisite) { 
+                indegree[prerequisites[i][0]]--;
+                if (indegree[prerequisites[i][0]] == 0) {
+                    canFinishCount++;
+                    queue.add(prerequisites[i][0]);
+                }
+            }
+        }
+    }
+
+    return (canFinishCount == numCourses);    
+}
+
+Tiem Complexity: For your BFS code, I think the complexity is O(V*E). As you iterate through the edge list every time. 
+It can be reduced to O(V+E) by converting the edge list into a adjacency list.
+------------------------------------------------------------------------------------------------
+Thanks! This is a little bit concise version for quick writing in interview:
+
+    public boolean canFinish(int numCourses, int[][] pres) {
+        int n=pres.length;
+        if (numCourses==0||pres.length==0) return true;
+        int[] indegree=new int[numCourses];
+        for (int[] pre:pres){
+            indegree[pre[0]]++;
+        }
+        Queue<Integer> queue=new LinkedList<>();
+        for(int i=0;i<numCourses;i++){
+            if (indegree[i]==0) queue.add(i);
+        }
+        int count=queue.size();
+        while(!queue.isEmpty()){
+            int prereq=queue.poll();
+            for (int[] pre:pres){
+                if (pre[1]==prereq){
+                    indegree[pre[0]]--;
+                    if (indegree[pre[0]]==0){
+                        queue.add(pre[0]);
+                        count++;
+                    }
+                }
+            }
+        }
+        return count==numCourses;
+    }
