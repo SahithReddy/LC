@@ -1,0 +1,19 @@
+Crazy Explanation:
+https://leetcode.com/problems/consecutive-numbers-sum/discuss/129015/5-lines-C%2B%2B-solution-with-detailed-mathematical-explanation.
+
+Solution in Java based om above approach:
+https://leetcode.com/problems/consecutive-numbers-sum/discuss/128959/JavaPython-3-5-liners-O(N-0.5)-Math-method-w-explanation-and-analysis.
+
+class Solution {
+    public int consecutiveNumbersSum(int N) {
+        int ans =0;
+        for(int i=1; i*(i-1)/2< N; i++){
+            if((N-i*(i-1)/2)%i == 0) ans++;
+        } return ans;
+    }
+}
+
+Solve the equation i * (i - 1) / 2 = N, we know i ~ N ^ 0.5
+Loop runs at most N ^ 0.5 times, so
+
+Time: O(N ^ 0.5), space: O(1)
