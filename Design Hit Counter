@@ -1,0 +1,118 @@
+O(s) s is total seconds in given time interval, in this case 300.
+basic ideal is using buckets. 1 bucket for every second because we only need to keep the recent hits info 
+for 300 seconds. hit[] array is wrapped around by mod operation. Each hit bucket is associated with times[] 
+bucket which record current time. If it is not current time, it means it is 300s or 600s... ago and need to reset to 1.
+
+
+class HitCounter {
+    int length;
+    int [] time;
+    int [] hits;
+    /** Initialize your data structure here. */
+    public HitCounter() {
+        length = 300;
+        time = new int[length];
+        hits = new int[length];
+    }
+    
+    /** Record a hit.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public void hit(int timestamp) {
+        int index = timestamp % length;
+        if(time[index]!=timestamp){
+            time[index]=timestamp;
+            hits[index] =1;
+        } else{
+            hits[index]+=1;
+        }
+    }
+    
+    /** Return the number of hits in the past 5 minutes.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public int getHits(int timestamp) {
+        int total = 0;
+        for(int i=0; i<length; i++){
+            if(timestamp - time[i]< length){
+                total += hits[i];
+            }
+        }
+        return total;
+    }
+}
+
+/**
+ * Your HitCounter object will be instantiated and called as such:
+ * HitCounter obj = new HitCounter();
+ * obj.hit(timestamp);
+ * int param_2 = obj.getHits(timestamp);
+ */
+ --------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------
+Follow up:
+What if the number of hits per second could be very large? Does your design scale?
+
+ I think AtomicIntegerArray won't solve the issue as other points out, here is a ReentrantReadWriteLock solution.
+ The advantage of ReentrantReadWriteLock over Synchonized keyword is multiple getHits(t) (read operation) won't 
+ block each other, hence increase the performance.
+
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.locks.Lock;
+
+class HitCounter {
+    private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
+    private final Lock r = rwl.readLock();
+    private final Lock w = rwl.writeLock();
+    
+    // store each last get hit timestamp with that bucket
+    int[] times;
+    // store the number of hit for that bucket
+    int[] hits;
+    
+    /** Initialize your data structure here. */
+    public HitCounter() {
+        hits = new int[300];
+        times = new int[300];
+    }
+    
+    /** Record a hit.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public void hit(int timestamp) {
+        w.lock();
+        try {
+            int idx = timestamp % 300;
+            if (times[idx] != timestamp) {
+                // not in the same 5 minute window
+                times[idx] = timestamp;
+                hits[idx] = 1;
+            } else {
+                hits[idx]++;
+            }
+                    
+        } finally {
+            w.unlock();
+        }
+    }
+    
+    /** Return the number of hits in the past 5 minutes.
+        @param timestamp - The current timestamp (in seconds granularity). */
+    public int getHits(int timestamp) {
+        int sum = 0;
+        r.lock();
+        try {
+            for (int i = 0; i < 300; i++) {
+                if (timestamp - times[i] < 300) sum += hits[i];
+            }            
+        } finally {
+            r.unlock();
+        }
+        return sum;
+    }
+}
+
+/**
+ * Your HitCounter object will be instantiated and called as such:
+ * HitCounter obj = new HitCounter();
+ * obj.hit(timestamp);
+ * int param_2 = obj.getHits(timestamp);
+ */
+  --------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------
+ 
