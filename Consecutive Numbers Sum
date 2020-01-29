@@ -4,6 +4,17 @@ https://leetcode.com/problems/consecutive-numbers-sum/discuss/129015/5-lines-C%2
 Solution in Java based om above approach:
 https://leetcode.com/problems/consecutive-numbers-sum/discuss/128959/JavaPython-3-5-liners-O(N-0.5)-Math-method-w-explanation-and-analysis.
 
+
+For the example: x + (x+1) + (x+2)+...+ k terms = N, I guess write it as x + (x+1) + (x+2)+...+ x + k - 1 = N would be clearer,
+so it's easier to observe there are k items: x + 0, x + 1 .. x + (k - 1), implies kx + k*(k-1)/2 = N ==> kx = N - k*(k-1)/2
+
+
+So, we can calculate the RHS for every value of k and if it is a multiple of k then we can construct a sum of N using k terms
+starting from x.
+Now, the question arises, till what value of k should we loop for? That's easy. In the worst case, RHS should be greater 
+than 0. That is
+N - k*(k-1)/2 > 0 
+
 class Solution {
     public int consecutiveNumbersSum(int N) {
         int ans =0;
