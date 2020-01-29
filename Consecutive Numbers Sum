@@ -13,7 +13,7 @@ So, we can calculate the RHS for every value of k and if it is a multiple of k t
 starting from x.
 Now, the question arises, till what value of k should we loop for? That's easy. In the worst case, RHS should be greater 
 than 0. That is
-N - k*(k-1)/2 > 0 
+N - k*(k-1)/2 > 0 ==> k*(k-1)/2< N
 
 class Solution {
     public int consecutiveNumbersSum(int N) {
