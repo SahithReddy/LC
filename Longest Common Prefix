@@ -1,0 +1,28 @@
+// for indexOf metod: https://www.geeksforgeeks.org/java-string-indexof/
+
+Solution: https://leetcode.com/problems/longest-common-prefix/discuss/6910/Java-code-with-13-lines
+
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs ==null || strs.length<1) return "";
+        String answer =strs[0];
+        for(int i=1; i<strs.length; i++){
+            while(strs[i].indexOf(answer)!=0){
+                answer = answer.substring(0, answer.length()-1);
+            }
+        } return answer;
+    }
+
+
+Time complexity : O(S)O(S) , where S is the sum of all characters in all strings.
+
+In the worst case all nn strings are the same. The algorithm compares the string S1S1 with the other strings 
+[S_2 \ldots S_n][S 
+2
+​	
+ …S 
+n
+​	
+ ] There are SS character comparisons, where SS is the sum of all characters in the input array.
+
+Space complexity : O(1)O(1). We only used constant extra space.
