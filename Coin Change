@@ -1,1 +1,27 @@
-// Do it here...
+// Iterative -- Bottom Up Approach
+
+
+Crazy Explanation: https://www.youtube.com/watch?v=jgiZlGzXMBw&feature=youtu.be
+
+Inspired from here: 3rd Comment: 
+https://leetcode.com/problems/coin-change/discuss/77368/*Java*-Both-iterative-and-recursive-solutions-with-explanations
+
+class Solution{
+    public int coinChange(int[] coins, int amount){
+        int [] dp = new int[amount+1];
+        for(int i =1; i<=amount; i++){
+            int min = Integer.MAX_VALUE;
+            for(int coin: coins){
+                if(i-coin>=0 && dp[i-coin]!= -1){
+                    min = dp[i-coin]<min? dp[i-coin] : min;
+                } 
+            }
+            dp[i] = min==Integer.MAX_VALUE? -1: min+1;
+        }
+        return dp[amount];
+    }
+}
+
+Time Complexity: O(A*C) A-> Amount C-> Coins
+Space: O(A) -> Call stack depth of A
+
