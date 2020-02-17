@@ -1,0 +1,66 @@
+// Referred from here: https://www.baeldung.com/java-merge-sort
+// This too: https://www.educative.io/edpresso/how-to-implement-a-merge-sort-in-java
+// **Only Diagram : https://www.geeksforgeeks.org/merge-sort/
+
+
+// we'll write a mergeSort function which takes in the input array and its length
+public static void mergesort(int [] a, int n){
+
+  if(n<2) return; // The base condition checks if the array length is 1 and it will just return.
+
+  int mid = n/2;
+
+  int[] l = int [mid];
+  int[] r = int[n-mid];
+
+  for(int i=0; i<mid; i++){
+    l[i] = a[i];
+  }
+
+  for(int i=mid; i<n; i++){
+    r[i-mid] = a[i];
+  }
+
+// For the recursive case, we get the middle index and create two temporary arrays l[] and r[]. 
+// The mergeSort function is then called recursively for both the sub-arrays:
+  mergesort(l, mid);
+  mergesort(r, n-mid);
+
+// We then call the merge function which takes in the input and both the sub-arrays and the starting and end indices 
+of both the sub arrays.
+  merge(a, l, r, min, n-mid);
+}
+
+// The merge function compares the elements of both sub-arrays one by one and places the smaller element into the input array.
+public static void merge(int[] a, int[] l, int[] r, int left, int right){
+
+  int i=0; j=0; k=0;
+
+  while(i<left && j<right){
+    if(l[i]<r[j]) a[k++] = l[i++];
+    else a[k++] = r[j++];
+  }
+
+// When we reach the end of one of the sub-arrays, the rest of the elements from the other array are copied 
+    into the input array thereby giving us the final sorted array:
+  while(i<left) { 
+    a[k++] = l[i++];
+  }
+
+  while (j<right) { 
+    a[k++] = r[j++];
+  }
+
+}
+
+The unit test for the program:
+@Test
+public void positiveTest() {
+    int[] actual = { 5, 1, 6, 2, 3, 4 };
+    int[] expected = { 1, 2, 3, 4, 5, 6 };
+    MergeSort.mergeSort(actual, actual.length);
+    assertArrayEquals(expected, actual);
+}
+
+Time: O(nlogn); This is true for worst, average and best cases.
+Space: O(n); we are creating temporary arrays in each recursive call
