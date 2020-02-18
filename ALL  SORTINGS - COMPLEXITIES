@@ -1,3 +1,33 @@
-Bubble SOrt; O(n^2) swapping side-by-side items and doing this until whole array  is sorted.
+Bubble SOrt; O(n^2) swapping side-by-side items and doing this until whole array is sorted.
+------------------------------------------------------------------------------------------------------------------------
 
-Insertion Sorr: O(n^2) Sorted and Unsorted array two parts.Expand the sorted part until whole array is sorted.
+Insertion Sorr: O(n^2) 
+
+The idea behind Insertion Sort is dividing the array into the sorted and unsorted subarrays.
+
+The sorted part is of length 1 at the beginning and is corresponding to the first (left-most) element in the array. 
+We iterate through the array and during each iteration, we expand the sorted portion of the array by one element.
+
+Upon expanding, we place the new element into its proper place within the sorted subarray. We do this by shifting all 
+of the elements to the right until we encounter the first element we don't have to shift.
+
+For example, if in the following array the bolded part is sorted in an ascending order, the following happens:
+
+3 5 7 8 4 2 1 9 6: We take 4 and remember that that's what we need to insert. Since 8 > 4, we shift.
+
+3 5 7 x 8 2 1 9 6: Where the value of x is not of crucial importance, since it will be overwritten immediately 
+(either by 4 if it's its appropriate place or by 7 if we shift). Since 7 > 4, we shift.
+
+3 5 x 7 8 2 1 9 6
+
+3 x 5 7 8 2 1 9 6
+
+3 4 5 7 8 2 1 9 6
+
+After this process, the sorted portion was expanded by one element, we now have five rather than four elements. 
+Each iteration does this and by the end we'll have the whole array sorted.
+
+--> Time Complexity: This is because in each iteration, we'll have to move the whole sorted list by one, which is O(n). 
+We have to do this for each element in every array, which means it's going to be bounded by O(n^2).
+
+------------------------------------------------------------------------------------------------------------------------
