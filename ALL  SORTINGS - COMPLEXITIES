@@ -1,0 +1,3 @@
+Bubble SOrt; O(n^2) swapping side-by-side items and doing this until whole array  is sorted.
+
+Insertion Sorr: O(n^2) Sorted and Unsorted array two parts.Expand the sorted part until whole array is sorted.
