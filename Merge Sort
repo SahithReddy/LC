@@ -1,6 +1,7 @@
 // Referred from here: https://www.baeldung.com/java-merge-sort
 // This too: https://www.educative.io/edpresso/how-to-implement-a-merge-sort-in-java
 // **Only Diagram : https://www.geeksforgeeks.org/merge-sort/
+// DIAGRAM: https://4.bp.blogspot.com/-k5wgS4lwMrU/Wptps_lyVWI/AAAAAAAAK70/mFC6CJxIZfotXuu3ViC8y_cL1AnHB-v-gCLcBGAs/s640/how%2Bmerge%2Bsort%2Balgorithm%2Bworks%2Bin%2BJava.png
 
 
 // we'll write a mergeSort function which takes in the input array and its length
