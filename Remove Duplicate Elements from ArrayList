@@ -1,1 +1,10 @@
 // https://javarevisited.blogspot.com/2012/12/how-to-remove-duplicates-elements-from-ArrayList-Java.html
+
+
+You could do
+
+HashSet<T> uniqueElems = new HashSet<>(yourArrayList);
+And if you wanted back to array
+
+yourArrayList = new ArrayList<>(uniqueElems);
+assuming your equals() method for the element is defined correctly
