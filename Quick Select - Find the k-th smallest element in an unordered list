@@ -1,0 +1,15 @@
+The important part in quick select is PARTITION. So let me explain that first.
+
+Partition in quick select picks a pivot (either randomly or first/last element). 
+Then it rearranges the list in a way that all elements less than pivot are on left side of pivot and others on right. 
+It then returns index of the pivot element.
+
+Now here we are SEARCHING kth smallest element. After partition cases are:
+
+k == pivot. Then you have already found kth smallest. This is because the way partition is working. 
+There are exactly k - 1 elements that are smaller than the kth element.
+
+k < pivot. Then kth smallest is on the left side of pivot.
+
+k > pivot. Then kth smallest is on the right side of pivot. 
+And to find it you actually have to find k-pivot smallest number on right.
