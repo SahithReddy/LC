@@ -103,7 +103,21 @@ QuickSort tends to be a bit better and more consistent - which checks out.
 There are also various algorithms which perform the sorting task for restricted kinds of values, for example:
 
 Counting sort, which relies on the values belonging to a small set of items
+--> Time Complexity:
+Best case : O(n+k)
+Average case : O(n+k)
+Worst case : O(n+k)
+
+
 Bucket sort, which relies on the ability to map each value to one of a small set of items
+--> Time Complexity:
+Best case : O(n+k)
+Average case : O(n+k)
+Worst case : O(n^2)
+
 Radix sort, which relies on the values being sequences of digits
-
-
+--> Time Complexity:
+Best case : O(nk)
+Average case : O(nk)
+Worst case : O(nk)
+------------------------------------------------------------------------------------------------------------------------
