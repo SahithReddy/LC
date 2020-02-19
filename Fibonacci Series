@@ -1,0 +1,37 @@
+// Recursive
+
+class Solution {
+    public int fib(int N) {
+        if(N<2) return N;
+        return fib(N-1) + fib(N-2);
+    }
+}
+
+Time complexity: O(2^n)- since T(n) = T(n-1) + T(n-2)is an exponential time
+Space complexity: O(n) - space for recursive function call stack
+
+// Iterative
+
+class Solution {
+    public int fib(int N) {
+        if(N<2) return N;
+        
+        int a=0; int b=1;
+        
+        while(N-- >1){
+            int sum = a + b;
+            a=b;
+            b=sum;
+        }
+        return b;
+    }
+}
+
+Time complexity: O(n)
+Space complexity: O(1)
+
+
+// Similar Problems:
+https://leetcode.com/problems/decode-ways
+https://leetcode.com/problems/unique-paths/
+https://leetcode.com/problems/climbing-stairs/
