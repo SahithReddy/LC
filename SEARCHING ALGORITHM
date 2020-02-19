@@ -1,0 +1,37 @@
+// Copied from here: https://python-textbok.readthedocs.io/en/1.0/Sorting_and_Searching_Algorithms.html
+
+linear search, which simply checks the values in sequence until the desired value is found
+------------------------------------------------------------------------------------------------------------------
+BINARY SEARCH
+which requires a sorted input list, and checks for the value in the middle of the list, 
+repeatedly discarding the half of the list which contains values which are definitely either all larger or 
+all smaller than the desired value
+
+We first check the middle element in the list.
+
+If it is the value we want, we can stop.
+If it is higher than the value we want, we repeat the search process with the portion of the list before the middle element.
+If it is lower than the value we want, we repeat the search process with the portion of the list after the middle element.
+
+------------------------------------------------------------------------------------------------------------------
+TIME:
+Algorithm	      Best case	     Expected	      Worst case
+Selection sort	  O(N2)	        O(N2)	          O(N2)
+Merge sort	      O(N log N)	  O(N log N)	  O(N log N)
+Linear search	    O(1)	        O(N)	        O(N)
+Binary search	    O(1)	        O(log N)	    O(log N)
+
+SPACE:
+Algorithm	          Space complexity
+Selection sort	        O(1)
+Merge sort	            O(N)
+Linear search	          O(1)
+Binary search	          O(1)
+------------------------------------------------------------------------------------------------------------------
+
+LINEAR VS BINARY
+The advantage of linear search is that it can be performed on an unsorted list – if we are going to examine all 
+the values in turn, their order doesn’t matter. It can be more efficient to perform a linear search than a binary 
+search if we need to find a value once in a large unsorted list, because just sorting the list in preparation for 
+performing a binary search could be more expensive. If, however, we need to find values in the same large list 
+multiple times, sorting the list and using binary search becomes more worthwhile.
