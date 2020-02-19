@@ -1,4 +1,6 @@
 https://stackabuse.com/sorting-algorithms-in-java/
+
+https://java2blog.com/sorting-algorithms-java/
 ------------------------------------------------------------------------------------------------------------------------
 Bubble SOrt; O(n^2) swapping side-by-side items and doing this until whole array is sorted.
 ------------------------------------------------------------------------------------------------------------------------
@@ -97,5 +99,11 @@ all of the sorting is done in-place, and there's no expensive allocation and dea
 
 HeapSort and QuickSort are the best performance-wise. Although they're outputting similar results, 
 QuickSort tends to be a bit better and more consistent - which checks out.
+------------------------------------------------------------------------------------------------------------------------
+There are also various algorithms which perform the sorting task for restricted kinds of values, for example:
+
+Counting sort, which relies on the values belonging to a small set of items
+Bucket sort, which relies on the ability to map each value to one of a small set of items
+Radix sort, which relies on the values being sequences of digits
 
 
