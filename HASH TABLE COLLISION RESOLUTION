@@ -1,0 +1,18 @@
+// THOP explanation of Hash Tables
+https://www.hackerearth.com/practice/data-structures/hash-tables/basics-of-hash-tables/tutorial/
+
+
+// Good explanation of colliosion, resolution techniques like linear probing, quadratic probing, Double Hashing. Load Factor 
+https://www.youtube.com/watch?v=xdGs0S9iPi4 --> Summary Below
+
+Load Factor = N/Mwhere N= no of keys & M=no of hash address. Load factor is directly proportional to collision probability
+
+Collision Depends on Factors:
+1. Distribution of key values
+2. Selection of hashing techniques (Division Method, Mid Square method, Folding Method)
+3. Load factor
+
+// https://www.youtube.com/watch?v=zeMa9sg-VJM. --> Summary below:
+Closed Addressing - When collision occurs we use chaining method(LinkedList would be used to store) to store values in the addresses
+
+Open Addressing = when collision occurs we use probing to store values in the address
