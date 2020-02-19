@@ -1,6 +1,8 @@
 https://stackabuse.com/sorting-algorithms-in-java/
 
 https://java2blog.com/sorting-algorithms-java/
+
+// Copied from here: https://python-textbok.readthedocs.io/en/1.0/Sorting_and_Searching_Algorithms.html
 ------------------------------------------------------------------------------------------------------------------------
 Bubble SOrt; O(n^2) swapping side-by-side items and doing this until whole array is sorted.
 ------------------------------------------------------------------------------------------------------------------------
