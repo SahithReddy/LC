@@ -1,3 +1,5 @@
+// Very Well Explained - https://stackoverflow.com/questions/10846482/quickselect-algorithm-understanding
+
 The important part in quick select is PARTITION. So let me explain that first.
 
 Partition in quick select picks a pivot (either randomly or first/last element). 
@@ -13,3 +15,13 @@ k < pivot. Then kth smallest is on the left side of pivot.
 
 k > pivot. Then kth smallest is on the right side of pivot. 
 And to find it you actually have to find k-pivot smallest number on right.
+
+This reduces the expected complexity from O(n log n) of Quick Sort to O(n), with a worst case of O(n^2).
+
+--> Like quicksort, it is fast in practice, but has poor worst-case performance of O^2 when a wrong pivot is choosen
+--> The partition process is same as QuickSort, only recursive code differs.
+--> There exists an algorithm that finds k-th smallest element in O(n) in worst case, 
+    but QuickSelect performs better on average.
+    
+CODE:
+// https://www.geeksforgeeks.org/quickselect-algorithm/
