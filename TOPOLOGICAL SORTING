@@ -1,0 +1,47 @@
+// https://www.interviewcake.com/concept/java/topological-sort -- GREAT EXPLANATION WITH PICS
+
+DEFINITION:
+The topological sort algorithm takes a **DIRECTED GRAPH** and returns an array of the nodes where each node 
+appears before all the nodes it points to.
+--------------------------------------------------------------------------------------------------
+IMPLEMENTATION:
+We'll use the strategy we outlined above:
+
+1.Identify a node with no incoming edges.
+2.Add that node to the ordering.
+3.Remove it from the graph.
+4.Repeat.
+
+-->We'll keep looping until there aren't any more nodes with indegree zero. This could happen for two reasons:
+
+There are no nodes left. We've taken all of them out of the graph and added them to the topological ordering.
+There are some nodes left, but they all have incoming edges. This means the graph has a cycle, and no topological 
+ordering exists.
+
+--------------------------------------------------------------------------------------------------
+TIME COMPLEXITY: O(M+N)
+Breaking the algorithm into chunks, we:
+
+1. Determine the indegree for each node. This is O(M)O(M) time (where MM is the number of edges), 
+since this involves looking at each directed edge in the graph once.
+
+2. Find nodes with no incoming edges. This is a simple loop through all the nodes with some number of constant-time appends. 
+O(N)O(N) time (where NN is the number of nodes).
+
+3. Add nodes until we run out of nodes with no incoming edges. This loop could run once for every node—O(N)O(N) times. In the body, we:
+Do two constant-time operations on an array to add a node to the topological ordering.
+Decrement the indegree for each neighbor of the node we added. Over the entire algorithm, we'll end up doing exactly one decrement for each edge, making this step O(M)O(M) time overall.
+Check if we included all nodes or found a cycle. This is a fast O(1)O(1) comparison.
+All together, the time complexity is O(M+N).
+
+That's the fastest time we can expect, since we'll have to look at all the nodes and edges at least once.
+
+SPACE COMPLEXITY:O(N)
+indegrees—this has one entry for each node in the graph, so it's O(N)O(N) space.
+nodesWithNoIncomingEdges—in a graph with no edges, this would start out containing every node, so it's O(N)O(N) 
+space in the worst case.
+topologicalOrdering—in a graph with no cycles, this will eventually have every node. O(N)O(N) space.
+
+All in all, we have three structures and they're all O(N)O(N) space. Overall space complexity: O(N).
+
+This is the best space complexity we can expect, since we must allocate a return array which costs O(N)O(N) space itself.
