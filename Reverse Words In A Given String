@@ -4,3 +4,16 @@ Output : "geeksforgeeks to Welcome"
 Input : "I love Java Programming"
 Output :"Programming Java love I"
 
+public class ReverseWords { 
+  
+    public static void main(String[] args) 
+    { 
+        String s[] = "i like this program very much".split(" "); 
+        String ans = ""; 
+        for (int i = s.length - 1; i >= 0; i--) { 
+            ans += s[i] + " "; // adding space after each word
+        } 
+        System.out.println("Reversed String:"); 
+        System.out.println(ans.substring(0, ans.length() - 1)); // ans.length() - 1 bcoz to eliminate the last space
+    } 
+}
