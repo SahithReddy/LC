@@ -1,0 +1,16 @@
+Binary Search Tree –
+In a binary search tree, left child of a node has value less than the parent and right child has value greater than parent.
+
+//https://www.geeksforgeeks.org/relationship-number-nodes-height-binary-tree/
+
+==>> Calculating minimum and maximum number of nodes from height –
+If binary tree has height h, minimum number of nodes is n+1 (in case of left skewed and right skewed binary tree).
+
+For example, the binary tree shown in Figure 2(a) with height 2 has 3 nodes.(See above GFG links for pictures)
+If binary tree has height h, maximum number of nodes will be when all levels are completely full. 
+Total number of nodes will be 2^0 + 2^1 + …. 2^h = 2^(h+1)-1.
+For example, the binary tree shown in Figure 2(b) with height 2 has 2^(2+1)-1 = 7 nodes.
+
+==>>Calculating minimum and maximum height from the number of nodes –
+
+If there are n nodes in a binary search tree, maximum height of the binary search tree is n-1 and minimum height is floor(log2n)
