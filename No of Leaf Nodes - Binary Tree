@@ -1,0 +1,19 @@
+// https://www.geeksforgeeks.org/write-a-c-program-to-get-count-of-leaf-nodes-in-a-binary-tree/
+
+class GfG
+{
+    int countLeaves(Node node) 
+    {
+         // Your code 
+    // int count = 0;
+  if(node==null) return 0;
+  
+  if(node.left ==null && node.right==null){
+        return 1;
+    }
+    return countLeaves(node.left)+countLeaves(node.right);
+    }
+}
+
+Time: O(N)
+Space: O(N)
