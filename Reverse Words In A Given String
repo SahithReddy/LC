@@ -1,0 +1,5 @@
+Input : "Welcome to geeksforgeeks"
+Output : "geeksforgeeks to Welcome"
+
+Input : "I love Java Programming"
+Output :"Programming Java love I"
