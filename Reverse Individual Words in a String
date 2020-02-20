@@ -1,3 +1,9 @@
+Input : Hello World
+Output : olleH dlroW
+ 
+Input :  Geeks for Geeks
+Output : skeeG rof skeeG
+
 // Explanantion:  https://www.geeksforgeeks.org/reverse-individual-words/. --- Using Stack**
 
 class GFG { 
