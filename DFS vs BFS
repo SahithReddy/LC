@@ -1,0 +1,33 @@
+COMPLEXITIES:
+// https://www.geeksforgeeks.org/bfs-vs-dfs-binary-tree/
+
+Is there any difference in terms of Time Complexity?
+All four traversals require O(n) time as they visit every node exactly once.
+
+Is there any difference in terms of Extra Space?
+There is difference in terms of extra space required.
+
+Extra Space required for Level Order Traversal is O(w) where w is maximum width of Binary Tree. 
+In level order traversal, queue one by one stores nodes of different level.
+
+Extra Space required for Depth First Traversals is O(h) where h is maximum height of Binary Tree. 
+In Depth First Traversals, stack (or function call stack) stores all ancestors of a node.
+
+It is evident from above points that extra space required for Level order traversal is likely to be more when 
+tree is more balanced and extra space for Depth First Traversal is likely to be more when tree is less balanced
+
+How to Pick One?
+
+Extra Space can be one factor (Explained above)
+Depth First Traversals are typically recursive and recursive code requires function call overheads.
+The most important points is, BFS starts visiting nodes from root while DFS starts visiting nodes from leaves. 
+So if our problem is to search something that is more likely to closer to root, we would prefer BFS. And if the target node is close to a leaf, we would prefer DFS.
+---------------------------------------------------------------------------------------------------------
+All DFS Traversals Using Recursiom:
+// https://www.geeksforgeeks.org/dfs-traversal-of-a-tree-using-recursion/
+
+BFS Traversal Recursion and Queueus
+https://www.geeksforgeeks.org/level-order-tree-traversal/
+
+Basecs: 
+//https://medium.com/basecs/demystifying-depth-first-search-a7c14cccf056
