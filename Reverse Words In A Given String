@@ -17,3 +17,14 @@ public class ReverseWords {
         System.out.println(ans.substring(0, ans.length() - 1)); // ans.length() - 1 bcoz to eliminate the last space
     } 
 }
+
+class Solution {
+  public String reverseWords(String s) {
+    // remove leading spaces
+    s = s.trim();
+    // split by multiple spaces
+    List<String> wordList = Arrays.asList(s.split("\\s+"));
+    Collections.reverse(wordList);
+    return String.join(" ", wordList);
+  }
+}
