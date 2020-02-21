@@ -1,0 +1,103 @@
+// https://www.geeksforgeeks.org/find-whether-an-array-is-subset-of-another-array-set-1/
+
+Using Merge Sort: handles Duplicates too
+
+static boolean isSubset(int arr1[], int arr2[], int m, int n) 
+    {  
+        Arrays.sort(arr1); //sorts arr1 
+        Arrays.sort(arr2); // sorts arr2 
+        int i = 0, j = 0; 
+        while( i < m && j < n ) 
+        { 
+            if( arr1[i] < arr2[j] ) i++; 
+            else if( arr1[i] == arr2[j] ) 
+            { 
+                i++; 
+                j++; 
+            } 
+            else if( arr1[i] > arr2[j] ) return false; 
+        }
+        if( i < m ) 
+            return false; 
+        else
+            return true; 
+    } 
+Time: (mLogm + nLogn), Space: O(N)
+
+--------------------------------------------------------------------------------------------------------------------
+// HashSet. -- Easy but does not handles duplicates --{1, 4, 4, 2} is not a subset of {1, 4, 2}, but these methods will print it as a subset.
+
+static boolean isSubset(int arr1[], int arr2[], int m, 
+                                                 int n) 
+    { 
+        HashSet<Integer> hset= new HashSet<>(); 
+          
+        // hset stores all the values of arr1 
+        for(int i = 0; i < m; i++) 
+        { 
+            if(!hset.contains(arr1[i])) 
+                hset.add(arr1[i]); 
+        } 
+              
+        // loop to check if all elements of arr2 also 
+        // lies in arr1 
+        for(int i = 0; i < n; i++) 
+        { 
+            if(!hset.contains(arr2[i])) 
+                return false; 
+        } 
+        return true; 
+    }
+    
+  Time : O(N)
+------------------------------------------------------------------------------------------------------------
+// HashMap -- Handles Duplicates
+// https://www.geeksforgeeks.org/find-whether-an-array-is-subset-of-another-array-using-map/
+Efficient Approach: Create a map to store the frequency of each distinct number present in A[].
+Then we will check if each number of B[] is present in map or not. If present in the map, we will 
+decrement the frequency value for that number by one and check for the next number. 
+If map value for any number becomes zero, we will erase it from the map. If any number of B[] is 
+not found in the map, we will set the flag value and break the loops and print No. Otherwise, we will print Yes.
+
+static int isSubset(int a[], int b[], int m, int n)  
+    {
+        // map to store the values of array a[] 
+        HashMap<Integer, Integer> mp1 = new
+                HashMap<Integer, Integer>(); 
+  
+        for (int i = 0; i < m; i++) 
+            if (mp1.containsKey(a[i]))  
+            { 
+                mp1.put(a[i], mp1.get(a[i]) + 1); 
+            }  
+            else
+            { 
+                mp1.put(a[i], 1); 
+            } 
+  
+        // flag value 
+        int f = 0; 
+  
+        for (int i = 0; i < n; i++)  
+        { 
+            // if b[i] is not present in map 
+            // then array b[] can not be a 
+            // subset of array a[] 
+            if (!mp1.containsKey(b[i]))  
+            { 
+                f = 1; 
+                break; 
+            } 
+  
+            // if if b[i] is present in map 
+            // decrement by one 
+            else 
+            { 
+                mp1.put(b[i], mp1.get(b[i]) - 1); 
+  
+                if (mp1.get(b[i]) == 0) 
+                    mp1.remove(b[i]); 
+            } 
+        }
+        return f; 
+    } 
