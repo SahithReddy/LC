@@ -1,0 +1,19 @@
+//https://stackoverflow.com/questions/11944737/finding-the-minimum-unique-number-in-an-array
+
+I believe this is an O(N) solution in both time and space:
+
+HashSet seenOnce;     // sufficiently large that access is O(1)
+HashSet seenMultiple; // sufficiently large that access is O(1)
+
+for each in input // O(N)
+    if item in seenMultiple
+        next
+    if item in seenOnce
+        remove item from seenOnce
+        add to item seenMultiple
+    else
+        add to item seeOnce
+
+smallest = Integer.MAX_VALUE
+for each in seenOnce // worst case, O(N)
+    Smallest = Math.min(smallest, item)
