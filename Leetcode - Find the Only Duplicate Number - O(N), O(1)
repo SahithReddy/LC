@@ -1,0 +1,56 @@
+Refer: https://leetcode.com/problems/find-the-duplicate-number/
+
+There is only one duplicate number in the array, but it could be repeated more than once.
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        Arrays.sort(nums);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] == nums[i-1]) {
+                return nums[i];
+            }
+        }
+
+        return -1;
+    }
+}
+
+Time complexity : O(nlgn)O(nlgn)
+
+The sort invocation costs O(nlgn)O(nlgn) time in Python and Java, so it dominates the subsequent linear scan.
+
+Space complexity : O(1)O(1) (or O(n)O(n))
+
+Here, we sort nums in place, so the memory footprint is constant. If we cannot modify the input array, then we must allocate linear space for a copy of nums and sort that instead.
+------------------------------------------------------------------------------------------------------------------------
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        Set<Integer> seen = new HashSet<Integer>();
+        for (int num : nums) {
+            if (seen.contains(num)) {
+                return num;
+            }
+            seen.add(num);
+        }
+
+        return -1;
+    }
+}
+
+Time complexity : O(n)O(n)
+
+Set in both Python and Java rely on underlying hash tables, so insertion and lookup have amortized constant time complexities. The algorithm is therefore linear, as it consists of a for loop that performs constant work nn times.
+
+Space complexity : O(n)O(n)
+
+In the worst case, the duplicate element appears twice, with one of its appearances at array index n-1n−1. In this case, seen will contain n-1n−1 distinct values, and will therefore occupy O(n)O(n) space.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------
+Tortoise and Hare - O(N) and O(1)
+
+I did not understood it. Chech here.
+https://leetcode.com/problems/find-the-duplicate-number/solution/
+----------------------------------------------------------------------------------------------------------------------------------
+
+
