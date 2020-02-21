@@ -28,3 +28,6 @@ class Solution {
     return String.join(" ", wordList);
   }
 }
+Time complexity: \mathcal{O}(N)O(N), where N is a number of characters in the input string.
+
+Space complexity: \mathcal{O}(N)O(N), to store the result of split by spaces.
