@@ -22,7 +22,7 @@ class MovingAverage {
     }
 }
 
-Time Complexity: \mathcal{O}(N)O(N) where NN is the size of the moving window, since we need to retrieve NN 
+Time Complexity: O(N) where N is the size of the moving window, since we need to retrieve N 
 elements from the queue at each invocation of next(val) function.
-Space Complexity: \mathcal{O}(M)O(M), where MM is the length of the queue which would grow at each invocation 
+Space Complexity: O(M), where M is the length of the queue which would grow at each invocation 
 of the next(val) function.
