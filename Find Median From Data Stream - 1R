@@ -21,10 +21,11 @@ class MedianFinder {
     Therefore to add a number, we have 3 O(log n) heap operations
     
     public void addNum(int num) {
-        min.offer(num); --->(1)
-        max.offer(min.poll()); ----> (2)
+        min.offer(num); --->(1) // EACH ELEMENT IS ADDEDD TO MIN HEAP FIRST
+        max.offer(min.poll()); ----> (2) // MINIMUM ELEMENT FROM THE TOP OF MIN HEAP IS POPPED AND GIVEN TO MAX HEAP
+        // ABOVE TWO STEPS ENSURES THAT ALL ELEMEMNTS IN MIN HEAP ARE GREATER THAN MAX HEAP
         if(max.size() > min.size()){
-            min.offer(max.poll());  ------>(3)
+            min.offer(max.poll());  ------>(3) // THE TWO HEAPS NEEDS TO BE LOAD BALANCED
         }
     }
     
