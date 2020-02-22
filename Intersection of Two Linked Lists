@@ -1,0 +1,68 @@
+https://leetcode.com/problems/intersection-of-two-linked-lists/
+
+
+// Approach 1: Brute Force (527ms)
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode pa = headA, pb;
+        while (pa != null) {
+            for (pb = headB; pb != null; pb = pb.next) {
+                if (pa == pb) {
+                    return pa;
+                }
+            }
+            pa = pa.next;
+        }
+        return null;
+    }
+}
+
+Time complexity : O(mn)O(mn).
+
+Space complexity : O(1)O(1).
+
+
+// Approach 2: Hash Table (10ms)
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        Set<ListNode> nodes = new HashSet<>();
+        ListNode pa = headA;
+        while (pa != null) {
+            nodes.add(pa);
+            pa = pa.next;
+        }
+        if (nodes.isEmpty()) {
+            return null;
+        }
+        ListNode pb = headB;
+        while (pb != null) {
+            if (nodes.contains(pb)) {
+                return pb;
+            }
+            pb = pb.next;
+        }
+        return null;
+    }
+}
+
+Time complexity : O(m+n)O(m+n).
+
+Space complexity : O(m)O(m) or O(n)O(n).
+
+
+
+
+// Two Pointers
+public class Solution {
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        ListNode pa = headA, pb = headB;
+        while (pa != pb) {
+            pa = (pa != null) ? pa.next : headB;
+            pb = (pb != null) ? pb.next : headA;
+        }
+        return pa;
+    }
+}
+Time complexity : O(m+n)O(m+n).
+
+Space complexity : O(1)O(1).
