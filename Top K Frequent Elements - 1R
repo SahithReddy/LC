@@ -32,14 +32,11 @@ class Solution {
 Timne: O(n) Space: O(n)
 
 Similar Questions: Top K Frequent Words, Sort Characters By Frequency
------------------------------------------------------------------------------------------------
-// If you use  Min Heap instead of Max Heap. SO that Time complexity remains at NlogK where K is the heap size and N is the array size.
-For maxheap both would be N. and complexity id NlogN.
- K and N different But Big-O doesn't care that k<=n. Constant factors are not relevant to the complexity analysis. 
+----------------------------------------------------------------------------------------------
  
- Spae: O(n) to store the hashmap
+ Space: O(n) to store the hashmap
  
- //however implementing maxHeap
+ //// use maxHeap. Put entry into maxHeap so we can always poll a number with largest frequency
  
  class Solution {
     public List<Integer> topKFrequent(int[] nums, int k) {
