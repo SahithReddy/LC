@@ -9,8 +9,10 @@ class Solution {
         }
     }
     
-   O(N), O(1)
-    
+   Time complexity : \mathcal{O}(N)O(N) to swap N/2N/2 element.
+
+Space complexity : \mathcal{O}(1)O(1), it's a constant space solution.
+----------------------------   --------------   --------------   --------------   --------------   --------------   
 // For a input and output datatype String
 
 public class Solution {
@@ -28,8 +30,28 @@ public class Solution {
         return new String(word);
     }
 }
- O(N), O(N)
+
+Time Complexity: `O(n)` (Average Case) and `O(n)` (Worst Case) where `n` is the total number character in the input string. 
+The algorithm need to reverse the whole string.
+
+Auxiliary Space: `O(n)` space is used where `n` is the total number character in the input string. Space is needed to 
+transform string to character array.
+ --------------   --------------   --------------   --------------   --------------   --------------   --------------   --------------   
+ // Using String Builder
  
+public class Solution {
+    public String reverseString(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        return sb.reverse().toString();
+    }
+}
+
+Time Complexity: `O(n)` (Average Case) and `O(n)` (Worst Case) where `n` is the total number character in 
+the input string. Depending on the implementation. However, it is not possible to reverse string in less than `O(n)`.
+
+Auxiliary Space: `O(n)` space is used where `n` is the total number character in the input string. Space is needed to 
+transform immutable string into character buffer in StringBuilder.
+--------------   --------------   --------------   --------------   --------------   --------------   --------------   
  
  // Recursion
  
