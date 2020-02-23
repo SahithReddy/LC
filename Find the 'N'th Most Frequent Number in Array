@@ -1,4 +1,4 @@
 // https://www.ideserve.co.in/learn/find-the-nth-most-frequent-number-in-array
 
 Same as Top k frequest elements. Here, after assigning frequencies in Hash Table. Iterate througj the EntrySet and push 
-into a aMax Heap. Put a condition (MaxHeap.size()<k) and then so a pop. This pop gives kth frequent element;
+into a aMax Heap. Put a condition (MaxHeap.size()<k) and then so a pop. Thr getkey() of this popped entry set gives kth frequent element;
