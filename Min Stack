@@ -1,4 +1,4 @@
-// https://leetcode.com/problems/min-stack/discuss/49010/Clean-6ms-Java-solution . - 4th comment here
+// https://leetcode.com/problems/min-stack/discuss/49010/Clean-6ms-Java-solution . - 4th comment here by UMN-HKC
 
 class MinStack {
 
