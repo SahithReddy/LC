@@ -1,0 +1,22 @@
+class Solution {
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        
+        Stack<TreeNode> s = new Stack<TreeNode>();
+        TreeNode curr = root;
+         while(curr!=null || !s.empty()){
+             while(curr!=null){
+                 s.add(curr);
+                 curr=curr.left;
+             }
+             curr = s.pop();
+             result.add(curr.val);
+             curr=curr.right;
+         }
+        return result;
+    }
+}
+
+Time complexity : O(n).
+
+Space complexity : O(n).
