@@ -1,0 +1,58 @@
+// A Comment by diddit
+https://leetcode.com/problems/max-stack/discuss/108938/Java-AC-solution
+
+// Explanation: https://leetcode.com/problems/max-stack/solution/
+
+Stack<Integer> s;
+Stack<Integer> max;
+Stack<Integer> temp;
+public MaxStack() {
+    s = new Stack<>();
+    max = new Stack<>();
+    temp = new Stack<>();
+}
+
+public void push(int x) {
+    s.push(x);
+    max.push(max.isEmpty() ? x : (x > max.peek() ? x : max.peek()));
+}
+
+public int pop() {
+    max.pop();
+    return s.pop();
+}
+
+public int top() {
+    return s.peek();
+}
+
+public int peekMax() {
+    return max.peek();
+}
+
+public int popMax() {
+    while(!max.peek().equals(s.peek())) {
+        temp.push(s.pop());
+        max.pop();
+    }
+
+    int maxVal = max.pop(); // clear max
+    s.pop(); // clear max
+    
+    while(!temp.isEmpty()) push(temp.pop());
+    
+    return maxVal;
+}
+
+
+Time Complexity: O(N) for the popMax operation, and O(1) for the other operations, 
+where N is the number of operations performed.
+
+Space Complexity: O(N)O(N), the maximum size of the stack.
+
+
+
+Better and Tough ones using TreeMap and DLL:
+https://leetcode.com/problems/max-stack/discuss/129922/Java-simple-solution-with-strict-O(logN)-push()popMax()pop()
+
+https://leetcode.com/problems/max-stack/discuss/108947/Java-TreeMap-and-Double-LinkedList
