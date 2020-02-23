@@ -1,0 +1,20 @@
+// Easy - Straight Forward
+
+class Solution {
+    public ListNode deleteDuplicates(ListNode head) {
+        ListNode node= head;
+        while(node!=null && node.next!=null){
+            if(node.val ==node.next.val){
+                node.next=node.next.next;
+            }
+            else{
+                node=node.next;
+            }  
+        } return head;
+    }
+}
+    
+Time complexity : O(n)O(n). Because each node in the list is checked exactly once to determine if it is a duplicate or not, 
+the total run time is O(n)O(n), where nn is the number of nodes in the list.
+
+Space complexity : O(1)O(1). No additional space is used.
