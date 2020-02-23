@@ -4,22 +4,7 @@ Output : "geeksforgeeks to Welcome"
 Input : "I love Java Programming"
 Output :"Programming Java love I"
 
-
-
-public class ReverseWords { 
-  
-    public static void main(String[] args) 
-    { 
-        String s[] = "i like this program very much".split(" "); 
-        String ans = ""; 
-        for (int i = s.length - 1; i >= 0; i--) { 
-            ans += s[i] + " "; // adding space after each word
-        } 
-        System.out.println("Reversed String:"); 
-        System.out.println(ans.substring(0, ans.length() - 1)); // ans.length() - 1 bcoz to eliminate the last space
-    } 
-}
-
+---------------------------------------------------------------------------------------------------------------------------------------
 class Solution {
   public String reverseWords(String s) {
     // remove leading spaces
@@ -30,8 +15,21 @@ class Solution {
     return String.join(" ", wordList);
   }
 }
-Time complexity: \mathcal{O}(N)O(N), where N is a number of characters in the input string.
 
-Space complexity: \mathcal{O}(N)O(N), to store the result of split by spaces.
+"\s" is a regex class for any kind of whitespace (space, tab, newline, etc). Since Java uses "\" as an escape 
+character in strings (e.g. for newlines: "\n"), we need to escape the escape character ;-) So it becomes "\\s". 
+The "+" means one or more of them.
 
+Time complexity: O(N), where N is a number of characters in the input string.
+
+Space complexity: O(N), to store the result of split by spaces.
+---------------------------------------------------------------------------------------------------------------------------------------
+Same as above but a littel different
+String[] parts = s.trim().split("\\s+");
+String out = "";
+for (int i = parts.length - 1; i > 0; i--) {
+    out += parts[i] + " ";
+}
+return out + parts[0];
+---------------------------------------------------------------------------------------------------------
 // https://leetcode.com/problems/reverse-words-in-a-string/solution/ -- More Solutions without using inbuilt functions.
