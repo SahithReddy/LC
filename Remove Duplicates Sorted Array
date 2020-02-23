@@ -1,0 +1,28 @@
+Given a sorted array nums, remove the duplicates in-place such that each element appear only once and return the new length.
+
+Input  : arr[] = {2, 2, 2, 2, 2}
+Output : arr[] = {2}
+         new size = 1
+
+Input  : arr[] = {1, 2, 2, 3, 4, 4, 4, 5, 5}
+Output : arr[] = {1, 2, 3, 4, 5}
+         new size = 5
+         
+ // Leetcode
+ 
+ 
+ class Solution {
+  public int removeDuplicates(int[] nums) {
+        if(nums == null || nums.length == 0) return 0;
+        int i = 0;
+        nums[i]=nums[0]; i++;
+        for(int j = 1; j < nums.length; j++){
+            if(nums[j] != nums[j-1]){
+                nums[i] = nums[j];
+                i++;
+            }
+        }
+        return i;
+    }
+}
+Time O(n), Space O(1)
