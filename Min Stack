@@ -4,9 +4,6 @@ class MinStack {
 
     /** initialize your data structure here. */
     private Node head;
-    public MinStack() {
-        head = null;
-    }
     
     public void push(int x) {
         if(head==null){
@@ -48,3 +45,6 @@ New nodes added to the head may have smaller values, but won't change the stored
 
 How do you keep track of min value if its popped?
 Sol: Each node stores the min value at or below it.
+
+
+
