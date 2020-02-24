@@ -1,0 +1,14 @@
+// https://www.geeksforgeeks.org/print-reverse-of-a-linked-list-without-actually-reversing/
+
+void printReverse(Node head) 
+    { 
+        if (head == null) return; 
+  
+        // print list of head node 
+        printReverse(head.next); 
+  
+        // After everything else is printed 
+        System.out.print(head.data+" "); 
+    } 
+    
+    Time Complexity: O(n)
