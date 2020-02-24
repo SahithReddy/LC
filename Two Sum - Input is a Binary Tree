@@ -34,3 +34,25 @@ Time complexity : O(n)O(n). We need to traverse over the whole tree once to do t
 Here, nn refers to the number of nodes in the given tree.
 
 Space complexity : O(n)O(n). The sorted listlist will contain nn elements.
+
+------------------------------------------------------------------------------------------------------------------------
+
+This method also works for those who are not BSTs. The idea is to use a hashtable to save the values of the nodes in the BST.
+Each time when we insert the value of a new node into the hashtable, we check if the hashtable contains k - node.val.
+
+Time Complexity: O(n), Space Complexity: O(n).
+
+Java version:
+
+    public boolean findTarget(TreeNode root, int k) {
+        HashSet<Integer> set = new HashSet<>();
+        return dfs(root, set, k);
+    }
+    
+    public boolean dfs(TreeNode root, HashSet<Integer> set, int k){
+        if(root == null)return false;
+        if(set.contains(k - root.val))return true;
+        set.add(root.val);
+        return dfs(root.left, set, k) || dfs(root.right, set, k);
+    }
+
