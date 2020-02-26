@@ -49,8 +49,59 @@ In the worst case, the duplicate element appears twice, with one of its appearan
 -----------------------------------------------------------------------------------------------------------------------------------------------
 Tortoise and Hare - O(N) and O(1)
 
-I did not understood it. Chech here.
+I did not understood it. Check here.
 https://leetcode.com/problems/find-the-duplicate-number/solution/
+
+Here, comment by liqingfd: 
+// https://leetcode.com/problems/find-the-duplicate-number/discuss/72845/Java-O(n)-time-and-O(1)-space-solution.-Similar-to-find-loop-in-linkedlist.
+
+
+Same as finding the linked List cycle starting point.
+
+Similar idea. Also attached the code of Linked List Cycle II. The code of cycle problem is referred to the 
+popular post in the Leetcode discuss.
+Find duplicate num
+
+public class Solution {
+    public int findDuplicate(int[] nums) {
+        int slow = 0, fast = 0;
+        int len = nums.length;
+        while (fast < len && nums[fast] < len) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+            if (slow == fast) {
+                slow = 0;
+                while (slow != fast) {
+                    slow = nums[slow];
+                    fast = nums[fast];
+                }
+                return slow;
+            }
+        }
+        return -1;
+    }
+}
+Linked List Cycle II
+
+public class Solution {
+    public ListNode detectCycle(ListNode head) {
+        if (head == null || head.next == null)  return null;
+        ListNode fast = head, slow = head;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow == fast) {
+                slow = head;
+                while (slow != fast) {
+                    slow = slow.next;
+                    fast = fast.next;
+                }
+                return slow;
+            }
+        }
+        return null;
+    }
+}
 ----------------------------------------------------------------------------------------------------------------------------------
 
 
