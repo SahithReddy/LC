@@ -15,11 +15,40 @@ traverse the list for i= 0 to n-1 elements
 }
 
 Code:
+void printRepeating(int arr[], int size) 
+    { 
+        int i;   
+        System.out.println("The repeating elements are : "); 
+     
+        for (i = 0; i < size; i++) 
+        { 
+            if (arr[ Math.abs(arr[i])] >= 0) 
+                arr[ Math.abs(arr[i])] = -arr[ Math.abs(arr[i])]; 
+            else
+                System.out.print(Math.abs(arr[i]) + " "); 
+        }          
+    }  
+------------------------------------------------------------------------------------------------------------------------
+
+https://leetcode.com/problems/find-all-duplicates-in-an-array/
+
+Given an array of integers, 1 ≤ a[i] ≤ n (n = size of array), some elements appear twice and others appear once.
+
+Find all the elements that appear twice in this array.
+
+
+Input:
+[4,3,2,7,8,2,3,1]
+
+Output:
+[2,3]
+
+Code:
 class Solution {
     public List<Integer> findDuplicates(int[] nums) {
         List<Integer> result = new ArrayList();
         for(int i : nums){
-            int index = Math.abs(i) -1;
+            int index = Math.abs(i) -1; // -1 because the indexing is based on 0 and we have integers <=N 
             if(nums[index]<0){
                 result.add(index+1); //we can optimize the code a little bit. Because index can never be negative, we don't have to use Math.abs(index + 1)
             }
@@ -27,3 +56,4 @@ class Solution {
         } return result;
     }
 }
+-------------------------------------------------------------------------------------------------------------------
