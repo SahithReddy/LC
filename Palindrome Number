@@ -1,0 +1,18 @@
+// Crazy Solution
+
+class Solution {
+    public boolean isPalindrome(int x) {
+        int palin = 0;
+        int input = x;
+        while(x>0){
+            palin = palin*10 + (x%10);
+            x/=10;
+        }
+        return palin==input;
+    }
+}
+
+
+
+For those that are confused with the argument whether this algorithm is O(N) or O(lgN):
+This algorithm is O(N) where N is the number of digits. At the same time it is O(lnX), where X is the input value.
