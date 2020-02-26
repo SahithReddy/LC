@@ -8,6 +8,8 @@ Output: [0,0,1,1,2,2]
 // every elem left low pointer is 0, elem right high pointer is 2
 
 // Atmost Two Pass
+// https://leetcode.com/problems/sort-colors/discuss/26472/Share-my-at-most-two-pass-constant-space-10-line-solution - 1st comment
+
    public void sortColors(int[] A) {
        if(A==null || A.length<2) return;
        int low = 0; 
@@ -32,7 +34,11 @@ Output: [0,0,1,1,2,2]
    }
    
    Time: O(N), SPace: O(1)
-     // 1-pass  
+     
+// 1-pass
+
+// From here: https://leetcode.com/problems/sort-colors/discuss/26549/Java-solution-both-2-pass-and-1-pass
+
   public void sortColors(int[] nums) {
     int p1 = 0, p2 = nums.length - 1, index = 0;
     while (index <= p2) {
