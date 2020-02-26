@@ -21,7 +21,7 @@ class Solution {
         }
         
         List<Integer> result = new ArrayList();
-        for(int i=bucket.length-1; i>=0 && k>0; i--){
+        for(int i=bucket.length-1; i>=0; i--){
             if(bucket[i]!=null){
                 result.addAll(bucket[i]);
             }
@@ -58,3 +58,7 @@ Similar Questions: Top K Frequent Words, Sort Characters By Frequency
         return result;
     }
 }
+
+Time complexity : O(Nlog(k)). The complexity of Counter method is O(N). To build a heap and output list takes \mathcal{O}(N \log(k))O(Nlog(k)). Hence the overall complexity of the algorithm is \mathcal{O}(N + N \log(k)) = \mathcal{O}(N \log(k))O(N+Nlog(k))=O(Nlog(k)).
+
+Space complexity : O(N) to store the hash map.
