@@ -1,0 +1,54 @@
+// Not done yet, just for the record
+
+Input: [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
+
+// The idea is to sweep all 0s to the left and all 2s to the right, then all 1s are left in the middle.
+// the basic idea is to use two pointer low and high and an iterator i 
+// every elem left low pointer is 0, elem right high pointer is 2
+
+// Atmost Two Pass
+   public void sortColors(int[] A) {
+       if(A==null || A.length<2) return;
+       int low = 0; 
+       int high = A.length-1;
+       for(int i = low; i<=high;) {
+           if(A[i]==0) {
+              // swap A[i] and A[low] and i,low both ++
+              int temp = A[i];
+              A[i] = A[low];
+              A[low]=temp;
+              i++;low++;
+           }else if(A[i]==2) {
+               //swap A[i] and A[high] and high--;
+              int temp = A[i];
+              A[i] = A[high];
+              A[high]=temp;
+              high--;
+           }else {
+               i++;
+           }
+       }
+   }
+   
+   Time: O(N), SPace: O(1)
+     // 1-pass  
+  public void sortColors(int[] nums) {
+    int p1 = 0, p2 = nums.length - 1, index = 0;
+    while (index <= p2) {
+        if (nums[index] == 0) {
+            nums[index] = nums[p1];
+            nums[p1] = 0;
+            p1++;
+        }
+        if (nums[index] == 2) {
+            nums[index] = nums[p2];
+            nums[p2] = 2;
+            p2--;
+            index--;
+        }
+        index++;
+    }
+}
+
+   Time: O(N), SPace: O(1)
