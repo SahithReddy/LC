@@ -33,3 +33,49 @@ for (int i = parts.length - 1; i > 0; i--) {
 return out + parts[0];
 ---------------------------------------------------------------------------------------------------------
 // https://leetcode.com/problems/reverse-words-in-a-string/solution/ -- More Solutions without using inbuilt functions.
+
+// Explanation
+
+storeIdx: the current position available for insertion.
+j: the end of one word(including one trailing space), used for copying word one by one.
+i: the beginning of one word.
+
+The procedure inside the for loop is summaried by @wen_chieh in his post, which quotes:
+
+put a blank space in front of the word if this word is not the first word
+
+copy the word to the position starts with storeIndex
+
+reverse the word
+
+update the possible start of next word
+
+
+public String reverseWords(String s) {
+        if (s.length() < 1) return s; // empty string
+        int startIdx = 0;
+        char[] str = s.toCharArray();
+        // reverse whole string
+        reverse(str, 0, str.length - 1);
+        // reverse word one by one
+        for (int i = 0; i < str.length; i++) {
+            if (str[i] != ' ') {
+                if (startIdx != 0) str[startIdx++] = ' ';
+                int j = i;
+                while (j < str.length && str[j] != ' ')
+                    str[startIdx++] = str[j++];
+                reverse(str, startIdx - (j - i), startIdx - 1); // startIdx - 1, NOT startIdx; 
+                // C++ std::reverse : Reverses the order of the elements in the range [first, last)
+                i = j;
+            }
+        }
+        return new String(str, 0, startIdx);
+    }
+
+    private void reverse(char[] str, int begin, int end) {
+        for (; begin < end; begin++, end--) {
+            char tmp = str[begin];
+            str[begin] = str[end];
+            str[end] = tmp;
+        }
+    }
