@@ -11,7 +11,6 @@ class Solution {
         Arrays.sort(nums);
         List<List<Integer>> answer = new LinkedList();
         for(int i=0;i<nums.length-2;i++){
-            if(nums[i]>0) break;
             if(i == 0 || nums[i]!=nums[i-1]){
                 int front = i+1;
                 int back = nums.length-1;
