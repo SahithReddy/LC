@@ -15,16 +15,15 @@ traverse the list for i= 0 to n-1 elements
 }
 
 Code:
-void printRepeating(int arr[], int size) 
-    { 
-        int i;   
-        System.out.println("The repeating elements are : "); 
-     
-        for (i = 0; i < size; i++) 
-        { 
-            if (arr[ Math.abs(arr[i])] >= 0) 
-                arr[ Math.abs(arr[i])] = -arr[ Math.abs(arr[i])]; 
-            else
-                System.out.print(Math.abs(arr[i]) + " "); 
-        }          
-    } 
+class Solution {
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> result = new ArrayList();
+        for(int i : nums){
+            int index = Math.abs(i) -1;
+            if(nums[index]<0){
+                result.add(index+1); //we can optimize the code a little bit. Because index can never be negative, we don't have to use Math.abs(index + 1)
+            }
+            else nums[index] = -nums[index];
+        } return result;
+    }
+}
