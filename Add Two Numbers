@@ -1,0 +1,33 @@
+// just for record, I haven't done it yet.
+
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+Explanation: 342 + 465 = 807.
+
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int left = 0;
+        ListNode dummy = new ListNode(0), tail = dummy;
+        
+        // iterate two list, add each position until 2 lists are finished && left equals to 0
+        while(!(l1 == null && l2 == null && left == 0)){
+            // is number1 finished?
+            int add1 = l1 != null ? l1.val : 0;
+            // is number2 finished?
+            int add2 = l2 != null ? l2.val : 0;
+            int sum = add1 + add2 + left;
+            left = sum / 10;
+            ListNode newNode = new ListNode(sum % 10);
+            tail.next = newNode;
+            tail = newNode;
+            
+            if(l1 != null) l1 = l1.next;
+            if(l2 != null) l2 = l2.next;
+        }
+        
+        return dummy.next;
+    }
+    
+Time complexity : O(max(m,n)). Assume that mm and nn represents the length of l1 and l2 respectively, 
+the algorithm above iterates at most max(m,n) times.
+
+Space complexity : O(max(m,n)). The length of the new list is at most \max(m,n) + 1max(m,n)+1.
