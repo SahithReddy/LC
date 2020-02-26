@@ -1,0 +1,43 @@
+// Not done yet, just for record
+
+// https://leetcode.com/problems/permutations/
+
+Input: [1,2,3]
+Output:
+[
+  [1,2,3],
+  [1,3,2],
+  [2,1,3],
+  [2,3,1],
+  [3,1,2],
+  [3,2,1]
+]
+
+// Solution here: https://leetcode.com/problems/permutations/discuss/18239/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partioning)
+
+public List<List<Integer>> permute(int[] nums) {
+   List<List<Integer>> list = new ArrayList<>();
+   // Arrays.sort(nums); // not necessary
+   backtrack(list, new ArrayList<>(), nums);
+   return list;
+}
+
+private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+   if(tempList.size() == nums.length){
+      list.add(new ArrayList<>(tempList));
+   } else{
+      for(int i = 0; i < nums.length; i++){ 
+         if(tempList.contains(nums[i])) continue; // element already exists, skip
+         tempList.add(nums[i]);
+         backtrack(list, tempList, nums);
+         tempList.remove(tempList.size() - 1);
+      }
+   }
+} 
+
+
+// Time Complexity: For the complexity, I think you can explain in this way: in the first level of the tree, 
+// you have N options and for each of the option, you have N-1 option, and for each of these N-1 options, 
+// you have another N-2 options, so putting them together you would end up N*(N-1)*(N-2).... = N!
+
+// Space:  O(N!) since one has to keep N! solutions.
