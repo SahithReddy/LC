@@ -1,0 +1,58 @@
+// Not done yet
+/*
+Intuition
+I take it this way:
+We cannot build any well.
+There is one and only one hidding well in my house (house 0).
+The cost to lay pipe between house[i] and my house is wells[i].
+
+In order to supply water to the whole village,
+we need to make the village a coonected graph.
+
+
+Explanation
+Merge all costs of pipes together and sort by key.
+Greedily lay the pipes if it can connect two seperate union.
+Appply union find to record which houses are connected.
+
+
+Complexity
+Time O(ElogE)
+Space O(N)
+*/
+
+// Minimum SPanning Tree
+
+// The idea is to imagine that there is a well with a house number of 0. Each well[i] is a connection between house 0 and 
+// house number "i" with a cost of well[i]. Then the rest becomes a regular spanning tree question.
+
+
+    int[] uf;
+    public int minCostToSupplyWater(int n, int[] wells, int[][] pipes) {
+        uf = new int[n + 1];
+        List<int[]> edges = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            uf[i + 1] = i + 1;
+            edges.add(new int[] {0, i + 1, wells[i]});
+        }
+        for (int[] p : pipes) {
+            edges.add(p);
+        }
+        Collections.sort(edges, (a, b) -> Integer.compare(a[2], b[2]));
+
+        int res = 0;
+        for (int[] e : edges) {
+            int x = find(e[0]), y = find(e[1]);
+            if (x != y) {
+                res += e[2];
+                uf[x] = y;
+                --n;
+            }
+        }
+        return res;
+    }
+
+    private int find(int x) {
+        if (x != uf[x]) uf[x] = find(uf[x]);
+        return uf[x];
+    }
