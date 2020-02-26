@@ -1,3 +1,20 @@
+// Without illegal argument exceptiomn bjt it is creating object twice 'new'
+
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+        int[] result= new int[2];
+        HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for(int i=0; i<nums.length; i++){
+            if(map.containsKey(target-nums[i])){
+                result = new int[]{map.get(target-nums[i]), i};
+            }
+            map.put(nums[i], i);
+        } return result;
+    }
+}
+T : O(N), S: O(N)
+------------------------------------------------------------------------------------------------------------------------
+
 class Solution {
     public int[] twoSum(int[] nums, int target) {
     int[] result = new int[2];
@@ -12,20 +29,7 @@ class Solution {
         }
     throw new IllegalArgumentException("No two sum solution");
     }
-    ---------------------------------------------------------------------------------------------------------------------
-    public int[] twoSum(int[] nums, int target) {
-    int[] result = new int[2];
-    Map<Integer,Integer> tooSum = new HashMap<Integer, Integer>();
-        for(int i=0;i<nums.length; i++ ){
-            if(tooSum.get(target - nums[i])!=null){
-                result[0] = tooSum.get(target - nums[i]);
-                result[1] = i;
-                return result;
-            }
-            else tooSum.put(nums[i],i);
-        }
-    throw new IllegalArgumentException("No two sum solution");
-    }
+    T : O(N), S: O(N)
    ---------------------------------------------------------------------------------------------------------------------
     public int[] twoSum(int[] nums, int target) {
     Map<Integer,Integer> map = new HashMap<>();
@@ -39,22 +43,10 @@ class Solution {
         }
     throw new IllegalArgumentException("No two sum solution");
     }
+    T : O(N), S: O(N)
    ---------------------------------------------------------------------------------------------------------------------
+    // T: O(n^2) S: O(1)
     
-    public int[] twoSum(int[] nums, int target) {
-    Map<Integer,Integer> map = new HashMap<>();
-        for(int i=0; i<nums.length; i++){
-            map.put(nums[i],i);
-        }
-        for(int i=0; i<nums.length; i++){
-            int complement = target - nums[i];
-            if(map.containsKey(complement) && map.get(complement)!= i){
-                return new int [] {i,map.get(complement)};
-            }
-        }
-    throw new IllegalArgumentException("No two sum solution");
-    }
-   ---------------------------------------------------------------------------------------------------------------------
     public int[] twoSum(int[] nums, int target) {
         for(int i=0; i<nums.length; i++){
             for(int j=0; j<nums.length; j++){
