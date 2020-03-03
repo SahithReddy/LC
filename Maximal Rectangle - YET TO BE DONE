@@ -1,3 +1,40 @@
 // Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
 
-// CODE:
+/*
+A O(n^2) solution based on Largest Rectangle in Histogram
+
+This question is similar as [Largest Rectangle in Histogram]:
+
+You can maintain a row length of Integer array H recorded its height of '1's, and scan and update row by row to find out the largest rectangle of each row.
+
+For each row, if matrix[row][i] == '1'. H[i] +=1, or reset the H[i] to zero.
+and accroding the algorithm of [Largest Rectangle in Histogram], to update the maximum area.
+
+*/
+
+// CODE: 
+
+class Solution {
+    public int maximalRectangle(char[][] matrix) {
+       int rLen = matrix.length, cLen = rLen == 0 ? 0 : matrix[0].length, max = 0;
+        int[] h = new int[cLen+1];
+   
+        for (int row = 0; row < rLen; row++) {
+            Stack<Integer> s = new Stack<Integer>();
+            s.push(-1);
+            for (int i = 0; i <= cLen ;i++) {
+                if(i < cLen && matrix[row][i] == '1')
+                    h[i] += 1;
+                else h[i] = 0;
+
+                while(s.peek() != -1 && h[i] < h[s.peek()]) {
+                    max = Math.max(max, h[s.pop()] * (i - s.peek() - 1));
+                }
+                s.push(i);
+            }
+        }
+        return max;
+    }
+}
+
+// https://leetcode.com/problems/maximal-rectangle/discuss/29064/A-O(n2)-solution-based-on-Largest-Rectangle-in-Histogram - comment by trustno1
