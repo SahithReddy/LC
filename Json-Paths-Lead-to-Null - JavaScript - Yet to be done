@@ -1,0 +1,58 @@
+/*
+If the value is null then just add its key to the nullPaths
+if the value is an array loop through the array and do same as 1.
+if the value is an object then call the function recursively on each value of the object.
+*/
+
+Input:
+{
+    "Jon": "Smith",
+    "Adam": ["Jake", null, "Nancy"],
+    "Alex": {
+        "Muller": [null, "Sam"],
+        "Phil": null,
+        "Xav": ["Mike", "Tom"]
+    }
+    "Lex": null,
+}
+
+Output: ["Adam.1", "Alex.Muller.0", "Alex.Phil", "Lex"]
+
+// CODE:
+
+const jsonStr = {
+  Jon: 'Smith',
+  Adam: ['Jake', null, 'Nancy'],
+  Alex: {
+    Muller: [null, 'Sam'],
+    Phil: null,
+    Xav: ['Mike', 'Tom']
+  },
+  Lex: null
+};
+
+const nullPaths = [];
+function getNulls(json, path) {
+  const keys = Object.keys(json);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    const value = json[key];
+
+    if (value == null) {
+      nullPaths.push([...path, key]);
+    } else if (typeof value == 'array') {
+      for (let j = 0; j < value.length; j++) {
+        if (value[j] == null) {
+          nullPaths.push([...path, key, j]);
+        }
+      }
+    } else if (typeof value == 'object') {
+      getNulls(value, [...path, key]);
+    }
+  }
+}
+
+getNulls(jsonStr, []);
+console.log(nullPaths.map(x => x.join(".")));
+// [ 'Adam.1', 'Alex.Muller.0', 'Alex.Phil', 'Lex' ]
+
