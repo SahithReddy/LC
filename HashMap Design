@@ -1,7 +1,47 @@
 
 // https://leetcode.com/problems/design-hashmap/discuss/227081/Java-Solutions . -- See this solution directly
-Explanation: https://leetcode.com/problems/design-hashmap/solution/
+// Explanation: https://leetcode.com/problems/design-hashmap/solution/
 
+// THEORY:
+/*The most distinguish characteristic about hashmap is that it provides a fast access to a value that is associated with a given key.
+
+There are two main issues that we should tackle, in order to design an efficient hashmap data structure: 1). hash function design and 2). collision handling.
+
+1) hash function design: the purpose of hash function is to map a key value to an address in the storage space, 
+similarly to the system that we assign a postcode to each mail address. As one can image, for a good hash function, 
+it should map different keys evenly across the storage space, so that we don't end up with the case that the 
+majority of the keys are concentrated in a few spaces.
+2) collision handling: essentially the hash function reduces the vast key space into a limited address space. 
+As a result, there could be the case where two different keys are mapped to the same address, which is what 
+we call 'collision'. Since the collision is inevitable, it is important that we have a strategy to handle the collision.
+
+Depending on how we deal with each of the above two issues, we could have various implementation of hashmap data structure.
+*/
+
+// ALGORITHM:
+/*
+For each of the methods in hashmap data structure, namely get(), put() and remove(), 
+it all boils down to the method to locate the value that is stored in hashmap, given the key.
+
+This localization process can be done in two steps:
+
+For a given key value, first we apply the hash function to generate a hash key, which corresponds to the address in our main storage. With this hash key, we would find the bucket where the value should be stored.
+Now that we found the bucket, we simply iterate through the bucket to check if the desired <key, value> pair does exist.
+*/
+
+// IMPLEMENTATION: 
+/* Below is Hash-Table Implementation - Using Array of LinkedList
+1. The general implementation of HashMap uses bucket which is basically a chain of linked lists and each node containing <key, value> pair.
+2. So if we have duplicate nodes, that doesn't matter - it will still replicate each key with it's value in linked list node.
+3. When we insert the pair (10, 20) and then (10, 30), there is technically no collision involved. We are just replacing 
+the old value with the new value for a given key 10, since in both cases, 10 is equal to 10 and also the hash code for 
+10 is always 10.
+4. Collision happens when multiple keys hash to the same bucket. In that case, we need to make sure that we can 
+distinguish between those keys. Chaining collision resolution is one of those techniques which is used for this.
+*/
+
+
+// CODE:
 class MyHashMap
 {
 	ListNode[] nodes = new ListNode[10000];
@@ -63,12 +103,12 @@ class MyHashMap
 	}
 }
 
-Time complexity: O(1) average and O(n) worst case - for all get(),put() and remove() methods.
-Space complexity: O(n) - where n is the number of entries in HashMap
+/*Time complexity: O(1) average and O(n) worst case - for all get(),put() and remove() methods.
+Space complexity: O(n) - where n is the number of entries in HashMap*/
 
 
-Q&A
+/*Q&A
 why is the size of bucket array 10000? it worked for me taking 1000 element array
 Sol: The problem statement says that the total number of operations could be 10000.
 In addition, the solution would work with an array of size 1 as well, but you don't
-want that. You would like to evenly distribute the elements in the bucket to get a constant time complexity.
+want that. You would like to evenly distribute the elements in the bucket to get a constant time complexity.*/
