@@ -1,27 +1,35 @@
-// Video Concept explanation: this expalins in bfs but the below solution is in DFS. Also, space complexity
+/*
+Video Concept explanation: this expalins in bfs but the below solution is in DFS. Also, space complexity
 https://www.youtube.com/watch?v=sz1qaKt0KGQ
+*/
 
 // My Code is written here: https://www.youtube.com/watch?v=tyVBx-OtDug
 
+/*
 We need to interpret the meanings of constraints. First, the first character should be “(“. Second, at each step, 
 you can either print “(“ or “)”, but print “)” only when there are more “(“s than “)”s. 
 Stop printing out “(“ when the number of “(“ s hit n.
+*/
 -------------------------------------------------------------------------------------------------------------
 
+/*
 The key to all backtracking problems is "to choose". You have to choose between many options and then come 
 back to choose again. In this problem, you have to choose between left and right parenthesis. In another 
 backtracking problem:letter-combinations-of-a-phone-number. You have to choose between different letters. 
 These problems share a same pattern.
 In your helper function, you just need to list all your options and try each one of them out.
 As for this problem, every time you choose a "(" means making another ")" available.
+*/
 
 -------------------------------------------------------------------------------------------------------------
 
+/*
 If anyone wondering why does this work, then the main concept is that in a parenthesis balanced string, count of ')' 
 must be less than equal to count of '(' for every prefix of the string. A parenthesis balanced string (of size 2*N) 
 must have N number of '(' and N number of ')'. We go on adding '(' before ')' for every recursive state string until 
 count of '(' becomes equal to N. Then we start adding ')' only on a condition that count of ')' is less than count of '('. 
 These two conditions will always produce balanced string.
+*/
 
 -------------------------------------------------------------------------------------------------------------
 class Solution {
@@ -45,11 +53,14 @@ class Solution {
             helper(result, p + ")", open, close-1);
             }
         }
+ /*
  I think it should be O(2^(2n)). Space is O(n). We need n pairs which means we need n left parenthesis and n right parenthesis,
  making it total 2n.
 Then we need to decide will we include left or right? Think about the subset problem. We need to answer it 2^(2n) times.
 Some people may argue it O(2^n), I would say the power 2 here is very significant and should not be ignored.
+*/
 -------------------------------------------------------------------------------------------------------------
+/*
 an example to understand this solution:
 (
 ((
@@ -72,4 +83,5 @@ an example to understand this solution:
 ()()
 ()()(
 ()()()
+*/
 -------------------------------------------------------------------------------------------------------------
