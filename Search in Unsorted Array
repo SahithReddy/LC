@@ -1,0 +1,98 @@
+/*
+Search an element in an unsorted array using minimum number of comparisons
+
+Examples:
+
+Input : arr[] = {4, 6, 1, 5, 8}, 
+        x = 1
+Output : Found
+
+Input : arr[] = {10, 3, 12, 7, 2, 11, 9}, 
+        x = 15
+Output : Not Found
+
+*/
+
+/*
+
+Below simple method to search requires 2n + 1 comparisons in worst case.
+
+for (i = 0; i < n; i++)  // Worst case n+1
+   if (arr[i] == x)  // Worst case n
+       return i;
+       
+How to reduce number of comparisons?
+The idea is to copy x (element to be searched) to last location so that one last comparison when x is not present in arr[] is saved.
+
+Algorithm:
+
+search(arr, n, x)
+    if arr[n-1] == x  // 1 comparison
+       return "true"
+    backup = arr[n-1]
+    arr[n-1] = x
+
+    for i=0, i++ // no termination condition
+        if arr[i] == x // execute at most n times
+                       // that is at-most n comparisons
+            arr[n-1] = backup
+            return (i < n-1) // 1 comparison
+
+*/
+
+// CODE:
+
+// Java implementation to search an element in 
+// the unsorted array using minimum number of 
+// comparisons 
+import java.io.*; 
+
+class GFG { 
+
+	// Function to search an element in 
+	// minimum number of comparisons 
+	static String search(int arr[], int n, int x) 
+	{ 
+		// 1st comparison 
+		if (arr[n - 1] == x) 
+			return "Found"; 
+
+		int backup = arr[n - 1]; 
+		arr[n - 1] = x; 
+
+		// no termination condition and thus 
+		// no comparison 
+		for (int i = 0;; i++) { 
+			// this would be executed at-most n times 
+			// and therefore at-most n comparisons 
+			if (arr[i] == x) { 
+				// replace arr[n-1] with its actual element 
+				// as in original 'arr[]' 
+				arr[n - 1] = backup; 
+
+				// if 'x' is found before the '(n-1)th' 
+				// index, then it is present in the array 
+				// final comparison 
+				if (i < n - 1) 
+					return "Found"; 
+
+				// else not present in the array 
+				return "Not Found"; 
+			} 
+		} 
+	} 
+
+	// driver program 
+	public static void main(String[] args) 
+	{ 
+		int arr[] = { 4, 6, 1, 5, 8 }; 
+		int n = arr.length; 
+		int x = 1; 
+		System.out.println(search(arr, n, x)); 
+	} 
+} 
+
+/*
+Time Complexity: O(n)
+Number of Comparisons: Atmost (n+2) comparisons
+*/
