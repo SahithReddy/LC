@@ -7,8 +7,10 @@ class Solution {
     }
 }
 
+/*
 Time complexity: O(2^n)- since T(n) = T(n-1) + T(n-2)is an exponential time
 Space complexity: O(n) - space for recursive function call stack
+*/
 
 // Iterative
 
@@ -27,11 +29,15 @@ class Solution {
     }
 }
 
+/*
 Time complexity: O(n)
 Space complexity: O(1)
+*/
 
 
-// Similar Problems:
+/*
+Similar Problems:
 https://leetcode.com/problems/decode-ways
 https://leetcode.com/problems/unique-paths/
 https://leetcode.com/problems/climbing-stairs/
+*/
