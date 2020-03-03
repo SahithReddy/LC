@@ -1,10 +1,10 @@
-Watch this wonderful explanation: https://www.youtube.com/watch?v=1CxyVdA_654
+// Watch this wonderful explanation: https://www.youtube.com/watch?v=1CxyVdA_654
 
-One more : https://www.youtube.com/watch?v=6N6QQpoU7H4
+// One more : https://www.youtube.com/watch?v=6N6QQpoU7H4
 
 
 // VERY INTELLIGENT/CLEVER/SHORT SOLUTION
-Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/  (has a picture)
+// Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/  (has a picture)
 
 class MedianFinder {
 
@@ -40,13 +40,49 @@ class MedianFinder {
 
 // Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
 
+/*
 At worst, there are three heap insertions and two heap deletions from the top. Each of these takes about O(logn) time.
 Finding the mean takes constant O(1)O(1) time since the tops of heaps are directly accessible. So O(logN).
 
 Space complexity: O(n) linear space to hold input in containers.
-
+*/
 ------------------------------------------------------------------------------
-// IF FACEING PROBLEM TO UNDERSTAND OR JUSTIFY ABOVE SOLUTION TO OTHERS FOLLOW TH EBELOW ONE. MORE INTUTIVE, EASY BUT 
-ALSO VEY FAST
+// IF FACEING PROBLEM TO UNDERSTAND OR JUSTIFY ABOVE SOLUTION TO OTHERS FOLLOW TH EBELOW ONE. MORE INTUTIVE, EASY BUT ALSO VEY FAST
 
-Find it here: https://leetcode.com/problems/find-median-from-data-stream/discuss/74144/Easy-to-understand-double-heap-solution-in-Java
+// Find it here: https://leetcode.com/problems/find-median-from-data-stream/discuss/74144/Easy-to-understand-double-heap-solution-in-Java
+
+
+class MedianFinder {
+    PriorityQueue<Integer> minHeap;
+    PriorityQueue<Integer> maxHeap;
+    
+    public MedianFinder() {
+        minHeap = new PriorityQueue<Integer>();
+        maxHeap = new PriorityQueue<Integer>(Collections.reverseOrder()); 
+    }
+    
+    // Adds a number into the data structure.
+    public void addNum(int num) {
+        if(maxHeap.isEmpty() || num <= maxHeap.peek()) {
+            maxHeap.add(num);
+        } else {
+            minHeap.add(num);
+        }
+        if(minHeap.size() >= maxHeap.size()+2) {
+            maxHeap.add(minHeap.remove());
+        } else if(maxHeap.size() >= minHeap.size()+2){ 
+            minHeap.add(maxHeap.remove());
+        }
+    }
+
+    // Returns the median of current data stream
+    public double findMedian() {
+        if(minHeap.size() == maxHeap.size()) {
+            return (double)(minHeap.peek()+maxHeap.peek())/2;
+        } else if(minHeap.size() > maxHeap.size()) {
+            return minHeap.peek();
+        } else {
+            return maxHeap.peek();
+        }
+    }
+};
