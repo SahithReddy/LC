@@ -1,7 +1,9 @@
+/*
 O(s) s is total seconds in given time interval, in this case 300.
 basic ideal is using buckets. 1 bucket for every second because we only need to keep the recent hits info 
 for 300 seconds. hit[] array is wrapped around by mod operation. Each hit bucket is associated with times[] 
 bucket which record current time. If it is not current time, it means it is 300s or 600s... ago and need to reset to 1.
+*/
 
 
 class HitCounter {
@@ -47,12 +49,14 @@ class HitCounter {
  * int param_2 = obj.getHits(timestamp);
  */
  --------------------------------------------------------------------------------------- ---------------------------------------------------------------------------------------
+/*
 Follow up:
 What if the number of hits per second could be very large? Does your design scale?
 
  I think AtomicIntegerArray won't solve the issue as other points out, here is a ReentrantReadWriteLock solution.
  The advantage of ReentrantReadWriteLock over Synchonized keyword is multiple getHits(t) (read operation) won't 
  block each other, hence increase the performance.
+ */
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.Lock;
