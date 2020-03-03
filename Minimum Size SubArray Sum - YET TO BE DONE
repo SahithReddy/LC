@@ -1,0 +1,32 @@
+/*Given an array of n positive integers and a positive integer s, find the minimal length of a contiguous subarray of which the sum ≥ s. If there isn't one, return 0 instead.
+
+Example: 
+
+Input: s = 7, nums = [2,3,1,2,4,3]
+Output: 2
+Explanation: the subarray [4,3] has the minimal length under the problem constraint.
+*/
+
+
+
+// CODE: Java O(n) solution (two pointers)
+
+public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null) return 0;
+        int ans = Integer.MAX_VALUE;
+        int sum = 0;
+        int localAns = 0;
+        for(int i = 0, j = 0;i< nums.length;i++){ //i is the faster pointer, j is the slower pointer
+            sum += nums[i];
+            localAns++;
+            while(sum >= s){
+                ans = Math.min(ans,localAns);// update global ans.
+                localAns--;
+                sum -= nums[j];
+                j++; // move the slower pointer forward and decrease the related nums[j], at the same time localAns will be decreased by 1.
+            }
+        }
+        return (ans == Integer.MAX_VALUE)?0: ans;
+    }
+    
+    
