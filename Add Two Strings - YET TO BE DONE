@@ -1,0 +1,62 @@
+/*
+
+Algorithm
+Approach: Iterative
+
+The while loop will run as long as there are characters left in one of the strings or when there is a carry in 
+remaining. Starting from right to left, each character is converted to integer by the mean of offsetting its ASCII value. 
+If the shorter string is exhausted first, the value will be forced to `0` as default from there onwards. 
+Sum for that particular position is conveniently calculated and a modulus of `10` will extract the digit portion 
+in case the sum is bigger than 10. Carry in is extracted by flooring the number after division by `10`. StringBuilder 
+is used due to its efficiently in inserting character to existing StringBuilder object. If normal String is used then 
+each insertion by + operation will have to copy over the immutable String object which is highly inefficient.
+
+*/
+
+// https://leetcode.com/problems/add-strings/discuss/90436/Straightforward-Java-8-main-lines-25ms - First Coment Reply
+
+// CODE:
+class Solution {
+        public String addStrings(String num1, String num2) {
+        
+        int i = num1.length()-1;
+        int j = num2.length()-1;
+        int carry = 0;
+        StringBuilder sb = new StringBuilder();
+        
+        while(i >= 0 || j >= 0 || carry > 0) {
+            
+            int c1 = 0;
+            int c2 = 0;
+            
+            if(i >= 0) c1 = (int)(num1.charAt(i) - '0');
+            
+            if(j >= 0) c2 = (int)(num2.charAt(j) - '0');
+            
+            int sum = c1 + c2 + carry;
+            
+            carry = sum/10;
+    
+            sum = sum%10;
+            
+            sb.append(sum);
+            
+            i--;
+            j--;
+        }
+        
+        return sb.reverse().toString();
+    }
+}
+
+// https://leetcode.com/problems/add-strings/discuss/90491/JAVA-Simple-and-Clean-with-Explanations-29-ms
+/*
+
+Complexity Analysis
+Time Complexity: `O(m + n)` (Average Case) and `O(m + n)` (Worst Case) where `m` and `n` are the total number 
+of characters in the first and second input respectively. The algorithm evaluate each character for potential carry.
+
+Auxiliary Space: `O(m + n)` space is used where `m` and `n` are the total number of characters in the first 
+and second input respectively. Converting both input to character array required extra space.
+
+*/
