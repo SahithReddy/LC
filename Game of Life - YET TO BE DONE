@@ -67,3 +67,10 @@ class Solution {
         return r >= 0 && r < board.length && c >= 0 && c < board[0].length && (board[r][c] == ALIVE || board[r][c] == ALIVETODEAD);
     }   
 }
+
+/*
+
+Time Complexity: O(M×N), where MM is the number of rows and NN is the number of columns of the Board.
+
+Space Complexity: O(1)O(1)
+*/
