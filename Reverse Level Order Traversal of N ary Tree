@@ -1,0 +1,22 @@
+// https://leetcode.com/discuss/interview-question/505517/Oracle-OCI-or-Phone-or-Reverse-level-order-traversal-N-ary-tree
+
+public void print(TreeNode root) {
+ 
+        LinkedList<Character> list = new LinkedList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+            list.addFirst(node.val);
+            List<TreeNode> children = node.children;
+            for(TreeNode child : children) {
+                queue.offer(child);
+            }
+        }
+        Iterator<Character> iter = list.iterator();
+        while(iter.hasNext()) {
+            System.out.println(iter.next());
+        }
+    }
+    
+    // Time and Space : O(N)
