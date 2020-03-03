@@ -1,5 +1,5 @@
 // https://www.geeksforgeeks.org/reverse-a-string-without-affecting-special-characters/
-
+/*
 Input:   str = "a,b$c"
 Output:  str = "c,b$a"
 Note that $ and , are not moved anywhere.  
@@ -7,8 +7,9 @@ Only subsequence "abc" is reversed
 
 Input:   str = "Ab,c,de!$"
 Output:  str = "ed,c,bA!$"
+*/
 
-Efficient Solution:
+/* Efficient Solution:
 Time complexity of above solution is O(n), but it requires extra space and it does two traversals of input string.
 We can reverse with one traversal and without extra space. Below is algorithm.
 
@@ -18,10 +19,12 @@ We can reverse with one traversal and without extra space. Below is algorithm.
     a) If str[l] is not an alphabetic character, do l++
     b) Else If str[r] is not an alphabetic character, do r--
     c) Else swap str[l] and str[r]
+*/
     
  
 // Java code to illustrate how to reverse 
-// an array without affecting special characters. 
+// an array without affecting special characters.
+
 class GFG 
 { 
     public static void reverse(char str[]) 
@@ -65,4 +68,4 @@ class GFG
     } 
 } 
   
-  O(N) and O(1)
+// Time: O(N) and Space: O(1)
