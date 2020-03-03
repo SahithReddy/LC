@@ -1,7 +1,21 @@
-Good Theory: // https://www.interviewcake.com/concept/java/lru-cache
-
+// Good Theory: https://www.interviewcake.com/concept/java/lru-cache
 
 // Solution from this video: https://www.youtube.com/watch?v=NDpwj0VWz1U 
+
+// The key to solve this problem is using a double linked list which enables us to quickly move nodes.
+
+/*
+The problem can be solved with a hashmap that keeps track of the keys and its values in the double linked list. 
+That results in O(1) time for put and get operations and allows to remove the first added node in O(1) time as well.
+
+One advantage of double linked list is that the node can remove itself without other reference. 
+In addition, it takes constant time to add and remove nodes from the head or tail.
+
+One particularity about the double linked list implemented here is that there are pseudo head and pseudo tail 
+to mark the boundary, so that we don't need to check the null node during the update.
+*/
+
+// CODE:
 
 class LRUCache {
     
@@ -68,10 +82,13 @@ class LRUCache {
     }
 }
 
-Time complexity : O(1) both for put and get. DLL remove(at any position) is O(1). Also, inserting/removing at head/tail is O(1)
+/*
+Time complexity : The LRU cache is a hash table of keys and double linked nodes. The hash table makes the 
+time of get() to be O(1). The list of double linked nodes make the nodes adding/removal operations O(1). As,inserting/removing at head/tail is O(1)
 
 Space complexity : O(capacity) since the space is used only for a hashmap and double linked list with at 
 most capacity + 1 elements.
+*/
 
 Just for reference: 
 https://leetcode.com/problems/lru-cache/discuss/45911/Java-Hashtable-%2B-Double-linked-list-(with-a-touch-of-pseudo-nodes)
