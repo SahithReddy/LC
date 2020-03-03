@@ -1,55 +1,9 @@
-// https://leetcode.com/problems/product-of-array-except-self/solution/
-class Solution {
-    public int[] productExceptSelf(int[] nums) {
-        int length = nums.length;
-        int[] left = new int[length];
-        int[] right = new int[length];
-        int[] answer = new int[length];
-        
-        left[0]=1;
-        for(int i=1;i<length;i++){
-            left[i]=left[i-1]*nums[i-1];
-        }
-        right[length-1]=1;
-        for(int j=length-2;j>=0;j--){
-            right[j]=right[j+1]*nums[j+1];
-        }
-        
-        for(int k=0;k<length;k++){
-            answer[k]=left[k]*right[k];
-        }
-        return answer;
-    }
-}
-----------------------------------------------------------------------------------------------------------
-// O(1) space as used only one array apart form the the answer array
-// Follow the below one. It is much simple.
-class Solution {
-    public int[] productExceptSelf(int[] nums) {
-        int length = nums.length;
-        int[] right = new int[length];
-        int[] answer = new int[length];
-        
-        answer[0]=1;
-        for(int i=1;i<length;i++){
-            answer[i]=answer[i-1]*nums[i-1];
-        }
-        
-        int r=1;
-        for(int i=length-1;i>=0;i--){
-            answer[i]=answer[i]*r;
-            r=r*nums[i];
-        }
-        return answer;
-    }
-}
---------------------------------------------------------------------------------------------------------------
-Much Simpler version of the above solution
-
+/*
 The idea is simply. The product basically is calculated using the numbers before the current number and the numbers after
 the current number. Thus, we can scan the array twice. First, we calcuate the running product of the part before the current
 number. Second, we calculate the running product of the part after the current number through scanning from the end of
 the array.
+*/
 
 class Solution {
     public int[] productExceptSelf(int[] nums) {
@@ -71,6 +25,6 @@ class Solution {
 
 Time: O(n), Space: O(1)
 ------------------------------------------------------------------------------------------------
-https://leetcode.com/problems/product-of-array-except-self/discuss/65667/My-one-pass-Java-solution-without-extra-spaces
+// https://leetcode.com/problems/product-of-array-except-self/discuss/65667/My-one-pass-Java-solution-without-extra-spaces
 
-Try to have a look at this solution if possible in future when you are here
+// Try to have a look at this solution if possible in future when you are here
