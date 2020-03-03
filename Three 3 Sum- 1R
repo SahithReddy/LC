@@ -1,8 +1,8 @@
 // Explanation is here https://www.youtube.com/watch?v=qJSPYnS35SE
 
-The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
+/*The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
 For each possible first element we make a standard bi-directional 2Sum sweep of the remaining part of the array.
-Also we want to skip equal elements to avoid duplicates in the answer without making a set or smth like that.
+Also we want to skip equal elements to avoid duplicates in the answer without making a set or smth like that.*/
 
 // I wrote the below solution
 
@@ -38,13 +38,13 @@ class Solution {
     }
 }
 
-time O(n^2), space O(n)
+// time O(n^2), space O(n)
 // (1) Sort the array - O(nlogn)
 // (2) Iterate the array - O(n)
 // (3) Find valid triplets - O(n)
 // Overall time complexity: O(n^2)
 ------------------------------------------------------------------------------------------------------------------
-Below is the same solution but with small names and better to understand
+// Below is the same solution but with small names and better to understand
 
 public List<List<Integer>> threeSum(int[] num) {
     Arrays.sort(num);
@@ -75,7 +75,7 @@ public List<List<Integer>> threeSum(int[] num) {
 }
 ------------------------------------------------------------------------------------------------------------------
 
-Brilliant and SMall upto yhe point - Took Set to avoid duplicates
+// Brilliant and SMall upto yhe point - Took Set to avoid duplicates
 public  List<List<Integer>> threeSum(int[] nums) {
         Set<List<Integer>> res  = new HashSet<>();
         if(nums.length==0) return new ArrayList<>(res);
@@ -94,7 +94,7 @@ public  List<List<Integer>> threeSum(int[] nums) {
         return new ArrayList<>(res);
 
     }
-    
+/*    
 can you please explain these lines?
 else if ( sum >0) k--;
 else if (sum<0) j++;
@@ -103,3 +103,4 @@ As the array is already sorted. j being the left pointer (pointing to lower numb
 (pointing to higher numbers), with a static index i. If nums[i] + nums[j] + nums[k] is greater than target then we know 
 we need to select the next highest number hence k--. Same way when the sum is lower we need to select a number just 
 higher than the lowest.
+*/
