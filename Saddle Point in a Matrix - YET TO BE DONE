@@ -1,0 +1,90 @@
+/*
+
+Given a matrix of n x n size, the task is to find saddle point of the matrix. A saddle point is an element of the 
+matrix such that it is the minimum element in its row and maximum in its column.
+
+Examples :
+
+Input: Mat[3][3] = { {1, 2, 3},
+                  {4, 5, 6},
+                  {7, 8, 9}}
+Output: 7
+7 is minimum in its row and maximum in its column.
+
+Input: Mat[3][3] = {{1, 2, 3},
+                    {4, 5, 6},
+                    {10, 18, 4}}
+Output: No saddle point
+
+*/
+
+
+
+/*
+I think we can't do it in O(n)
+->Traverse all rows one by one and do following for every row i.
+->Find the minimum element of current row and store column index of the minimum element.
+->Check if the row minimum element is also maximum in its column. We use the stored column index here.
+->If yes, then saddle point else continue till end of matrix.
+*/
+
+// Code:
+
+// Java program to illustrate Saddle point 
+
+class Test 
+{ 
+	// Method to find saddle point 
+	static boolean findSaddlePoint(int mat[][ ], int n) 
+	{ 
+		// Process all rows one by one 
+		for (int i = 0; i < n; i++) 
+		{ 
+			// Find the minimum element of row i. 
+			// Also find column index of the minimum element 
+			int min_row = mat[i][0], col_ind = 0; 
+			for (int j = 1; j < n; j++) 
+			{ 
+				if (min_row > mat[i][j]) 
+				{ 
+					min_row = mat[i][j]; 
+					col_ind = j; 
+				} 
+			} 
+	
+			// Check if the minimum element of row is also 
+			// the maximum element of column or not 
+			int k; 
+			for (k = 0; k < n; k++) 
+	
+				// Note that col_ind is fixed 
+				if (min_row < mat[k][col_ind]) 
+					break; 
+	
+			// If saddle point is present in this row then 
+			// print it 
+			if (k == n) 
+			{ 
+			System.out.println("Value of Saddle Point " + min_row); 
+			return true; 
+			} 
+		} 
+	
+		// If Saddle Point not found 
+		return false; 
+	} 
+	
+	// Driver method 
+	public static void main(String[] args) 
+	{ 
+		int mat[][] = {{1, 2, 3}, 
+					{4, 5, 6}, 
+					{7, 8, 9}}; 
+		
+		int n = 3; 
+		if (findSaddlePoint(mat, n) == false) 
+			System.out.println("No Saddle Point "); 
+	} 
+} 
+
+
