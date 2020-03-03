@@ -1,6 +1,6 @@
 // https://www.geeksforgeeks.org/find-whether-an-array-is-subset-of-another-array-set-1/
 
-Using Merge Sort: handles Duplicates too
+// Using Merge Sort: handles Duplicates too
 
 static boolean isSubset(int arr1[], int arr2[], int m, int n) 
     {  
@@ -22,7 +22,7 @@ static boolean isSubset(int arr1[], int arr2[], int m, int n)
         else
             return true; 
     } 
-Time: (mLogm + nLogn), Space: O(N)
+// Time: (mLogm + nLogn), Space: O(N)
 
 --------------------------------------------------------------------------------------------------------------------
 // HashSet. -- Easy but does not handles duplicates --{1, 4, 4, 2} is not a subset of {1, 4, 2}, but these methods will print it as a subset.
@@ -49,15 +49,17 @@ static boolean isSubset(int arr1[], int arr2[], int m,
         return true; 
     }
     
-  Time : O(N)
+  // Time : O(N)
 ------------------------------------------------------------------------------------------------------------
 // HashMap -- Handles Duplicates
 // https://www.geeksforgeeks.org/find-whether-an-array-is-subset-of-another-array-using-map/
+/*
 Efficient Approach: Create a map to store the frequency of each distinct number present in A[].
 Then we will check if each number of B[] is present in map or not. If present in the map, we will 
 decrement the frequency value for that number by one and check for the next number. 
 If map value for any number becomes zero, we will erase it from the map. If any number of B[] is 
 not found in the map, we will set the flag value and break the loops and print No. Otherwise, we will print Yes.
+*/
 
 static int isSubset(int a[], int b[], int m, int n)  
     {
