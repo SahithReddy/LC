@@ -1,0 +1,112 @@
+/*
+Input: s = "ABC"
+Output: 10
+Explanation: All possible substrings are: "A","B","C","AB","BC" and "ABC".
+Evey substring is composed with only unique letters.
+Sum of lengths of all substring is 1 + 1 + 1 + 2 + 2 + 3 = 10
+
+Input: s = "ABA"
+Output: 8
+Explanation: The same as example 1, except countUniqueChars("ABA") = 1.
+
+Input: s = "LEETCODE"
+Output: 92
+*/
+
+ public int uniqueLetterStringII(String s) {
+    int[] lastPosition = new int[26];
+    int[] contribution = new int[26];
+    int res = 0;
+
+//     Basically, at each it, we count the contribution of all the characters to all the substrings ending till that point.
+
+    for (int i = 0; i < s.length(); i++) {
+
+      int curChar = s.charAt(i) - 'A';
+
+//       Now, we need to update the contribution of curChar.
+//       The total number of substrings ending at i are i+1. So if it was a unique character, it'd contribute to all of those
+//       and it's contribution would have been i+1.
+//       But if it's repeating, it means it has already contributed previously. So remove it's previous contribution.
+//       We can do that as we have it's last position.
+//       So these are the contributions for strings which start after this character's last occurrence and end at i.
+//       A simple example will demonstrate that the number of these strings are i+1 - lastPosition[curChar]
+//       For characters not appeared till now, lastPosition[curChar] would be 0.
+      int totalNumOfSubstringsEndingHere = i + 1;
+      contribution[curChar] = totalNumOfSubstringsEndingHere - lastPosition[curChar];
+
+//       Note that, the contribution of all the other characters will remain same.
+
+//       count the cur answer by summing all the contributions. This loop can be avoided by the idea in original post, but I find
+//       it easy to understand with this and it only iterates over 26 values.
+      int cur = 0;
+      for (int j = 0; j < 26; j++) {
+        cur += contribution[j];
+      }
+
+//       add the current value to final answer.
+      res += cur;
+
+//       update the last position of this char. This helps in future to count it's contribution if it appears again.
+      lastPosition[curChar] = i + 1;
+    }
+    return res;
+  }
+
+/*
+Complexity:
+One pass, time complexity O(N).
+Space complexity O(1).
+*/
+
+
+/*
+Intuition
+Let's think about how a character can be found as a unique character.
+
+Think about string "XAXAXXAX" and focus on making the second "A" a unique character.
+We can take "XA(XAXX)AX" and between "()" is our substring.
+We can see here, to make the second "A" counted as a uniq character, we need to:
+
+insert "(" somewhere between the first and second A
+insert ")" somewhere between the second and third A
+For step 1 we have "A(XA" and "AX(A", 2 possibility.
+For step 2 we have "A)XXA", "AX)XA" and "AXX)A", 3 possibilities.
+
+So there are in total 2 * 3 = 6 ways to make the second A a unique character in a substring.
+In other words, there are only 6 substring, in which this A contribute 1 point as unique string.
+
+Instead of counting all unique characters and struggling with all possible substrings,
+we can count for every char in S, how many ways to be found as a unique char.
+We count and sum, and it will be out answer.
+*/
+/*
+Explanation:
+index[26][2] record last two occurrence index for every upper characters.
+Initialise all values in index to -1.
+Loop on string S, for every character c, update its last two occurrence index to index[c].
+Count when loop. For example, if "A" appears twice at index 3, 6, 9 seperately, we need to count:
+For the first "A": (6-3) * (3-(-1))"
+For the second "A": (9-6) * (6-3)"
+For the third "A": (N-9) * (9-6)"
+*/
+
+    public int uniqueLetterString(String S) {
+        int[][] index = new int[26][2];
+        for (int i = 0; i < 26; ++i) Arrays.fill(index[i], -1);
+        int res = 0, N = S.length(), mod = (int)Math.pow(10, 9) + 7;
+        for (int i = 0; i < N; ++i) {
+            int c = S.charAt(i) - 'A';
+            res = (res + (i - index[c][1]) * (index[c][1] - index[c][0]) % mod) % mod;
+            index[c] = new int[] {index[c][1], i};
+        }
+        for (int c = 0; c < 26; ++c)
+            res = (res + (N - index[c][1]) * (index[c][1] - index[c][0]) % mod) % mod;
+        return res;
+    }
+    
+/*
+Complexity:
+One pass, time complexity O(N).
+Space complexity O(1).
+*/
