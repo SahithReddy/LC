@@ -1,9 +1,12 @@
 // https://www.youtube.com/watch?v=3IETreEybaA&t=40s
 
 
+/*
+Better than this approach is below this.
 The idea is use a hash set to track the longest substring without repeating characters so far, use a fast pointer 
 j to see if character j is in the hash set or not, if not, great, add it to the hash set, move j forward and update 
 the max length, otherwise, delete from the head by using a slow pointer i until we can put character j to the hash set.
+*/
 
 class Solution {
 public int lengthOfLongestSubstring(String s) {
@@ -24,24 +27,23 @@ public int lengthOfLongestSubstring(String s) {
 }
 }
 
-Time complexity : O(2n) = O(n). In the worst case each character will be visited twice by ii and jj.
-Space complexity : O(min(m, n))O(min(m,n)). We need O(k)O(k) space for the sliding window, 
-where kk is the size of the Set. The size of the Set is upper bounded by the size of the string nn and the size of the charset/alphabet mm.
+/*
+Time complexity : O(2n) = O(n). In the worst case each character will be visited twice by i and j.
+Space complexity : O(min(m,n)). We need O(k) space for the sliding window, 
+where k is the size of the Set. The size of the Set is upper bounded by the size of the string n and the size of the charset m.
+*/
 
 --------------------------------------------------------------------------------------------------------------
+/*
 The above solution requires at most 2n steps. In fact, it could be optimized to require only n steps. Instead of using a 
 set to tell if a character exists or not, keep a hashmap which stores the characters in string as keys and their positions as values. 
 Then we can skip the 
 characters immediately when we found a repeated character.
 
-The reason is that if s[j]s[j] have a duplicate in the range [i, j)[i,j) with index j'j 
-′
- , we don't need to increase ii little by little. We can skip all the elements in the range [i, j'][i,j 
-′
- ] and let ii to be j' + 1j 
-′
- +1 directly.
- 
+The reason is that if s[j] have a duplicate in the range [i,j) with index j 
+we don't need to increase i little by little. We can skip all the elements in the range [i,j] and let i to be j + 1 directly.
+*/
+
 class Solution {
     public int lengthOfLongestSubstring(String s) {
         HashMap<Character, Integer> sub = new HashMap<Character, Integer>();
@@ -57,9 +59,9 @@ class Solution {
     }
 }
 
-Time complexity : O(n). Index j will iterate n times.
+// Time complexity : Directly O(n). Index j will iterate n times.
 
-Space complexity (HashMap) : O(min(m,n)). Same as the previous approach.
+// Space complexity (HashMap) : O(min(m,n)). Same as the previous approach.
 
 ---------------------------------------------------------------------------------------------------
 
