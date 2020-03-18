@@ -18,6 +18,11 @@ to mark the boundary, so that we don't need to check the null node during the up
 // CODE:
 
 class LRUCache {
+
+    class Node{
+      Node prev, next;
+      int key, val;
+    }
     
     final Node head  = new Node();
     final Node tail = new Node();
@@ -30,6 +35,7 @@ class LRUCache {
         head.next = tail;
         tail.prev= head;
     }
+    // first write insert to head -> remove -> get -> put
     
     public int get(int key) {
         int result = -1;
@@ -74,11 +80,6 @@ class LRUCache {
         node.prev = head;
         node.next = head_next;
         head_next.prev = node;
-    }
-    
-    class Node{
-      Node prev, next;
-      int key, val;
     }
 }
 
