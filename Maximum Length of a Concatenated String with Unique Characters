@@ -1,0 +1,71 @@
+/*
+Given an array of strings arr. String s is a concatenation of a sub-sequence of arr which have unique characters.
+
+Return the maximum possible length of s.
+
+Input: arr = ["un","iq","ue"]
+Output: 4
+Explanation: All possible concatenations are "","un","iq","ue","uniq" and "ique".
+Maximum length is 4.
+
+Input: arr = ["cha","r","act","ers"]
+Output: 6
+Explanation: Possible solutions are "chaers" and "acters".
+
+Input: arr = ["abcdefghijklmnopqrstuvwxyz"]
+Output: 26
+*/
+
+/*
+EXPLANATION: 
+Initial the result res to include the case of empty string "".
+res include all possible combinations we find during we iterate the input.
+
+Itearte the the input strings,
+but skip the word that have duplicate characters.
+The examples is kind of misleading,
+but the input string can have duplicate characters,
+no need to considerate these strings.
+
+For each string,
+we check if it's conflit with the combination that we found.
+If they have intersection of characters, we skip it.
+If not, we append this new combination to result.
+
+return the maximum length from all combinations.
+*/
+
+class Solution {
+    private boolean isUnique(String str) {
+        if (str.length() > 26) return false;
+        boolean[] used = new  boolean [26];
+        char[] arr = str.toCharArray();
+        for (char ch : arr) {
+            if (used[ch - 'a']){
+            return false; 
+            } else {
+            used[ch -'a'] = true;
+        }
+    }
+        return true;
+    }
+    public int maxLength(List<String> arr) {
+        List<String> res = new ArrayList<>();
+        res.add("");
+        for (String str : arr) {
+            if (!isUnique(str)) continue;
+            List<String> resList = new ArrayList<>();
+            for (String candidate : res) {
+                String temp = candidate + str;
+                if (isUnique(temp)) resList.add(temp);
+            }
+            res.addAll(resList);
+        }
+        int ans = 0;
+        for (String str : res) ans = Math.max(ans, str.length());
+        return ans;
+    }
+}
+
+
+// TIME AND SPACE COMPLEXITY: space and time complexity is exponential in len(A). That is: O( 2^n)
