@@ -15,7 +15,7 @@ For k = 3, you should return: 3->2->1->4->5
 */
 
 /*
-ALGORITHM: 
+ALGORITHM: Picked from 2nd most upvoted solution and its 1st comment
 
 First, build a function reverse() to reverse the ListNode between begin and end.
 
