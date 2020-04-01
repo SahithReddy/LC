@@ -1,0 +1,62 @@
+/*
+Input: arr = [1,2]
+Output: 2
+
+Input: arr = [1,3,4,1,5]
+Output: 3
+Explanation: Remove [4] then remove [1,3,1] then remove [5].
+
+Input : s = “2553432”
+Output : 2
+We can delete all character of above string in
+2 steps, first deleting the substring s[3, 5] “343”  
+and then remaining string completely  s[0, 3] “2552”
+
+Input : s = “1234”
+Output : 4
+We can delete all character of above string in 4 
+steps only because each character need to be deleted 
+separately. No substring of length 2 is a palindrome 
+in above string.
+*/
+
+// Solution in C++. This is the best - if this asked - code it in C++
+
+class Solution {
+public:
+    int minimumMoves(vector<int>& arr) {
+        int n = arr.size();
+        
+        // dp[left][right] = the min move for arr[left]...arr[right] (both included).
+        // the max number of move is n.
+        vector<vector<int>> dp(n, vector<int>(n, n));
+        
+        // handle edge situation: subarray size == 1
+        for(int i = 0; i < n; i++) { dp[i][i] = 1; }
+        
+        // handle edge situation: subarray size == 2
+        for(int i = 0; i < n - 1; i++) { dp[i][i + 1] = arr[i] == arr[i + 1] ? 1 : 2; }
+        
+        // for subarray size >= 3:
+        for(int size = 3; size <= n; size++) {
+            for(int left = 0, right = left + size - 1; right < n; left++, right++) {
+                
+                // if arr[left] == arr[right], then the two number: arr[left] and arr[right] can be
+                // removed when the last move of subarray arr[left + 1:right - 1]
+                if(arr[left] == arr[right]) {
+                    dp[left][right] = dp[left + 1][right - 1];
+                }
+                
+                // or, if we cannot remove arr[left] and arr[right] in one move (the last move),
+                // the subarray arr[left:right] must can be split into two subarrays
+                // and remove them one by one.
+                for(int mid = left; mid < right; mid++) {
+                    dp[left][right] = min(dp[left][right], dp[left][mid] + dp[mid + 1][right]);
+                }
+            }
+        }
+        return dp[0][n - 1];
+    }
+};
+
+// Time Complexity: O(N^3).
