@@ -1,4 +1,16 @@
-//With Global Variables - Easier One
+/*
+
+Input: "babad"
+Output: "bab"
+Note: "aba" is also a valid answer.
+
+Input: "cbbd"
+Output: "bb"
+*/
+
+
+// Solution with Global Variables - Easier One
+
 public class Solution {
 private int lo, maxLen;
 
@@ -24,10 +36,12 @@ private void extendPalindrome(String s, int j, int k) {
 		maxLen = k - j - 1;
 	}
 }}
-Here it is: https://leetcode.com/problems/longest-palindromic-substring/discuss/2928/Very-simple-clean-java-solution
-Time - O(n^2) Space: O(1)
-Solution:
-https://leetcode.com/problems/palindromic-substrings/discuss/105688/Very-Simple-Java-Solution-with-Detail-Explanation
+
+// Time - O(n^2) Space: O(1)
+
+// Here it is: https://leetcode.com/problems/longest-palindromic-substring/discuss/2928/Very-simple-clean-java-solution
+// Solution:
+// https://leetcode.com/problems/palindromic-substrings/discuss/105688/Very-Simple-Java-Solution-with-Detail-Explanation
 -------------------------------------------------------------------------------------------------------
 // Without Global variables -  This was a youtube video idea
 
@@ -35,7 +49,9 @@ class Solution {
     public String longestPalindrome(String s) {
         int start = 0;
         int end = 0;
+	
         if(s==null || s.length()<1) return "";
+	
         for(int i=0;i<s.length()-1;i++){
         int len = Math.max(expandFromCenter(s,i,i), expandFromCenter(s,i,i+1));
             System.out.println("NEW LENGTH here is: " +len);
@@ -63,9 +79,9 @@ class Solution {
             
         }
     }
- Explanation: https://www.youtube.com/watch?v=y2BD4MJqV20
+  // Time - O(n^2) Space: O(1)
+ // Explanation: https://www.youtube.com/watch?v=y2BD4MJqV20
  
- Time - O(n^2) Space: O(1)
  -------------------------------------------------------------------------------------------------------
 // DIVYA's Solution - Easy - Follow this when in no time
 class Solution {
