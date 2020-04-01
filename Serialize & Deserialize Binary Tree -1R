@@ -1,5 +1,8 @@
-    //DFS for serializing  and QUEUE for deserializing using recursion
-    
+    /*
+  DFS for serializing  and QUEUE for deserializing using recursion
+  The idea is simple: print the tree in pre-order traversal and use "#" to denote null node and split node with ",". We can use a StringBuilder for building the string on the fly. For deserializing, we use a Queue to store the pre-order traversal and since we have "#" as null node, we know exactly how to where to end building subtress.
+
+  */
     public String serialize(TreeNode root) {
         return serial(new StringBuilder(), root).toString();
     }
@@ -31,7 +34,7 @@
         }
     }
 
-// time: O(N), space: O(width) where width is the max width of the tree
+// Time: O(N), Space: O(width) where width is the max width of the tree
 -----------------------------------------------------------------------------------------------------------------
 /*
 This problem solved in all 3 ways: Recursive DFS as above, Iterative DFS and Iterative BFS(queue)
