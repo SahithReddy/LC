@@ -1,8 +1,11 @@
+/*
+QUESTION:
 Input : "Welcome to geeksforgeeks"
 Output : "geeksforgeeks to Welcome"
 
 Input : "I love Java Programming"
 Output :"Programming Java love I"
+*/
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 class Solution {
@@ -16,6 +19,7 @@ class Solution {
   }
 }
 
+/*
 "\s" is a regex class for any kind of whitespace (space, tab, newline, etc). Since Java uses "\" as an escape 
 character in strings (e.g. for newlines: "\n"), we need to escape the escape character ;-) So it becomes "\\s". 
 The "+" means one or more of them.
@@ -23,32 +27,38 @@ The "+" means one or more of them.
 Time complexity: O(N), where N is a number of characters in the input string.
 
 Space complexity: O(N), to store the result of split by spaces.
+*/
 ---------------------------------------------------------------------------------------------------------------------------------------
-Same as above but a littel different
+// Same as above but a littel different
+
+class Solution {
+  public String reverseWords(String s) {
 String[] parts = s.trim().split("\\s+");
 String out = "";
 for (int i = parts.length - 1; i > 0; i--) {
     out += parts[i] + " ";
 }
 return out + parts[0];
+}
+}
 ---------------------------------------------------------------------------------------------------------
 // https://leetcode.com/problems/reverse-words-in-a-string/solution/ -- More Solutions without using inbuilt functions.
 
-// Explanation
+/*
+Explanation of algo without using any inbuilt function:
 
-storeIdx: the current position available for insertion.
+startIdx: the current position available for insertion.
 j: the end of one word(including one trailing space), used for copying word one by one.
 i: the beginning of one word.
 
-The procedure inside the for loop is summaried by @wen_chieh in his post, which quotes:
+1. put a blank space in front of the word if this word is not the first word
 
-put a blank space in front of the word if this word is not the first word
+2. copy the word to the position starts with storeIndex
 
-copy the word to the position starts with storeIndex
+3. reverse the word
 
-reverse the word
-
-update the possible start of next word
+4. update the possible start of next word
+*/
 
 
 public String reverseWords(String s) {
@@ -79,3 +89,5 @@ public String reverseWords(String s) {
             str[end] = tmp;
         }
     }
+
+// Time: O(N) Space: O(1)
