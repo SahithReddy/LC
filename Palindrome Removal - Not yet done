@@ -20,7 +20,7 @@ separately. No substring of length 2 is a palindrome
 in above string.
 */
 
-// Solution in C++. This is the best - if this asked - code it in C++
+// This is the top solution in LC. Solution in C++. This is the best - if this asked - code it in C++
 
 class Solution {
 public:
