@@ -2,6 +2,8 @@
 This is a template that can be applied to serialize and deserialize both binary(refer it in this repo) and n-ary trees.
 
 The only difference is that to serialize n-ary tree, we need to append the number of children of a node.
+
+Taken from 2nd most upvoted answer.
 */
 
 
