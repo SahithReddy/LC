@@ -1,14 +1,17 @@
+/*
+QUESTION: 
 Input : Hello World
 Output : olleH dlroW
  
 Input :  Geeks for Geeks
 Output : skeeG rof skeeG
+*/
 
-
+/*
 split string by space
 reverse each string
 append them
-
+*/
 
     public String reverseWords(String s) {
       
