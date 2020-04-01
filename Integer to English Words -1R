@@ -1,3 +1,5 @@
+// Combine belowTen and belowTwenty into LESS_THAN_20 array
+
 private final String[] LESS_THAN_20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
 private final String[] TENS = {"", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
 
@@ -23,5 +25,5 @@ String help(int num) {
     }
     return ret.trim();
 }
-Time complexity : O(N). Intuitively the output is proportional to the number N of digits in the input.
-Space complexity : O(1) since the output is just a string.
+// Time complexity : O(N). Intuitively the output is proportional to the number N of digits in the input.
+// Space complexity : O(1) since the output is just a string.
