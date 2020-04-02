@@ -1,0 +1,71 @@
+/*
+
+Input: day = 31, month = 8, year = 2019
+Output: "Saturday"
+
+Input: day = 18, month = 7, year = 1999
+Output: "Sunday"
+
+Input: day = 15, month = 8, year = 1993
+Output: "Sunday"
+
+Constraints:
+The given dates are valid dates between the years 1971 and 2100.
+*/
+
+
+/*
+ALGORITHM:
+
+This solution uses the current date (literally the day you sit down to solve the problem) to find the correct offset to a list of strings representings the days of the week, i.e. [ "Sunday", "Monday", ... ].
+
+In general, you can start the list of days with a known date. For example, if today when writing the solution is Day = 14, Month = 9, and Year = 2019 and you know the day name is "Saturday" then +1 day must be "Sunday" and likewise -1 day must be "Friday".
+
+So start your list of day names with the known date of "today", e.g. "Saturday". Then, find the number of days since the start of the valid range for both your known date and the input date. Note, the code considers 1, 1, 1971 to be 1 day after the start and so on.
+
+The difference will be the +1, -1, .. etc. offset that you are looking for, just use this difference mod 7 to correctly index the list of days.
+*/
+
+
+class Solution {
+		int[] months = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+		String[] days = {"Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday", "Monday"};
+		public String dayOfTheWeek(int day, int month, int year) {
+				int curr = daysFromStart(31, 12, 2019);
+				int cnt = daysFromStart(day, month, year);
+				// return days[((cnt - curr) % 7 + 7) % 7];
+        int i=(cnt-curr)%7;
+        if(i<0){
+        i=i+7;
+        }
+        return days[i];
+		}
+
+		private int daysFromStart(int day, int month, int year) {
+				int sum = 0;
+				for (int i = 1971; i < year; i++) {
+						sum += 365;
+						if (isLeapYear(i)) {
+								sum++;
+						}
+				}
+				for (int i = 1; i < month; i++) {
+						sum += months[i - 1];
+						if (i == 2 && isLeapYear(year)) {
+								sum++;
+						}
+				}
+				sum += day - 1;
+				return sum;
+		}
+
+		private boolean isLeapYear(int year) {
+				return (year % 4 == 0 && year % 100 != 0) || year % 400 == 0;
+		}
+}
+
+/*
+Time: O(N)
+Space: O(1)
+*/
+
