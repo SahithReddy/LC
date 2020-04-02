@@ -1,0 +1,52 @@
+/*
+1. If the given node has a right, then the left most node on the right side must be the successor.
+
+2. If the given node is on the left side of tree and its parent's right is pointing to the given node, then we must find a parent node whose left is current node for it to become the successor.
+*/
+
+/*
+// Definition for a Node.
+class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node parent;
+};
+*/
+
+public Node inorderSuccessor(Node x) {
+        if(x == null) return null;
+        
+        if(x.right != null) {
+            x = x.right;
+            
+            while(x != null && x.left != null) {
+                x = x.left;
+            }
+            
+            return x;
+        }
+        
+        while(x != null)
+        {
+            if(x.parent == null)
+                return null;
+                
+            if(x.parent.left == x)
+                return x.parent;
+            
+            else {
+                x = x.parent;
+            }
+                
+        }
+        
+        return x;
+    }
+    
+    
+/*
+
+Time complexity : O(H), where H is the height of the tree. That means O(logN) in the average case, and O(N) in the worst case, where N is the number of nodes in the tree.
+Space complexity : O(1), since no additional space is allocated during the calculation.
+*/
