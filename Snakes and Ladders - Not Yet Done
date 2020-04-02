@@ -1,0 +1,101 @@
+/*
+Snak and Ladder board game playing with a dice of 6. you got zig zag from bottom left cell to top right cell/top left cell to win the game
+
+A board square on row r and column c has a "snake or ladder" if board[r][c] != -1.  The destination of that snake or ladder is board[r][c].
+
+Return the least number of moves required to reach square N*N.  If it is not possible, return -1.
+
+
+Input: [
+[-1,-1,-1,-1,-1,-1],
+[-1,-1,-1,-1,-1,-1],
+[-1,-1,-1,-1,-1,-1],
+[-1,35,-1,-1,13,-1],
+[-1,-1,-1,-1,-1,-1],
+[-1,15,-1,-1,-1,-1]]
+
+Output: 4
+
+Explanation: 
+At the beginning, you start at square 1 [at row 5, column 0].
+You decide to move to square 2, and must take the ladder to square 15.
+You then decide to move to square 17 (row 3, column 5), and must take the snake to square 13.
+You then decide to move to square 14, and must take the ladder to square 35.
+You then decide to move to square 36, ending the game.
+It can be shown that you need at least 4 moves to reach the N*N-th square, so the answer is 4.
+
+*/
+
+
+// BFS approach but first lets flatten the matrix into normal 1D array and apply the math on it. Solution has detailed comments
+
+class Solution {
+    public int snakesAndLadders(int[][] board) {
+        int n = board.length;
+        // convert 2D array to 1D to make processing more easier
+        int[] flatten = convert2DTo1D(board);
+        int targetIdx = n * n - 1; // target index to try to reach
+        Queue<Integer> queue = new ArrayDeque<>();  // queue for BFS
+        boolean[] visited = new boolean[n * n]; // keep track of which node has been visited
+        int steps = 0; // keep track of number of steps (levels) we have gone in BFS
+        // add starting node (number 1, index 0) to the queue and start BFS
+
+        int start = flatten[0] == -1 ? 0 : flatten[0] - 1;
+        queue.offer(start);
+        visited[start] = true;
+        // BFS:
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            while (size-- > 0) {
+                int currIdx = queue.poll();
+                // in case the current index is the index we are looking for
+                // return the number of moves used to get there
+                if (currIdx == targetIdx) return steps;
+                // consider all numbers from +1 to +6, note that don't go out of bound
+                int upper = Math.min(targetIdx, currIdx + 6);
+                for (int nextIdx = currIdx + 1; nextIdx <= upper; nextIdx++) {
+                    // check if the nextIdx is a snake/ladder
+                    int dest = flatten[nextIdx] == -1 ? nextIdx : flatten[nextIdx] - 1;
+
+                    // in case the next index is already explored, skip it
+                    if (visited[dest]) continue;
+                    // add next index into the queue and mark it as visited
+                    queue.offer(dest);
+                    visited[dest] = true;
+                }
+            }
+            steps++;
+        }
+        return -1;
+    }
+
+    private int[] convert2DTo1D(int[][] board) {
+        int n = board.length;
+        // 1D array whose size is n^2
+        int[] rst = new int[n * n];
+        boolean leftToRight = true; // order to traverse columns in each row
+        int idx = 0;
+
+        // start from the bottom row of 2D array, initially going from left to right
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = 0; j < n; j++) {
+                // if we need to read columns from left to right
+                if (leftToRight) {
+                    rst[idx++] = board[i][j];
+                } else {
+                    // if we need to read columns from right to left
+                    rst[idx++] = board[i][n - 1 - j];
+                }
+            }
+            // after processing each row, switch the order
+            leftToRight = !leftToRight;
+        }
+        return rst;
+    }
+}
+
+
+/*
+Time Complexity: O(N^2), as iterated through whole matrix
+Space Complexity: O(N^2), stored all those values in a queue
+*/
