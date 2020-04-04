@@ -1,49 +1,28 @@
+// Optimal Solution
+
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
-        if(strs.length==0) return new ArrayList();
-        HashMap<String, List> answer = new HashMap<String, List>();
-        for(String s:strs){
-            char[] cars = s.toCharArray();
-            Arrays.sort(cars);
-            String key = String.valueOf(cars);
-            if(!answer.containsKey(key)){
-                answer.put(key, new ArrayList());
-            }
-                answer.get(key).add(s);
-            
-        } return new ArrayList(answer.values());
+        if (strs == null || strs.length == 0) return new ArrayList<>();
+        Map<String, List<String>> map = new HashMap<>();
+        for (String s : strs) {
+            //only lower-case letters. so array of size 26 is enough
+            char[] ca = new char[26];
+            //Iterate the string and increment corresponding index
+            //char - 'a' , so the index will be between 0 and 25
+            for (char c : s.toCharArray()) ca[c - 'a']++;
+            String keyStr = String.valueOf(ca);
+            if (!map.containsKey(keyStr)) map.put(keyStr, new ArrayList<>());
+            map.get(keyStr).add(s);
+        }
+        return new ArrayList<>(map.values());
     }
 }
-
-The java string valueOf() method converts different types of values into string. By the help of string valueOf() method,
-you can convert int to string, long to string, boolean to string, character to string, float to string, double to string,
-
-Time Complexity: O(NKlogK), where N is the length of strs, and K is the maximum length of a string in strs. 
-The outer loop has complexity O(N)O(N) as we iterate through each string. Then, we sort each string in O(KlogK) time.
+/*
+The overall time complexity is O(m*n) or O( sum of all chars in strs). Use int[26] as bucket to count the frequency instead of Arrays.sort, this can reduce the O(nlgn) to O(n) when calculate the key.
 
 Space Complexity: O(NK), the total information content stored in ans.
+*/
 ---------------------------------------------------------------------------------------------------------------
-class Solution {
-    public List<List<String>> groupAnagrams(String[] strs) {
-        if(strs.length == 0) return new ArrayList();
-        HashMap <String, List> answer = new HashMap<>();
-        for(String s:strs){
-            int[] count = new int[26];
-            Arrays.fill(count,0);
-            for(char c:s.toCharArray()){
-                count[c - 'a']++;
-            }
-            StringBuilder sb = new StringBuilder();
-            for(int i=0;i<26;i++){
-                sb.append('#');
-                sb.append(count[i]);
-            }
-            String key = sb.toString();
-            
-            if(!answer.containsKey(key)) answer.put(key, new ArrayList());
-            answer.get(key).add(s);
-        } return new ArrayList(answer.values());
-    }
-}
+
 
 -----------------------------------------------------------------------------------------------------
