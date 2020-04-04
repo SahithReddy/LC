@@ -21,5 +21,63 @@ class Solution {
 }
 }
 
-// Space: O(n) n=7 different romans
-// Time: O(n)
+
+/* 
+Time: O(1)
+
+As there is a finite set of roman numerals, the maximum number possible number can be 3999, which in roman numerals is MMMCMXCIX. As such the time complexity is O(1).
+
+If roman numerals had an arbitrary number of symbols, then the time complexity would be proportional to the length of the input, i.e. O(n). This is assuming that looking up the value of each symbol is O(1).
+
+*/
+
+/*
+
+Space: O(1) n=7 different romans
+Because only a constant number of single-value variables are used, the space complexity is O(1)O(1).
+*/
+--------------------------------------------------------------------------
+
+// This soultion can be improve by removing the hashmap and using a switch but using the same logic:
+
+public int romanToInt(String s) {
+    int total = 0;
+    int prevVal = 0;
+    for(int i = s.length() - 1; i >= 0; i--) {
+        int currVal = 0;
+        char curr = s.charAt(i);
+        switch(curr) {
+            case 'I':
+                currVal = 1;
+                break;
+            case 'V':
+                currVal = 5;
+                break;
+            case 'X':
+                currVal = 10;
+                break;
+            case 'L':
+                currVal = 50;
+                break;
+            case 'C':
+                currVal = 100;
+                break;
+            case 'D':
+                currVal = 500;
+                break;
+            case 'M':
+                currVal = 1000;
+                break;
+        }
+        if(prevVal != 0 && currVal < prevVal) {
+            total -= currVal;
+        } else {
+            total += currVal;
+        }
+        prevVal = currVal;
+    }
+    return total;
+}
+
+// TC and SC: Same as above
+
