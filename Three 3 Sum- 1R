@@ -2,7 +2,8 @@
 
 /*The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
 For each possible first element we make a standard bi-directional 2Sum sweep of the remaining part of the array.
-Also we want to skip equal elements to avoid duplicates in the answer without making a set or smth like that.*/
+Also we want to skip equal elements to avoid duplicates in the answer without making a set or smth like that.
+*/
 
 // I wrote the below solution
 
@@ -25,10 +26,12 @@ class Solution {
                     back--;
                     }
                     else if(nums[front] + nums[back]>target){
+                        // improve: skip duplicates
                         while(front<back && nums[back] ==nums[back-1]) back--;
                         back--;
                     }
                     else {
+                        // improve: skip duplicates
                         while(front<back && nums[front]==nums[front+1]) front++;
                         front++;
                     }
@@ -38,11 +41,12 @@ class Solution {
     }
 }
 
-// time O(n^2), space O(n)
-// (1) Sort the array - O(nlogn)
-// (2) Iterate the array - O(n)
-// (3) Find valid triplets - O(n)
-// Overall time complexity: O(n^2)
+/* time O(n^2), space O(n)
+(1) Sort the array - O(nlogn)
+(2) Iterate the array - O(n)
+(3) Find valid triplets - O(n)
+Overall time complexity: O(n^2)
+*/
 ------------------------------------------------------------------------------------------------------------------
 // Below is the same solution but with small names and better to understand
 
