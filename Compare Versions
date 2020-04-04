@@ -1,0 +1,133 @@
+/*
+
+Input: version1 = "0.1", version2 = "1.1"
+Output: -1
+
+
+Input: version1 = "1.0.1", version2 = "1"
+Output: 1
+
+
+Input: version1 = "7.5.2.4", version2 = "7.5.3"
+Output: -1
+
+
+Input: version1 = "1.01", version2 = "1.001"
+Output: 0
+Explanation: Ignoring leading zeroes, both “01” and “001" represent the same number “1”
+
+
+Input: version1 = "1.0", version2 = "1.0.0"
+Output: 0
+Explanation: The first version number does not have a third level revision number, which means its third level revision number is default to "0"
+
+*/
+
+
+/*
+// Approach 1: Split + Parse, Two Pass, Linear Space
+
+Algorithm:
+1. Split both strings by dot character into two arrays.
+
+2. Iterate over the longest array and compare chunks one by one. If one of the arrays is over, virtually add as many zeros as needed to continue the comparison with the longer array.
+
+-->If two chunks are not equal, return 1 or -1.
+3. If we're here, the versions are equal. Return 0.
+
+*/
+
+class Solution {
+  public int compareVersion(String version1, String version2) {
+    String[] nums1 = version1.split("\\.");
+    String[] nums2 = version2.split("\\.");
+    int n1 = nums1.length, n2 = nums2.length;
+
+    // compare versions
+    int i1, i2;
+    for (int i = 0; i < Math.max(n1, n2); ++i) {
+      i1 = i < n1 ? Integer.parseInt(nums1[i]) : 0;
+      i2 = i < n2 ? Integer.parseInt(nums2[i]) : 0;
+      if (i1 != i2) {
+        return i1 > i2 ? 1 : -1;
+      }
+    }
+    // the versions are equal
+    return 0;
+  }
+}
+
+/*
+
+// Two pass and Linear space complexity
+
+Time complexity : O(N+M+max(N,M)), where N and M are lengths of input strings.
+
+Space complexity : O(N+M) to store arrays nums1 and nums2.
+
+*/
+
+----------------------------------------------------------
+// This is so much efficient solution with one pass and constant space complexity
+
+/*
+
+Approach 2: Two Pointers, One Pass, Constant Space
+
+*/
+
+/*
+
+Time complexity : O(max(N,M)), where N and M are lengths of the input strings respectively. It's a one-pass solution.
+
+Space complexity : O(1), since we don't use any additional data structure.
+
+*/
+
+class Solution {
+  public Pair<Integer, Integer> getNextChunk(String version, int n, int p) {
+    // if pointer is set to the end of string
+    // return 0
+    if (p > n - 1) {
+      return new Pair(0, p);
+    }
+    // find the end of chunk
+    int i, pEnd = p;
+    while (pEnd < n && version.charAt(pEnd) != '.') {
+      ++pEnd;
+    }
+    // retrieve the chunk
+    if (pEnd != n - 1) {
+      i = Integer.parseInt(version.substring(p, pEnd));
+    } else {
+      i = Integer.parseInt(version.substring(p, n));
+    }
+    // find the beginning of next chunk
+    p = pEnd + 1;
+
+    return new Pair(i, p);
+  }
+
+  public int compareVersion(String version1, String version2) {
+    int p1 = 0, p2 = 0;
+    int n1 = version1.length(), n2 = version2.length();
+
+    // compare versions
+    int i1, i2;
+    Pair<Integer, Integer> pair;
+    while (p1 < n1 || p2 < n2) {
+      pair = getNextChunk(version1, n1, p1);
+      i1 = pair.getKey();
+      p1 = pair.getValue();
+
+      pair = getNextChunk(version2, n2, p2);
+      i2 = pair.getKey();
+      p2 = pair.getValue();
+      if (i1 != i2) {
+        return i1 > i2 ? 1 : -1;
+      }
+    }
+    // the versions are equal
+    return 0;
+  }
+}
