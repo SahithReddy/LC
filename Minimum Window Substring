@@ -1,1 +1,85 @@
-// Still not done
+/*
+QUESTION:
+
+Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+
+Example:
+
+Input: S = "ADOBECODEBANC", T = "ABC"
+Output: "BANC"
+
+Note:
+If there is no such window in S that covers all characters in T, return the empty string "".
+If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
+*/
+
+/*
+
+ALGORITHM:
+1. Use two pointers: start and end pointers to represent a window.
+2. moving end forward to find a valid window, moving start forward to find a smaller window
+3. counter and map[] array to determine if the window is valid or not
+
+To check if a window is valid, we use an array[128] for chars in t. And use counter for the number of chars of t to be found in s. The key part is map[c1]--;. We decrease count for each char in s. If it does not exist in t, the count will be negative.
+
+*/
+
+
+  public String minWindow(String s, String t) {
+  
+    int [] map = new int[128];
+    
+    // Count the frequencies for chars in t
+    for (char c : t.toCharArray()) {
+      map[c]++;
+    }
+    // Two pointers where end starts progressing forward first
+    int start = 0, end = 0;
+    
+    // If the minimal length doesn't change, it means there's no valid window
+    int minLen = Integer.MAX_VALUE;
+    
+    // Start point of the minimal window
+    int minStart = 0;
+    
+    // Works as a counter of how many chars still need to be included in a window or counter represents the number of chars of t to be found in s.
+    int counter = t.length();
+    
+    // Move end pointer to find a valid window.
+    while (end < s.length()) {
+      final char c1 = s.charAt(end);
+      
+      // If char in s exists in t, decrease counter
+      if (map[c1] > 0) counter--;
+      
+      // Decrease map[c1]. If char does not exist in t, map[c1] will be negative.
+      map[c1]--;
+      
+      // Move end forward to find another valid window
+      end++;
+      
+      // If the current window has all the desired chars
+      while (counter == 0) {
+      //See if this window is smaller
+        if (minLen > end - start) {
+          minLen = end - start;
+          minStart = start;
+        }
+        final char c2 = s.charAt(start);
+        map[c2]++;
+        
+        // When char exists in t, increase counter.
+        if (map[c2] > 0) counter++;
+        
+        // Move start forward to find a smaller window
+        start++;
+      }
+    }
+
+    return minLen == Integer.MAX_VALUE ? "" : s.substring(minStart, minStart + minLen);
+  }
+  
+  /*
+  Time Complexity : O(∣S∣+∣T∣) where |S| and |T| represent the lengths of strings S and T.
+  Space Complexity: O(∣S∣+∣T∣)
+  */
