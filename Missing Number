@@ -1,5 +1,34 @@
-// Using HashSet
 
+/*
+Best Algo: Gauss Formula
+We can compute the sum of nums in linear time, and by Gauss' formula, we can compute the sum of the first nn natural numbers in constant time. Therefore, the number that is missing is simply the result of Gauss' formula minus the sum of nums, as nums consists of the first nn natural numbers minus some number.
+
+*/
+
+class Solution {
+    public int missingNumber(int[] nums) {
+        int expectedSum = nums.length*(nums.length + 1)/2;
+        int actualSum = 0;
+        for (int num : nums) actualSum += num;
+        return expectedSum - actualSum;
+    }
+}
+
+// In case of overflow, approach 4 can be optimized as follow:
+
+int missingNumber(vector<int>& nums) {
+    int result = 0;
+    for (int i = 0; i < nums.size(); ++i) {
+        result += (i+1)-nums[i];
+    }
+    return result;
+}
+
+Time: O(n)
+Space: O(1)
+
+-------------------------------------------------------------------
+// Using HashSet
 class Solution {
     public int missingNumber(int[] nums) {
         Set<Integer> numSet = new HashSet<Integer>();
@@ -17,14 +46,4 @@ class Solution {
 
 Time :O(n)
 Space: O(n)
--------------------------------------------------------------------
-class Solution {
-    public int missingNumber(int[] nums) {
-        int expectedSum = nums.length*(nums.length + 1)/2;
-        int actualSum = 0;
-        for (int num : nums) actualSum += num;
-        return expectedSum - actualSum;
-    }
-}
-Time: O(n)
-Space: O(1)
+
