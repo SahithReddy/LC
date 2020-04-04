@@ -1,17 +1,22 @@
-//https://leetcode.com/problems/integer-to-roman/discuss/6310/My-java-solution-easy-to-understand --First Comment
-
 
 public static String intToRoman(int num){
-	if (num < 1 || num > 3999) return "";
+	if (num < 1 || num > 3999) return ""; // Validating the integer
 	
+	// Initialise the string builder
 	StringBuilder result = new StringBuilder();
 	
+	// Set up key numerals and numeral pairs
 	String[] roman = {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"};
 	int[] values = {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
 	
 	int i = 0;
-            //iterate until the number becomes zero, NO NEED to go until the last element in roman array
+	
+	// Loop through each of the values to diminish the number
+        //iterate until the number becomes zero, NO NEED to go until the last element in roman array
 	while (num >0) {
+		
+	    	// If the number being converted is less than the test value, append
+	    	// the corresponding numeral or numeral pair to the resultant string
 		while ( num >= values[i]) {
 			num -= values[i];
 			result.append(roman[i]);
@@ -21,5 +26,38 @@ public static String intToRoman(int num){
 	return result.toString();
 }
 
-My guess: Time : O(N); 
-Space: O(1);
+// My guess: Time : O(N); 
+// Space: O(1);
+
+//https://leetcode.com/problems/integer-to-roman/discuss/6310/My-java-solution-easy-to-understand --First Comment
+// http://www.blackwasp.co.uk/NumberToRoman.aspx
+
+----------------------------------------------------------------
+// If the input is greater than 4000 or any number in general
+
+class Solution {
+    int[] divStore = new int[] {1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5,4,1}; 
+    String [] romanStore = new String[] {"M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V","IV","I"}; 
+    public String intToRoman(int num) {
+        return getConversion(num);
+    }
+    private String getConversion(int num){
+        if(num==0){
+            return "";
+        }
+        int idx = getDivisor(num);
+        return romanStore[idx]+ getConversion(num-divStore[idx]);    
+    }
+    
+    private int getDivisor(int num){
+        for(int i=0; i<divStore.length; i++){
+            if(num/divStore[i] != 0){
+                return i;
+            }
+        }
+        return -1;
+    }
+    
+}
+
+// https://leetcode.com/problems/integer-to-roman/discuss/6309/more-generalizable-solution-can-be-extended-to-any-roman-to-integer-conversion
