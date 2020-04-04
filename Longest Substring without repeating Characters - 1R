@@ -1,44 +1,7 @@
 // https://www.youtube.com/watch?v=3IETreEybaA&t=40s
 
-
 /*
-Better than this approach is below this.
-The idea is use a hash set to track the longest substring without repeating characters so far, use a fast pointer 
-j to see if character j is in the hash set or not, if not, great, add it to the hash set, move j forward and update 
-the max length, otherwise, delete from the head by using a slow pointer i until we can put character j to the hash set.
-*/
-
-class Solution {
-public int lengthOfLongestSubstring(String s) {
-    int i = 0, j = 0, max = 0;
-    Set<Character> set = new HashSet<>();
-    while (j < s.length()) {
-        if (set.contains(s.charAt(j))) {
-            set.remove(s.charAt(i)); 
-            i++;
-        } else {
-            set.add(s.charAt(j));
-            j++;
-            max = Math.max(max, set.size());
-        }
-    }
-    
-    return max;
-}
-}
-
-/*
-Time complexity : O(2n) = O(n). In the worst case each character will be visited twice by i and j.
-Space complexity : O(min(m,n)). We need O(k) space for the sliding window, 
-where k is the size of the Set. The size of the Set is upper bounded by the size of the string n and the size of the charset m.
-*/
-
---------------------------------------------------------------------------------------------------------------
-/*
-The above solution requires at most 2n steps. In fact, it could be optimized to require only n steps. Instead of using a 
-set to tell if a character exists or not, keep a hashmap which stores the characters in string as keys and their positions as values. 
-Then we can skip the 
-characters immediately when we found a repeated character.
+The basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values, and keep two pointers which define the max substring. move the right pointer to scan through the string , and meanwhile update the hashmap. If the character is already in the hashmap, then move the left pointer to the right of the same character last found. Note that the two pointers can only move forward.
 
 The reason is that if s[j] have a duplicate in the range [i,j) with index j 
 we don't need to increase i little by little. We can skip all the elements in the range [i,j] and let i to be j + 1 directly.
@@ -61,35 +24,24 @@ class Solution {
 
 // Time complexity : Directly O(n). Index j will iterate n times.
 
-// Space complexity (HashMap) : O(min(m,n)). Same as the previous approach.
+// Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the Set
 
 ---------------------------------------------------------------------------------------------------
-
-
-
-// Did not understood this
-The previous implements all have no assumption on the charset of the string s.
-
-If we know that the charset is rather small, we can replace the Map with an integer array as direct access table.
-
-Commonly used tables are:
-
-int[26] for Letters 'a' - 'z' or 'A' - 'Z'
-int[128] for ASCII
-int[256] for Extended ASCII
-
+// Here is the same algo with int[256] rather than HashMap. Faster than map and shorter code.
 
 public class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int n = s.length(), ans = 0;
-        int[] index = new int[128]; // current index of character
-        // try to extend the range [i, j]
-        for (int j = 0, i = 0; j < n; j++) {
-            i = Math.max(index[s.charAt(j)], i);
-            ans = Math.max(ans, j - i + 1);
-            index[s.charAt(j)] = j + 1;
+        int result = 0;
+        int[] cache = new int[256];
+        for (int i = 0, j = 0; i < s.length(); i++) {
+            j = (cache[s.charAt(i)] > 0) ? Math.max(j, cache[s.charAt(i)]) : j;
+            cache[s.charAt(i)] = i + 1;
+            result = Math.max(result, i - j + 1);
         }
-        return ans;
+        return result;
     }
 }
----------------------------------------------------------------------
+
+// Time complexity : Directly O(n). Index j will iterate n times.
+
+// Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the Set
