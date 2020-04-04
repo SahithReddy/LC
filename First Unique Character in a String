@@ -34,5 +34,7 @@ class Solution {
     }
 }
 
+/*
 Time complexity : O(N) since we go through the string of length N two times.
 space complexity is constant O(26) ~ O(1) for any length of string
+*/
