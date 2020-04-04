@@ -1,0 +1,122 @@
+/*
+
+Input: 
+paragraph = "Bob hit a ball, the hit BALL flew far after it was hit."
+banned = ["hit"]
+Output: "ball"
+Explanation: 
+"hit" occurs 3 times, but it is a banned word.
+"ball" occurs twice (and no other word does), so it is the most frequent non-banned word in the paragraph. 
+Note that words in the paragraph are not case sensitive,
+that punctuation is ignored (even if adjacent to words, such as "ball,"), 
+and that "hit" isn't the answer even though it occurs more because it is banned.
+
+*/
+
+
+class Solution {
+     public String mostCommonWord(String paragraph, String[] banned) {
+         
+        String[] words = paragraph.toLowerCase().split("[ !?',;.]+");
+         
+        HashMap<String, Integer> map = new HashMap<>();
+         
+        for(String word : words) map.put(word, map.getOrDefault(word, 0) + 1);
+         
+        for(String word : banned) if(map.containsKey(word)) map.remove(word);
+         
+        String res = null;
+        for(String word : map.keySet())
+            if(res == null || map.get(word) > map.get(res))
+                res = word;
+        return res;
+    }
+}
+
+/*
+
+Time Complexity: O(P+B), where P is the size of paragraph and B is the size of banned.
+
+Space Complexity: O(P+B), to store the count and the banned set.
+
+*/
+
+---------------------------------------------------------------
+/*
+Don't go until this extent for this simple problem
+Instead of using Map, storing words in Trie (or called Prefix Tree) requires less memory space.
+
+Each node has 26 sub-nodes,
+
+private class Trie {
+    private Trie[] next = new Trie[26];    // sub nodes
+    private int count;                     // word freqence
+    private boolean ban;                   // banned?
+}
+The path from root to a specific node represents a word. The following diagram contains 3 words: [cat, do, dog]. The integer count note the frequence of that word. A third boolean field is used to distinct a normal word from banned one.
+
+*/
+
+class Solution {
+    public String mostCommonWord(String paragraph, String[] banned) {
+        Trie root = new Trie();
+        Trie curr = root;
+        // insert banned words into Trie
+        for (String ban : banned) {
+            for (int i = 0; i < ban.length(); i++) {
+                int idx = ban.charAt(i) - 'a';
+                if (curr.next[idx] == null) {
+                    curr.next[idx] = new Trie();
+                }
+                curr = curr.next[idx];
+            }
+            curr.ban = true;
+            curr = root;
+        }
+        int maxCount = 0;
+        String mostFreqWord = "";
+        paragraph = paragraph.toLowerCase();
+        char[] pArray = paragraph.toCharArray();
+        // insert words in paragraph into Trie
+        for (int start = 0, end = 0; start < pArray.length; start = end + 1) {
+            // skip non-letter characters
+            while (start < pArray.length && (pArray[start] < 'a' || pArray[start] > 'z')) { start++; }
+            // insert consecutive letters(words) into Trie
+            for (end = start; end < pArray.length && (pArray[end] >= 'a' && pArray[end] <= 'z'); end++) {
+                int idx = pArray[end] - 'a';
+                if (curr.next[idx] == null) {
+                    curr.next[idx] = new Trie();
+                }
+                curr = curr.next[idx];
+            }
+            // update statistics
+            if (curr != root && !curr.ban) {
+                curr.count++;
+                if (curr.count > maxCount) {
+                    mostFreqWord = paragraph.substring(start, end);
+                    maxCount = curr.count;
+                }
+            }
+            curr = root;
+        }
+        return mostFreqWord;
+    }
+    // simplest Trie data structure
+    private class Trie {
+        private Trie[] next = new Trie[26];    // sub nodes
+        private int count;                     // word freqence
+        private boolean ban;                   // banned?
+    }
+}
+
+
+
+
+
+
+/*
+Here is my solution. 6ms, beats 99%.
+Time Complexity: O (N + M)
+Space Complexity: O (N + M)
+where, N is the number of characters in banned list, while M is thoes in paragraph.
+*/
