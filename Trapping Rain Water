@@ -1,21 +1,36 @@
 // Refer here:  https://leetcode.com/problems/trapping-rain-water/discuss/17391/Share-my-short-solution.
 
+// Keep track of the maximum height from both forward directions backward directions, call them leftmax and rightmax.
+
 Solution {
     public int trap(int[] height) {
-       int a = 0;
-        int b = height.length-1;
+    if (height == null || height.length == 0) {
+            return 0;
+        }
         int area=0;
+        
+        int a = 0;
+        int b = height.length-1;
+        
+        // leftMax represents the highest bar from left
         int leftMax = height[a];
+        
+        // rightMax represents the highest bar from right
         int rightMax = height[b];
+        
+        // use two pointers to scan the entire array until they meet with each other
         while(a<=b){
             leftMax = Math.max(leftMax,height[a]);
             rightMax = Math.max(rightMax, height[b]);
+            
+            //how much can current position trap depends on the shorter bar 
             if(leftMax<rightMax){
+                //DO NOT FORGET to subtract bar height of current position
                 area+=(leftMax - height[a]); // leftmax is smaller than rightmax, so the (leftmax-height[a]) water can be stored
                 a++;
             }
             else{
-                area+=(rightMax - height[b]);
+                area+=(rightMax - height[b]); // leftmax is smaller than rightmax, so the (leftmax-height[a]) water can be stored
                 b--;
             }
         } return area;
