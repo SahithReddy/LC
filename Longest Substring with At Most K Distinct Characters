@@ -12,3 +12,50 @@ Input: s = "aa", k = 1
 Output: 2
 Explanation: T is "aa" which its length is 2.
 */
+
+
+
+class Solution {
+public:
+    int lengthOfLongestSubstringKDistinct(string s, int k) {
+        
+        unordered_map<char,int> count; //Char,Count
+        int l=0,distinct=0,res=0;
+        
+        // l is the leftmost starting of substring, r is the rightmost
+        for (int r = 0; r < s.size(); r++) 
+        {
+            //If character not seen before
+            if (count[s[r]] == 0) 
+                distinct++;
+             
+            //Inncrement count of the char
+             count[s[r]]++;
+            
+            //If there are more distinct char
+            //Start removing from left until Distict Chars == k
+            while(distinct > k) 
+            {
+                count[s[l]]--;
+                
+                if(count[s[l]]==0) 
+                    distinct--;
+
+                l++;
+            }
+            
+            res = max(res, r - l + 1);
+        }
+        
+
+        return res;
+    }
+};
+
+
+Time complexity : O(N) in the best case of k distinct characters in the string and O(Nk) in the worst case of N distinct characters in the string.
+
+Space complexity : O(k) since additional space is used only for a hashmap with at most k + 1 elements.
+---------------------------------------------------
+
+There is some solution with LinkedInHashMap too. Need to see that.
