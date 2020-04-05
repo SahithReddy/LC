@@ -1,0 +1,106 @@
+/*
+QUESTION:
+Input:
+beginWord = "hit",
+endWord = "cog",
+wordList = ["hot","dot","dog","lot","log","cog"]
+
+Output: 5
+
+Explanation: As one shortest transformation is "hit" -> "hot" -> "dot" -> "dog" -> "cog",
+return its length 5.
+
+
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot","dot","dog","lot","log"]
+
+Output: 0
+
+Explanation: The endWord "cog" is not in wordList, therefore no possible transformation.
+
+
+*/
+
+/*
+ALGORITHM:
+
+    1. Search from both ends.
+            
+    2. From 'beginWord', find the set of words which are one character from 'beginWord'.
+            
+    3. Do the same to 'endWord', form a set of words one character from 'endWord'.
+    
+    4. Check each word in the smaller of 'beginWord'/'endWord', if it is in the other set.
+    5. If it is, we are done. Otherwise, for each word in 'begigWord'/'endWord', update the set (by changing one character)
+
+The below code starts from a single end beginWord. We may also start from the endWord simultaneously. Once we meet the same word, we are done. 
+
+The idea behind bidirectional search is to run two simultaneous searches—one forward from
+the initial state and the other backward from the goal—hoping that the two searches meet in
+the middle. The motivation is that b^(d/2) + b^(d/2) is much less than b^d. b is branch factor, d is depth.
+
+WHY IT IS BETTER?
+Why two-way BFS speeds up BFS? It is still O(n) because you need to traverse all the nodes in between, right?
+Think about two circle stay together (OO), the distance between their centers is len, compare the area in 2 situations.
+2pi(len/2)^2 VS. pi*len^2, the result is clear.
+So the theory here is, the deeper(more layer) your BFS going, the cost of exploring one layer increase exponentially, so you want to have 2 half depth BFS than 1 full depth BFS.
+
+Replacing a big search tree in the one-end solution with two smaller trees in the two-end solution. Both solutions have the same TOTAL depth, yet tree width grows exponentially w.r.t. depths, and the two-end solutions results in less nodes being visited.
+
+
+*/
+
+// CODE:
+class Solution {
+    public int ladderLength(String beginWord, String endWord, List<String> wordAsList) {
+        if(!wordAsList.contains(endWord)) return 0;
+        
+        Set<String> wordList = new HashSet<String>(wordAsList); // Conversion to set
+        Set<String> start = new HashSet<String>();
+        Set<String> end = new HashSet<String>();
+        
+        int level = 1;
+        start.add(beginWord); end.add(endWord);
+        
+        while(!start.isEmpty()){
+            Set<String> next = new HashSet<String>(); // Set that we may use as start set at some point in our future iteration
+            
+            for(String word: start){
+                char[] wordArray = word.toCharArray(); // converting each word we come across to char array
+                
+                for(int i=0; i<word.length(); i++){
+                    char old = wordArray[i]; // saving the original character before we replace it
+                    
+                    for(char c='a'; c<='z'; c++){ 
+                        wordArray[i] = c; // replacing the charater at this index with all possible alphabets
+                        String str = String.valueOf(wordArray); // converting it back to string
+                        
+                        if(end.contains(str)) return level+1; // if matched with endword just return the level
+                        
+                        if(wordList.contains(str)){ // if the initial wordlist contains this word add it to 'next' set and remove from wordlist
+                            next.add(str);
+                            wordList.remove(str);
+                        }
+                    }
+                    wordArray[i] = old; // put back the original character in the character array
+                }
+            }
+            // The idea is that we always choose the smaller set of the two sets (next and end) as our start set for the next loop, to minimize the number of words we need to go through.
+            if (next.size() > end.size()) {
+                start = end;
+                end = next;
+            } else {
+                start = next;
+            }
+            level++;
+        }
+        return 0;
+    }
+}
+
+/*
+The time complexity is O(lN) where l is the length of the word and N is the total number of words in the dictionary. To get the neighbors of one word, it takes 26 l. To get all neighbors, it will take at most 26lN since it only has N words and all other branches that are not in the dictionary won't be traversed.
+Space complexity is O(N) N is the total number of words in the dictionary
+*/
