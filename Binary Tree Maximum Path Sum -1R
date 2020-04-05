@@ -56,8 +56,8 @@ class Solution {
         if(node==null) return 0;
         
         // max sum on the left and right sub-trees of node
-        int left = Math.max(0, helper(node.left));
-        int right = Math.max(0, helper(node.right));
+        int left = Math.max(0, helper(node.left)); // less than 0, then not take left branch
+        int right = Math.max(0, helper(node.right)); //less than 0, then not take right branch 
         
         // update max_sum if it's better to start a new path
         maxValue = Math.max(maxValue, left + right + node.val);
@@ -80,6 +80,7 @@ Just want to add a explanation about the last two lines based on my comprehensio
 
 maxValue = Math.max(maxValue, left + right + node.val);
 return Math.max(left, right) + node.val;
+
 maxValue is the value which recording whether this current root is the final root, 
 so we use left + right + node.val. But to the upper layer(after return statement), 
 we cannot choose both left and right brunches, so we need to select the larger one, 
