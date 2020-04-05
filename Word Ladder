@@ -104,3 +104,10 @@ class Solution {
 The time complexity is O(lN) where l is the length of the word and N is the total number of words in the dictionary. To get the neighbors of one word, it takes 26 l. To get all neighbors, it will take at most 26lN since it only has N words and all other branches that are not in the dictionary won't be traversed.
 Space complexity is O(N) N is the total number of words in the dictionary
 */
+
+/*
+
+From here by mrsiva26 comment and replies: 
+https://leetcode.com/problems/word-ladder/discuss/40711/Two-end-BFS-in-Java-31ms.
+
+*/
