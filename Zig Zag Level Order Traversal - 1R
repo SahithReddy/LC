@@ -1,3 +1,32 @@
+/*
+QUESTION:
+Given a binary tree, return the zigzag level order traversal of its nodes' values. (ie, from left to right, then right to left for the next level and alternate between).
+
+For example:
+Given binary tree [3,9,20,null,null,15,7],
+    3
+   / \
+  9  20
+    /  \
+   15   7
+return its zigzag level order traversal as:
+[
+  [3],
+  [20,9],
+  [15,7]
+]
+
+*/
+-------------------------------------------------------------------------------------
+/*
+ALGORITHM: DFS RECURSIVE
+1. O(n) solution by using LinkedList along with ArrayList. So insertion in the inner list and outer list are both O(1),
+2. Using DFS and creating new lists when needed.
+
+
+*/
+
+
 class Solution {
     List<List<Integer>> result = new ArrayList();
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
@@ -21,11 +50,56 @@ class Solution {
         }
         if(node.right!=null){
             helper(node.right, level+1);
-        }
-        
+        }  
         
     }
 }
 
 // Time Comolexity: O(n) where N is the number of nodes in the tree.
 // Space Complexity: O(N) where N is the number of nodes in the tree.
+-------------------------------------------------------------------------------------
+
+/*
+ALGORITHM: BFS ITERATIVE
+
+I use a queue to implement BFS. Each time when I poll a node, I add this node value to level. I use a variable zigzag to indicate whether add from left to right or right to left. If zigzag == false, it is from left to right; if zigzag == true, it is from right to left.
+And from right to left just need to use ArrayList.add(0, value) method
+
+*/
+
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+    List<List<Integer>> res = new ArrayList<>();
+if (root == null) return res;
+Queue<TreeNode> queue = new LinkedList<>();
+queue.add(root);
+boolean zigzag = false;
+while (!queue.isEmpty()) {
+    List<Integer> level = new ArrayList<>();
+    int cnt = queue.size();
+    for (int i = 0; i < cnt; i++) {
+        TreeNode node = queue.poll();
+        if (zigzag) {
+            level.add(0, node.val);
+        }
+        else {
+            level.add(node.val);
+        }
+        if (node.left != null) {
+            queue.add(node.left);
+        }
+        if (node.right != null) {
+            queue.add(node.right);
+        }
+    }
+    res.add(level);
+    zigzag = !zigzag;
+}
+return res;
+    }
+}
+
+/*
+Time Comolexity: O(n) where N is the number of nodes in the tree.
+Space Complexity: O(N) where N is the number of nodes in the tree.
+*/
