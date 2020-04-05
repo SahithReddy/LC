@@ -1,9 +1,37 @@
+// Iterative Method . - https://www.youtube.com/watch?v=O0By4Zq0OFc
+/*
+
+I use three pointers: prevHead, head, recordNext.
+
+Basic idea here is that there are always three pointers, which are represented in sequence as prevHead, head, recordNext. 
+Everytime in loop just make head.next points to prevHead, and then move all these three pointers to one next step.
+
+Since when we exit the while loop, head is pointing to null, so prevHead points to the end node of original list, 
+and thus we return prevHead.
+*/
+
+public ListNode reverseList(ListNode head) {
+        ListNode prevHead = null;
+        while(head != null){
+            ListNode recordNext = head.next;
+            head.next = prevHead;
+            prevHead = head;
+            head = recordNext;
+        }
+        return prevHead;
+    }
+
+// Time: O(n) Space: O(1);
+
+------------------------------------------------------------------------------------------------------------
 // Recursive Method
 
-Watch it: https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
+// Watch it: https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
 
+/*
 Much easier, intuitive recursive method and concise code:
 Key: reverse remaining linked list headed at head.next first, then operate on head
+
 
 initial:
 1 -> 2 -> 3 -> 4 -> 5
@@ -16,7 +44,7 @@ after reverseList(2):
 	
 after operate on 1:
 null <- 1 <- 2 <- 3 <- 4 <- 5
-Code:
+*/
 
 class Solution {
     public ListNode reverseList(ListNode head) {
@@ -33,31 +61,7 @@ class Solution {
 }
 
 
-Time: O(n) Space: O(N) becusae of recursion stack;
-------------------------------------------------------------------------------------------------------------
-// Iterative Method . - https://www.youtube.com/watch?v=O0By4Zq0OFc
+// Time: O(n) Space: O(N) becusae of recursion stack;
 
-Really a genius solution! Here I focused on the iterative one, and I slightly change the naming of variables to make 
-it easier to understand (for newbies like me!).
 
-I use three pointers: prevHead, head, recordNext.
-
-Basic idea here is that there are always three pointers, which are represented in sequence as prevHead, head, recordNext. 
-Everytime in loop just make head.next points to prevHead, and then move all these three pointers to one next step.
-
-Since when we exit the while loop, head is pointing to null, so prevHead points to the end node of original list, 
-and thus we return prevHead.
-
-public ListNode reverseList(ListNode head) {
-        ListNode prevHead = null;
-        while(head != null){
-            ListNode recordNext = head.next;
-            head.next = prevHead;
-            prevHead = head;
-            head = recordNext;
-        }
-        return prevHead;
-    }
-
-Time: O(n) Space: O(1);
 ----------------------------------------------------------------------------------------------------------------
