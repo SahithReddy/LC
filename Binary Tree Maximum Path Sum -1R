@@ -1,9 +1,52 @@
-// Elegant solution: https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/39875/Elegant-Java-solution
+/*
+QUESTION:
+
+Given a non-empty binary tree, find the maximum path sum.
+
+For this problem, a path is defined as any sequence of nodes from some starting node to any node in the tree along the parent-child connections. The path must contain at least one node and does not need to go through the root.
+
+Example 1:
+
+Input: [1,2,3]
+
+       1
+      / \
+     2   3
+
+Output: 6
+Example 2:
+
+Input: [-10,9,20,null,null,15,7]
+
+   -10
+   / \
+  9  20
+    /  \
+   15   7
+
+Output: 42
+
+
+*/
+
+/*
+ALGORITHM: RECURSIVE
+
+The helper( ) function goes from the bottom of the tree to the top, it's in post-order manner.
+
+At every node, we need to make a decision, if the sum comes from the left path larger than the right path, 
+we pick the left path and plus the current node's value, this recursion goes all the way up to the root node
+
+Each node actually has two roles in helper function. When processing the final result maxValue, 
+the node is treated as the highest point of a path. When calculating its return value, it is only part of a path 
+(left or right part), and this return value will be used to calculate path sum of other paths with some other 
+nodes(above the current one) as their highest point.
+
+*/
 
 class Solution {
     int maxValue = Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
-        if(root == null) return 0;
         helper(root);
         return maxValue;
         
@@ -11,28 +54,28 @@ class Solution {
     // helper returns the max branch plus current node's value
     public int helper(TreeNode node){
         if(node==null) return 0;
+        
+        // max sum on the left and right sub-trees of node
         int left = Math.max(0, helper(node.left));
         int right = Math.max(0, helper(node.right));
+        
+        // update max_sum if it's better to start a new path
         maxValue = Math.max(maxValue, left + right + node.val);
+        
+        // for recursion, return the max calue if continue the same path
         return Math.max(left, right) + node.val;
     }
 }
 
+/*
 Time complexity : O(N) where N is number of nodes, since we visit each node not more than 2 times.
-Space complexity : O(log(N)). We have to keep a recursion stack of the size of the tree height, 
-which is O(log(N)) for the binary tree.
------------------------------------------------------------------------------------------------------------------
-you can imagine the helper( ) function goes from the bottom of the tree to the top, it's in post-order manner.
+Space complexity : The space complexity should be O(H) instead of O(log(N)) to be more rigorous since H could be N in worst case.
 
-At every node, we need to make a decision, if the sum comes from the left path larger than the right path, 
-we pick the left path and plus the current node's value, this recursion goes all the way up to the root node
------------------------------------------------------------------------------------------------------------------
+Elegant solution: https://leetcode.com/problems/binary-tree-maximum-path-sum/discuss/39875/Elegant-Java-solution
+*/
+----------------------------------------------------------------
 
-Each node actually has two roles when it comes to function maxPathDown. When processing the final result maxValue, 
-the node is treated as the highest point of a path. When calculating its return value, it is only part of a path 
-(left or right part), and this return value will be used to calculate path sum of other paths with some other 
-nodes(above the current one) as their highest point.
------------------------------------------------------------------------------------------------------------------
+/*
 Just want to add a explanation about the last two lines based on my comprehension.
 
 maxValue = Math.max(maxValue, left + right + node.val);
@@ -42,11 +85,11 @@ so we use left + right + node.val. But to the upper layer(after return statement
 we cannot choose both left and right brunches, so we need to select the larger one, 
 so we use max(left, right) + node.val to prune the lower brunch.
 In the end, very elegant solution, thank you for your sharing!
+*/
 
+-------------------------------------------------------------------
 
------------------------------------------------------------------------------------------------------------------
-
-My approach to avoid global variable
+// My approach to avoid global variable
 
 public class Solution {
 public int maxPathSum(TreeNode root) {
@@ -64,14 +107,16 @@ private int maxPathSum(int[] max, TreeNode root){
     return root.val+Math.max(leftMax,rightMax);
 }
 
+/*
 int is one of the 8 basic variables, and int[] is reference variable.
 In a Java method, method arguments(MA) are passed by by value.
 if basic variables are in MA, the value is copied, and the initial variable remain unchanged.
 if reference variable is in MA, the address is copied (and passed as value), and the initial variable will be changed.
+*/
 
 -----------------------------------------------------------------------------------------------------------------
 
-Nice trick to make left/right 0 if negative to avoid if/else. My version w/o this trick.
+// Nice trick to make left/right 0 if negative to avoid if/else. My version w/o this trick.
 
 class Solution {
     int ret = Integer.MIN_VALUE;
