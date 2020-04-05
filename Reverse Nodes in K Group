@@ -47,53 +47,43 @@ Then walk thru the linked list and apply reverse() iteratively.
  *     ListNode(int x) { val = x; }
  * }
  */
- 
 class Solution {
     public ListNode reverseKGroup(ListNode head, int k) {
-        // Save the previous reversed pointer in prev and in wach iteration use prev.next to set the previous ptr to the current reversed.
-        ListNode tempNode = new ListNode(0);
-        tempNode.next = head;
-        ListNode tempHead = head;
-        ListNode prev = tempNode;
-        while(tempHead!=null){
-            // Begining of each reversed list, it will become the end after reversing
-            ListNode begin = tempHead;
-            int num = k;
-            // Jump k 
-            while(num>0 && tempHead!=null){
-                tempHead = tempHead.next;
-                num--;
-            }
-            // If cannot reverse
-            if(num!=0) {
-                prev.next = begin;
-                break;
-            }
-            // start of each reversed group
-            ListNode end = reverse(begin,k);
-            
-            // Use previous's next to point to curr reversed
-            prev.next = end;
-            // Set prev to current rev end.
-            prev = begin; 
-        }
-        return tempNode.next;
-        
+    ListNode begin;
+    if (head==null || head.next ==null || k==1)
+    	return head;
+    ListNode dummyhead = new ListNode(-1);
+    dummyhead.next = head;
+    begin = dummyhead;
+    int i=0;
+    while (head != null){
+    	i++;
+    	if (i%k == 0){
+    		begin = reverse(begin, head.next);
+    		head = begin.next;
+    	} else {
+    		head = head.next;
+    	}
     }
+    return dummyhead.next;
     
-    // Standard reverse code
-    public ListNode reverse(ListNode head, int k){
-        ListNode prev = null;
-        while(head!=null && k>0){
-            ListNode next = head.next;
-            head.next = prev;
-            prev = head;
-            head = next;
-            k--;
-        }
-        return prev;
-    }
-    
+}
+
+public ListNode reverse(ListNode begin, ListNode end){
+	ListNode curr = begin.next;
+	ListNode next, first;
+	ListNode prev = begin;
+	first = curr;
+	while (curr!=end){
+		next = curr.next;
+		curr.next = prev;
+		prev = curr;
+		curr = next;
+	}
+	begin.next = prev;
+	first.next = curr;
+	return first;
+}
 }
 
 
