@@ -1,3 +1,48 @@
+/*
+QUESTION:
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+An input string is valid if:
+
+Open brackets must be closed by the same type of brackets.
+Open brackets must be closed in the correct order.
+Note that an empty string is also considered valid.
+
+Example 1:
+
+Input: "()"
+Output: true
+Example 2:
+
+Input: "()[]{}"
+Output: true
+Example 3:
+
+Input: "(]"
+Output: false
+Example 4:
+
+Input: "([)]"
+Output: false
+Example 5:
+
+Input: "{[]}"
+Output: true
+
+*/
+
+
+/*
+
+ALGORITHM:
+It's brilliant. The basic idea is to push the right parentheses ')', ']', or '}' into the stack each time when we encounter 
+left ones. And if a right bracket appears in the string, we need check if the stack is empty and also whether the 
+top element is the same with that right bracket. If not, the string is not a valid one. At last, we also need check 
+if the stack is empty.
+
+*/
+
+
 public boolean isValid(String s) {
 	Stack<Character> stack = new Stack<Character>();
 	for (char c : s.toCharArray()) {
@@ -7,15 +52,21 @@ public boolean isValid(String s) {
 			stack.push('}');
 		else if (c == '[')
 			stack.push(']');
+			
+		// If the stack is empty or If the mapping for this bracket doesn't match the stack's top element, return false.
 		else if (stack.isEmpty() || stack.pop() != c)
 			return false;
 	}
+	// If the stack still contains elements, then it is an invalid expression.
 	return stack.isEmpty();
 }
----------------------------------------------------------------------------------------------------------
-TIme O(n) 1 loop & Space O(n)1 stack data structure
 
-It's brilliant. The basic idea is to push the right parentheses ')', ']', or '}' into the stack each time when we encounter 
-left ones. And if a right bracket appears in the string, we need check if the stack is empty and also whether the 
-top element is the same with that right bracket. If not, the string is not a valid one. At last, we also need check 
-if the stack is empty.
+
+/*
+
+Time complexity : O(n) because we simply traverse the given string one character at a time and push and pop operations on a stack take O(1) time.
+Space complexity : O(n) as we push all opening brackets onto the stack and in the worst case, we will end up pushing all the brackets onto the stack. e.g. ((((((((((.
+
+*/
+
+
