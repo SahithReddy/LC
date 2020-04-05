@@ -109,5 +109,5 @@ Space complexity is O(N) N is the total number of words in the dictionary
 
 From here by mrsiva26 comment and replies: 
 https://leetcode.com/problems/word-ladder/discuss/40711/Two-end-BFS-in-Java-31ms.
-
+http://theoryofprogramming.com/2018/01/21/bidirectional-search/
 */
