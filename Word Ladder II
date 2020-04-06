@@ -50,9 +50,16 @@ Treat each word as a node of a tree. There are two trees. One tree's root node i
 The root node can yield all his children node, and they are the second layer of the tree. The second layer can yield all their children, then we get the third layer of the tree, ... , and so on.
 
 When one tree yield a new child, we search it in the last layer of the other tree. If we find an identical node in that tree, then we get some ladders connect two roots("beginWord" -> ... -> "endWord").
+
+-----------------------------------------------------
+If we know source and destination, we can build the word tree by going forward in one direction and backwards in the other. We stop when we have found that a word in the next level of BFS is in the other level, but first we need to update the tree for the words in the current level.
+
+Then we build the result by doing a DFS on the tree constructed by the BFS.
+
+The difference between normal and double BFS is that the search changes from O(k^d) to O(k^(d/2) + k^(d/2)).
 */
  
-/* IMPLIES ONLY FOR THIS SOLUTION: May skip to explain initially
+/* IMPLIES ONLY FOR THIS SOLUTION: May skip to explain this initially
 Couple of things that make this below solution fast:
 
 1. We use Bidirectional BFS which always expand from direction with less nodes
@@ -87,10 +94,10 @@ public List<List<String>> findLadders(String beginWord, String endWord, List<Str
     bwd.add(endWord);
     
     // we use a map to help construct the final result
-    Map<String, List<String>> hs = new HashMap<String, List<String>>();
+    Map<String, List<String>> transformations = new HashMap<String, List<String>>();
     
     // build the map
-    BFS(fwd, bwd, dict, false, hs);
+    BFS(fwd, bwd, dict, false, transformations);
     
     //if two parts cannot be connected, then return empty list
     if(!isConnected) return result;
@@ -100,7 +107,7 @@ public List<List<String>> findLadders(String beginWord, String endWord, List<Str
     temp.add(beginWord);
     
     // recursively build the final result
-    generateList(result, temp, beginWord, endWord, hs);
+    generateList(result, temp, beginWord, endWord, transformations);
     
     return result;
 }
@@ -109,7 +116,7 @@ public List<List<String>> findLadders(String beginWord, String endWord, List<Str
 boolean isConnected = false;
 
 // BFS: Trace every node's distance from the start node (level by level).
-public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boolean swap, Map<String, List<String>> hs){
+public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boolean swap, Map<String, List<String>> transformations){
     
     //boundary check
     if(forward.isEmpty() || backward.isEmpty()){
@@ -119,7 +126,7 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
     //we always do BFS on direction with less nodes
     //here we assume forward set has less nodes, if not, we swap them
     if(forward.size() > backward.size()){
-        BFS(backward, forward, dict, !swap, hs);
+        BFS(backward, forward, dict, !swap, transformations);
         return;
     }
     
@@ -128,7 +135,7 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
     dict.removeAll(backward);
     
     //new set contains all new nodes from forward set
-    Set<String> set3 = new HashSet<String>();
+    Set<String> next = new HashSet<String>();
     
     //do BFS on every node of forward direction
     for(String str : forward){
@@ -148,18 +155,18 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
                 String key = !swap? str : temp;
                 String val = !swap? temp : str;
 
-                if(!hs.containsKey(key)) hs.put(key, new ArrayList<String>());
+                if(!transformations.containsKey(key)) transformations.put(key, new ArrayList<String>());
                 
                 //if temp string is in backward set, then it will connect two parts
                 if(backward.contains(temp)){
-                    hs.get(key).add(val);
+                    transformations.get(key).add(val);
                     isConnected = true;
                 }
                 
-                //if temp is in dict, then we can add it to set3 as new nodes in next layer
+                //if temp is in dict, then we can add it to next as new nodes in next layer
                 if(!isConnected && dict.contains(temp)){
-                    hs.get(key).add(val);
-                    set3.add(temp);
+                    transformations.get(key).add(val);
+                    next.add(temp);
                 }
                 
             } // End of for loop of replacing with 26 alphabets
@@ -168,12 +175,12 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
     
     //to force our path to be shortest, we will not do BFS if we have found shortest path(isConnected = true)
     if(!isConnected){
-        BFS(set3, backward, dict, swap, hs);
+        BFS(next, backward, dict, swap, transformations);
     }
 }
 
 // DFS: output all paths with the shortest distance.
-public void generateList(List<List<String>> result, List<String> temp, String start, String end, Map<String, List<String>> hs){
+public void generateList(List<List<String>> result, List<String> temp, String start, String end, Map<String, List<String>> transformations){
     //we will use DFS, more specifically backtracking to build paths
     
     //boundary case
@@ -182,15 +189,15 @@ public void generateList(List<List<String>> result, List<String> temp, String st
         return;
     }
     
-    //not each node in hs is valid node in shortest path, if we found current node does not have children node,
+    //not each node in transformations is valid node in shortest path, if we found current node does not have children node,
     //then it means it is not in shortest path
-    if(!hs.containsKey(start)){
+    if(!transformations.containsKey(start)){
         return;
     }
     
-    for(String s : hs.get(start)){
+    for(String s : transformations.get(start)){
         temp.add(s);
-        generateList(result, temp, s, end, hs);
+        generateList(result, temp, s, end, transformations);
         temp.remove(temp.size()-1);
         
     }
