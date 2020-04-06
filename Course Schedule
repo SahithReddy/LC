@@ -72,9 +72,9 @@ public boolean canFinish(int numCourses, int[][] prerequisites) {
 }
 
 /*
-Time Complexity: O(2⋅∣E∣+∣V∣) where |V∣ is the number of courses, and ∣E∣ is the number of dependencies.
+Time Complexity: O(∣E∣+∣V∣) where |V∣ is the number of courses, and ∣E∣ is the number of dependencies.
 
-As in the previous algorithm, it would take us ∣E∣ time complexity to build a graph in the first step.
+It would take us ∣E∣ time complexity to build a graph in the first step.
 we would visit each vertex and each edge once and only once in the worst case, i.e.∣E∣+∣V∣.
 As a result, the overall time complexity of the algorithm would be O(2⋅∣E∣+∣V∣).
 
