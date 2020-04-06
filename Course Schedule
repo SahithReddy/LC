@@ -1,10 +1,44 @@
 // https://leetcode.com/problems/course-schedule/discuss/58669/Concise-JAVA-solutions-based-on-BFS-and-DFS-with-explanation
+/*
+QUESTION: 
 
+There are a total of numCourses courses you have to take, labeled from 0 to numCourses-1.
+
+Some courses may have prerequisites, for example to take course 0 you have to first take course 1, which is expressed as a pair: [0,1]
+
+Given the total number of courses and a list of prerequisite pairs, is it possible for you to finish all courses?
+
+ 
+
+Example 1:
+
+Input: numCourses = 2, prerequisites = [[1,0]]
+Output: true
+Explanation: There are a total of 2 courses to take. 
+             To take course 1 you should have finished course 0. So it is possible.
+Example 2:
+
+Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+Output: false
+Explanation: There are a total of 2 courses to take. 
+             To take course 1 you should have finished course 0, and to take course 0 you should
+             also have finished course 1. So it is impossible.
+
+*/
+
+
+/*
+ALGORITHM: 
 BFS Solution: (Topological sorting)
 
 The basic idea is to use Topological algorithm: put NODE with 0 indgree into the queue, then make indegree of NODE's successor dereasing 1. Keep the above steps with BFS.
 
 Finally, if each node' indgree equals 0, then it is validated DAG (Directed Acyclic Graph), which means the course schedule can be finished.
+
+ONE MORE WAY TO PUT:
+BFS uses the indegrees of each node. We will first try to find a node with 0 indegree. If we fail to do so, there must be a cycle in the graph and we return false. Otherwise we set its indegree to be -1 to prevent from visiting it again and reduce the indegrees of its neighbors by 1. This process will be repeated for n (number of nodes) times.
+The reason we start with a node that has indegree of 0 is because that mean the course has no dependencies
+*/
 
 public boolean canFinish(int numCourses, int[][] prerequisites) {
     if (numCourses == 0 || prerequisites.length == 0) return true;
@@ -37,8 +71,19 @@ public boolean canFinish(int numCourses, int[][] prerequisites) {
     return (canFinishCount == numCourses);    
 }
 
-Tiem Complexity: For your BFS code, I think the complexity is O(V*E). As you iterate through the edge list every time. 
-It can be reduced to O(V+E) by converting the edge list into a adjacency list.
+/*
+Time Complexity: O(2⋅∣E∣+∣V∣) where |V∣ is the number of courses, and ∣E∣ is the number of dependencies.
+
+As in the previous algorithm, it would take us ∣E∣ time complexity to build a graph in the first step.
+we would visit each vertex and each edge once and only once in the worst case, i.e.∣E∣+∣V∣.
+As a result, the overall time complexity of the algorithm would be O(2⋅∣E∣+∣V∣).
+
+Space Complexity: O(∣E∣+2⋅∣V∣), with the same denotation as in the above time complexity.
+
+We built a graph data structure in the algorithm, which would consume ∣E∣+∣V∣ space.
+In addition, we use a container to keep track of the courses that have no prerequisite, and the size of the container would be bounded by ∣V∣. 
+As a result, the overall space complexity of the algorithm would be O(∣E∣+2⋅∣V∣).
+*/
 ------------------------------------------------------------------------------------------------
 Thanks! This is a little bit concise version for quick writing in interview:
 
