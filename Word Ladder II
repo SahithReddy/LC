@@ -27,9 +27,33 @@ Explanation: The endWord "cog" is not in wordList, therefore no possible transfo
 
 */
 
+
 /*
 ALGORITHM:
-Couple of things that make this solution fast:
+ High level design: BFS + DFS
+ 
+ Step 1: use BFS to build graph (adjacency list of each word), as well as calculating distance from beginWord to 
+ each node in the graph (should store minimum distance) 
+ Step 2: use DFS to traverse and record path from beginWord to endWord with shortest path. We can use distance map
+  to control every next word. 
+-------------------------------------------------------
+One more way of explaining is: 
+
+1). Use BFS to find the shortest distance between start and end, tracing the distance of crossing nodes from start node to end node, and store node's next level neighbors to HashMap;
+
+2). Use DFS to output paths with the same distance as the shortest distance from distance HashMap: compare if the distance of the next level node equals the distance of the current node + 1.
+
+-------------------------------------------------------
+
+Treat each word as a node of a tree. There are two trees. One tree's root node is "beginWord", and the other tree's root node is "endWord".
+
+The root node can yield all his children node, and they are the second layer of the tree. The second layer can yield all their children, then we get the third layer of the tree, ... , and so on.
+
+When one tree yield a new child, we search it in the last layer of the other tree. If we find an identical node in that tree, then we get some ladders connect two roots("beginWord" -> ... -> "endWord").
+*/
+ 
+/* IMPLIES ONLY FOR THIS SOLUTION: May skip to explain initially
+Couple of things that make this below solution fast:
 
 1. We use Bidirectional BFS which always expand from direction with less nodes
 
@@ -84,6 +108,7 @@ public List<List<String>> findLadders(String beginWord, String endWord, List<Str
 //flag of whether we have connected two parts
 boolean isConnected = false;
 
+// BFS: Trace every node's distance from the start node (level by level).
 public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boolean swap, Map<String, List<String>> hs){
     
     //boundary check
@@ -114,7 +139,6 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
             for(char j = 'a'; j <= 'z'; j++){
                 ary[i] = j;
                 String temp = new String(ary);
-                
                 //we skip this string if it is not in dict nor in backward
                 if(!backward.contains(temp) && !dict.contains(temp)){
                     continue;
@@ -137,10 +161,10 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
                     hs.get(key).add(val);
                     set3.add(temp);
                 }
-            }
-            
-        }
-    }
+                
+            } // End of for loop of replacing with 26 alphabets
+        } // End of for loop through each char of a word
+    } //End of for looping of words in forward set
     
     //to force our path to be shortest, we will not do BFS if we have found shortest path(isConnected = true)
     if(!isConnected){
@@ -148,6 +172,7 @@ public void BFS(Set<String> forward, Set<String> backward, Set<String> dict, boo
     }
 }
 
+// DFS: output all paths with the shortest distance.
 public void generateList(List<List<String>> result, List<String> temp, String start, String end, Map<String, List<String>> hs){
     //we will use DFS, more specifically backtracking to build paths
     
