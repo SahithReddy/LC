@@ -1,0 +1,168 @@
+/*
+QUESTION:
+You are asked to cut off trees in a forest for a golf event. The forest is represented as a non-negative 2D map, in this map:
+
+0 represents the obstacle can't be reached.
+1 represents the ground can be walked through.
+The place with number bigger than 1 represents a tree can be walked through, and this positive number represents the tree's height.
+In one step you can walk in any of the four directions top, bottom, left and right also when standing in a point which is a tree you can decide whether or not to cut off the tree.
+
+You are asked to cut off all the trees in this forest in the order of tree's height - always cut off the tree with lowest height first. And after cutting, the original place has the tree will become a grass (value 1).
+
+You will start from the point (0, 0) and you should output the minimum steps you need to walk to cut off all the trees. If you can't cut off all the trees, output -1 in that situation.
+
+You are guaranteed that no two trees have the same height and there is at least one tree needs to be cut off.
+
+Example 1:
+
+Input: 
+[
+ [1,2,3],
+ [0,0,4],
+ [7,6,5]
+]
+Output: 6
+ 
+
+Example 2:
+
+Input: 
+[
+ [1,2,3],
+ [0,0,0],
+ [7,6,5]
+]
+Output: -1
+ 
+
+Example 3:
+
+Input: 
+[
+ [2,3,4],
+ [0,0,5],
+ [8,7,6]
+]
+Output: 6
+Explanation: You started from the point (0,0) and you can cut off the tree in (0,0) directly without walking.
+
+*/
+
+/*
+ALGORITHM:
+1. Since we have to cut trees in order of their height, we first put trees (int[] {row, col, height}) into a priority queue and sort by height.
+2. BFS to find shortest path between two points. Poll each tree from the queue and use BFS to find out steps needed.
+3. The end point of current path is the starting point of next path.
+
+FOR THIS PROBLEM: 
+Since we always cut off the tree with lowest height first, we collect all trees and sort them by heights.
+If we make sure we walk the minimum steps to cut off each tree, the sum of these minimum steps will be the final answer.
+For cutting each tree (aimX, aimY), we implement BFS once:
+Start point: (curX, curY)
+Aim point: (aimX, aimY)
+End point: (aimX, aimY) or we have no way out.
+Transition: we try advancing by one step in 4 directions.
+*/
+
+// CODE:
+class Solution {
+    private static int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+
+    public int cutOffTree(List<List<Integer>> forest) {
+        
+        List<int[]> treeHeights = getAllTreeHights(forest);
+        // order tuple of (height, row, col) based on heights -> shortest to tallest
+        Collections.sort(treeHeights, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[2] - o2[2];
+            }
+        });
+        
+        
+        // for each tree calculate the minimum distance to next tree - end point of current path is the starting point of next path.
+        int minSteps = 0; // Final result variable
+        int curX = 0, curY = 0; // Initial
+        while (!treeHeights.isEmpty()) {
+            int[] curTree = treeHeights.remove(0); // start doing bfs from origin to reach this first tree
+            int steps = getMinimumSteps(forest, curX, curY, curTree[0], curTree[1]);
+            if (steps == -1) {
+                return -1;
+            }
+            minSteps += steps; // Keep on adding steps to final result
+            curX = curTree[0]; // Next tree x co-ordinate
+            curY = curTree[1]; // Next tree y co-ordinate
+            forest.get(curX).set(curY, 1); // Updating the forest to 1 such that the tree here was cut and made it to land(1)
+        }
+        return minSteps;
+    } // end of main function cutoff tree and below 2 supportive methods are private.
+    
+    
+    // Iterate through the input matrix and records all trees (ie whose value greater than 1)
+        private List<int[]> getAllTreeHights(List<List<Integer>> forest) {
+            List<int[]> treeHeights = new LinkedList<>();
+            for (int i = 0; i < forest.size(); i++) { //row
+                for (int j = 0; j < forest.get(0).size(); j++) { // column
+                    int tmpVal = forest.get(i).get(j); // getting the height
+                    if (tmpVal > 1) {  // greater than 1 means tree
+                        int[] element = new int[3];  // { x coordiante, y coordinate, height}
+                        element[0] = i;
+                        element[1] = j;
+                        element[2] = tmpVal;
+                        treeHeights.add(element); // add every tree array to the list of treeheights
+                    }
+                }
+            }
+            return treeHeights;
+        } // end of getAllTreeHeights function
+    
+    // uses BFS to calculate mininum distance
+    private int getMinimumSteps(List<List<Integer>> forest, int curX, int curY, int aimX, int aimY) {
+
+        int minSteps = 0; // Our final result to be returned
+        int rows = forest.size(), cols = forest.get(0).size();
+        boolean[][] visited = new boolean[forest.size()][forest.get(0).size()]; // Same size as input matrix
+        Queue<int[]> queue = new LinkedList<>(); // helper queue to do bfs and store tree arrays
+        int startVal = forest.get(curX).get(curY); // every tree
+        queue.offer(new int[]{curX, curY}); // push it to queue
+        visited[curX][curY] = true; // record that cell as visited
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int[] curCell = queue.poll(); // poll the top of queue
+                if (curCell[0] == aimX && curCell[1] == aimY) {  // check if it is the target tree we were searching for and return
+                    return minSteps;
+                }
+                for (int[] direction : directions) {
+                    int nx = curCell[0] + direction[0];
+                    int ny = curCell[1] + direction[1];
+                    if (nx >= 0 && nx < rows && ny >= 0 && ny < cols && !visited[nx][ny] && forest.get(nx).get(ny) != 0) {  // searching in all 4 valid directions
+                        queue.add(new int[]{nx, ny}); // if found add it to the queue
+                        visited[nx][ny] = true; // mark that cell as visited
+                    }
+                } // end of second for loop
+            } // end of first for loop
+            minSteps++;
+        } // end of while loop
+        return -1;
+    } // End of getMinimum function call
+} // end of solution class
+
+
+
+
+/*
+The worst case time complexity could be O(m^2 * n^2) (m = number of rows, n = number of columns) since there are m * n trees and for each BFS worst case time complexity is O(m * n) too.
+
+
+*/
+
+
+
+
+
+
+
+
+
