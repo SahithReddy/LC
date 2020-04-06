@@ -1,29 +1,68 @@
 // https://www.youtube.com/watch?v=o8S2bO3pmO4
+/*
+QUESTION:
+Given a 2d grid map of '1's (land) and '0's (water), count the number of islands. An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+
+
+
+Input:
+11110
+11010
+11000
+00000
+
+Output: 1
+
+
+Input:
+11000
+11000
+00100
+00011
+
+Output: 3
+
+*/
+
+/*
+The algorithm works as follow:
+
+1. Scan each cell in the grid.
+2. If the cell value is '1' explore that island.
+3. Mark the explored island cells with 'x'.
+4. Once finished exploring that island, increment islands counter.
+*/
 
 class Solution {
     public int numIslands(char[][] grid) {
+        // This method approaches the problem as one of depth-first connected components search
         int noOfIslands = 0;
+        
+        // i, the row index of the given grid
+        // j, the column index of the given grid
+        // Iterate over the entire given grid
         for(int i=0; i< grid.length; i++){
             for(int j=0; j<grid[0].length; j++){
                 if(grid[i][j] == '1'){
-                    noOfIslands += helper(grid,i,j);
+                    noOfIslands += helperdfs(grid,i,j);
                         
                 }
             }
         } return noOfIslands;
     }
     
-    public int helper(char[][] grid, int i, int j){
+    public int helperdfs(char[][] grid, int i, int j){
         
         // Check for invalid indices and for sites that aren't land
         if(i<0 || i>=grid.length || j<0 || j>=grid[0].length || grid[i][j]== '0') return 0;
         
         grid[i][j] = '0'; //sunking of an island or island as visited
+        
         // Check all adjacent sites
-        helper(grid, i+1, j);
-        helper(grid, i-1, j);
-        helper(grid, i, j+1);
-        helper(grid, i, j-1);
+        helperdfs(grid, i+1, j);
+        helperdfs(grid, i-1, j);
+        helperdfs(grid, i, j+1);
+        helperdfs(grid, i, j-1);
         return 1;                                                  
     }
 }
