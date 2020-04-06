@@ -1,4 +1,19 @@
-//
+/*
+ALGORITHM: DFS RECURSIVE
+
+We want to compare all diameters among all subtrees.
+Then this can be done when we DFS traverse the root.
+We just need to record the maximum one in a variable.
+
+In this post, the variable is the int max.
+max = Math.max(max, left + right) is to compare whether the diameter of this subtree is max or not, if it is, record it.
+And the remaining part in the maxDepth is just the normal height counting.
+
+
+Although the longest path doesn't have to go through the root node, 
+it has to pass the root node of some subtree of the tree (because it has to be from one leaf node to 
+another leaf node). The longest path that passes a given node as the ROOT node is T = left_height+right_height. So you just calculate T for all nodes and output the max T.
+*/
 
 public class Solution {
     int max = 0;
@@ -20,23 +35,9 @@ public class Solution {
     }
 }
 
-Time Complexity: O(N). We visit every node once.
+// Time Complexity: O(N). We visit every node once.
 
-Space Complexity: O(N), the size of our implicit call stack during our depth-first search.
---------------------------------------------------------------------------------------------------------------------
-// Nice explanation
-We want to compare all diameters among all subtrees.
-Then this can be done when we DFS traverse the root.
-We just need to record the maximum one in a variable.
-
-In this post, the variable is the int max.
-max = Math.max(max, left + right) is to compare whether the diameter of this subtree is max or not, if it is, record it.
-And the remaining part in the maxDepth is just the normal height counting.
---------------------------------------------------------------------------------------------------------------------
-although the longest path doesn't have to go through the root node, 
-it has to pass the root node of some subtree of the tree (because it has to be from one leaf node to 
-another leaf node, otherwise we can extend it for free). The longest path that passes a given node as 
-the ROOT node is T = left_height+right_height. So you just calculate T for all nodes and output the max T.
+// Space Complexity: O(N), the size of our implicit call stack during our depth-first search.
 --------------------------------------------------------------------------------------------------------------------
 another "trap version" of "get the height of a tree"...
 Pay attention that we define The diameter of a binary tree is the length of the longest path 
