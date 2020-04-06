@@ -18,10 +18,9 @@ Although the above answer is in lexicographical order, your answer could be in a
 ALGORITHM: BFS
 This is a iterative solution. For each digit added, remove and copy every element in the queue and add the possible letter to each element, then add the updated elements back into queue again. Repeat this procedure until all the digits are iterated.
 
-
 */
 
-// CODE:
+// CODE: BFS USING QUEUE
 
 public List<String> letterCombinations(String digits) {
 		LinkedList<String> ans = new LinkedList<String>();
@@ -38,8 +37,18 @@ public List<String> letterCombinations(String digits) {
 		}
 		return ans;
 	}
-
-
+	
+/*
+VARIABLE TRACKING: For String t and List ans in the above code
+t value is:
+each result value is:[a, b, c]
+t value is:a
+each result value is:[b, c, ad, ae, af]
+t value is:b
+each result value is:[c, ad, ae, af, bd, be, bf]
+t value is:c
+each result value is:[ad, ae, af, bd, be, bf, cd, ce, cf]
+*/
 
 /*
 
@@ -48,3 +57,39 @@ For time complexity, adding one more letter, 4 (for number 7) times more operati
 in worst case you have 4 letters for each digits(9) and you have n digits so.. 4x4x4..n times which is 4^n
 
 */
+---------------------------------------------------------------------------
+// DFS RECURSION:
+
+  public class Solution {
+        public static List<String> letterCombinations(String digits) {
+            String digitletter[] = {"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+            List<String> result = new ArrayList<String>();
+    
+            if (digits.length()==0) return result;
+            
+            result.add("");
+            for (int i=0; i<digits.length(); i++) 
+                result = combine(digitletter[digits.charAt(i)-'0'],result);
+            
+            return result;
+        }
+        
+        public static List<String> combine(String digit, List<String> l) {
+            List<String> result = new ArrayList<String>();
+            
+            for (int i=0; i<digit.length(); i++) 
+                for (String x : l) 
+                    result.add(x+digit.charAt(i));
+    
+            return result;
+        }
+    }
+
+/*
+O(2^n) time complixity
+O(n) space complixity
+n is the length of input.
+
+*/
+
+
