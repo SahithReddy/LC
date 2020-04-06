@@ -154,7 +154,8 @@ class Solution {
 
 /*
 The worst case time complexity could be O(m^2 * n^2) (m = number of rows, n = number of columns) since there are m * n trees and for each BFS worst case time complexity is O(m * n) too.
-
+Time Complexity: O((RC)^2) where there are R rows and C columns in the given forest. We walk to R∗C trees, and each walk could spend O(R∗C) time searching for the tree.
+Space Complexity: O(R∗C), the maximum size of the data structures used.
 
 */
 
