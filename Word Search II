@@ -1,0 +1,116 @@
+/*
+QUESTION:
+
+Given a 2D board and a list of words from the dictionary, find all words in the board.
+
+Each word must be constructed from letters of sequentially adjacent cell, where "adjacent" cells are those horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
+
+ 
+
+Example:
+
+Input: 
+board = [
+  ['o','a','a','n'],
+  ['e','t','a','e'],
+  ['i','h','k','r'],
+  ['i','f','l','v']
+]
+words = ["oath","pea","eat","rain"]
+
+Output: ["eat","oath"]
+
+*/
+
+
+/*
+ALGORITHM: TRIE + BACKTRACKING
+
+The overall workflow of the algorithm is intuitive, which consists of a loop over each cell in the board and a recursive function call starting from the cell. Here is the skeleton of the algorithm.
+
+1. We build a Trie out of the words in the dictionary, which would be used for the matching process later.
+
+2. Starting from each cell, we start the backtracking exploration (i.e. backtracking(cell)), if there exists any word in the dictionary that starts with the letter in the cell.
+
+3. During the recursive function call backtracking(cell), we explore the neighbor cells (i.e. neighborCell) around the current cell for the next recursive call backtracking(neighborCell). At each call, we check if the sequence of letters that we traverse so far matches any word in the dictionary, with the help of the Trie data structure that we built at the beginning.
+
+*/
+
+
+public class Solution {
+    private int m;
+    private int n;
+    private ArrayList<String> ans;
+ 
+    public List<String> findWords(char[][] board, String[] words) {
+        m = board.length;
+        n = board[0].length;
+        ans = new ArrayList<>();
+        TrieNode root = build(words); // Construct the trie from our input list of words
+        for (int i = 0; i < m; ++i)
+            for (int j = 0; j < n; ++j)
+                backtracking(board, i, j, root); // backtracking recursion method for each cell in the board
+        return ans;
+    }
+ 
+    private void backtracking(char[][] board, int i, int j, TrieNode node) {
+        char c = board[i][j]; // point 1: use board to check visited
+        if (c == '#' || node.next[c - 'a'] == null) return;
+        node = node.next[c - 'a'];
+        
+        // check if there is any match
+        if (node.val != null) {
+            ans.add(node.val); 
+            node.val = null; // In the problem, we are asked to return all the matched words, rather than the number of potential matches. Therefore, once we reach certain Trie node that contains a match of word, we could simply remove the match from the Trie.
+        }
+ 
+        board[i][j] = '#'; // visited
+        
+        // explore neighbor cells in around-clock directions: up, right, down, left
+        if (i > 0) backtracking(board, i - 1, j, node);
+        if (j > 0) backtracking(board, i, j - 1, node);
+        if (i + 1 < m) backtracking(board, i + 1, j, node);
+        if (j + 1 < n) backtracking(board, i, j + 1, node);
+        
+        board[i][j] = c; // unvisited
+    }
+ 
+    private class TrieNode {
+        public String val = null; // Point 1: store word in Trie, one does not need to reconstruct the matched word from the prefix, if we keep the words in Trie.
+        public TrieNode[] next = new TrieNode[26];
+    }
+ 
+    private TrieNode build(String[] words) {
+        TrieNode root = new TrieNode();
+        for (String word : words) {
+            TrieNode node = root;
+            for (char c : word.toCharArray()) {
+                int i = c - 'a';
+                if (node.next[i] == null) node.next[i] = new TrieNode();
+                node = node.next[i];
+            }
+            node.val = word;
+        }
+        return root;
+    }
+}
+
+/*
+
+Time complexity: O(M(4⋅3^L−1)), where M is the number of cells in the board and L is the maximum length of words.
+
+Assume the maximum length of word is L, starting from a cell, initially we would have at most 4 directions to explore. Assume each direction is valid (i.e. worst case), during the following exploration, we have at most 3 neighbor cells (excluding the cell where we come from) to explore. As a result, we would traverse at most 4⋅3^L−1
+ cells during the backtracking exploration.
+
+
+Space Complexity: O(N), where N is the total number of letters in the dictionary.
+
+The main space consumed by the algorithm is the Trie data structure we build. In the worst case where there is no overlapping of prefixes among the words, the Trie would have as many nodes as the letters of all words. And optionally, one might keep a copy of words in the Trie as well. As a result, we might need 2N space for the Trie.
+
+
+
+*/
+
+
+
+
