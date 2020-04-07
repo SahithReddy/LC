@@ -107,7 +107,7 @@ Space Complexity: O(N), where N is the total number of letters in the dictionary
 
 The main space consumed by the algorithm is the Trie data structure we build. In the worst case where there is no overlapping of prefixes among the words, the Trie would have as many nodes as the letters of all words. And optionally, one might keep a copy of words in the Trie as well. As a result, we might need 2N space for the Trie.
 
-
+https://web.archive.org/web/20160414153841/http://algobox.org:80/word-search-ii/  --Nice
 
 */
 
