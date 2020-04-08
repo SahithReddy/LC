@@ -2,6 +2,22 @@
 // https://leetcode.com/problems/design-hashmap/discuss/227081/Java-Solutions . -- See this solution directly
 // Explanation: https://leetcode.com/problems/design-hashmap/solution/
 
+
+/*QUESTIONS TO ASK BEFORE IMPLEMENTING:
+SHOULD I ASSUME: 
+All keys and values will be in the range of [0, 1000000].
+The number of operations will be in the range of [1, 10000].
+
+Some of the questions which can be asked to the interviewer before implementing the solution
+
+*For simplicity, are the keys integers only?
+*For collision resolution, can we use chaining?
+*Do we have to worry about load factors? (If Yes, refer solution 2nd solution)
+Can we assume inputs are valid or do we have to validate them?
+Can we assume this fits memory?
+
+*/
+
 // THEORY:
 /*The most distinguish characteristic about hashmap is that it provides a fast access to a value that is associated with a given key.
 
@@ -45,14 +61,10 @@ distinguish between those keys. Chaining collision resolution is one of those te
 class MyHashMap
 {
 	ListNode[] nodes = new ListNode[10000];
-
-	public int get(int key)
-	{
-		int index = getIndex(key);
-        ListNode prev = findElement(index, key);
-        return prev.next==null? -1: prev.next.val;
-	}
 	
+	// ORDER: getIndex --> findElement --> put --> get --> remove
+	
+	/** value will always be non-negative. */
 	public void put(int key, int value)
 	{
 		int index = getIndex(key);
@@ -62,7 +74,16 @@ class MyHashMap
         }
         prev.next.val = value;
 	}
-
+	
+	/** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+	public int get(int key)
+	{
+		int index = getIndex(key);
+        ListNode prev = findElement(index, key);
+        return prev.next==null? -1: prev.next.val;
+	}
+	
+	/** Removes the mapping of the specified value key if this map contains a mapping for the key */
 	public void remove(int key)
 	{
 		int index = getIndex(key);
@@ -104,11 +125,129 @@ class MyHashMap
 }
 
 /*Time complexity: O(1) average and O(n) worst case - for all get(),put() and remove() methods.
-Space complexity: O(n) - where n is the number of entries in HashMap*/
+Space complexity: O(n) - where n is the number of entries in HashMap
+*/
 
 
-/*Q&A
-why is the size of bucket array 10000? it worked for me taking 1000 element array
-Sol: The problem statement says that the total number of operations could be 10000.
-In addition, the solution would work with an array of size 1 as well, but you don't
-want that. You would like to evenly distribute the elements in the bucket to get a constant time complexity.*/
+/*
+Although upper bound of unique keys is given (10,000) so we can initialize nodes array with length 10000, adding rehashing can still be useful in case of followup question like:
+
+What if most keys are redundant?
+
+Reference: https://www.geeksforgeeks.org/load-factor-and-rehashing/
+
+HOW HASHING WORKS:
+For insertion of a key(K) – value(V) pair into a hash map, 2 steps are required:
+
+K is converted into a small integer (called its hash code) using a hash function.
+The hash code is used to find an index (hashCode % arrSize) and the entire linked list at that index(Separate chaining) is first searched for the presence of the K already.
+If found, it’s value is updated and if not, the K-V pair is stored as a new node in the list.
+
+
+COMPLEXITY AND LOAD FACTOR:
+For the first step, time taken depends on the K and the hash function.
+For example, if the key is a string “abcd”, then it’s hash function may depend on the length of the string. But for very large values of n, the number of entries into the map, length of the keys is almost negligible in comparison to n so hash computation can be considered to take place in constant time, i.e, O(1).
+For the second step, traversal of the list of K-V pairs present at that index needs to be done. For this, the worst case may be that all the n entries are at the same index. So, time complexity would be O(n). But, enough research has been done to make hash functions uniformly distribute the keys in the array so this almost never happens.
+So, on an average, if there are n entries and b is the size of the array there would be n/b entries on each index. This value n/b is called the load factor that represents the load that is there on our map.
+This Load Factor needs to be kept low, so that number of entries at one index is less and so is the complexity almost constant, i.e., O(1).
+
+
+REHASHING:
+As the name suggests, rehashing means hashing again. Basically, when the load factor increases to more than its pre-defined value (default value of load factor is 0.75), the complexity increases. So to overcome this, the size of the array is increased (doubled) and all the values are hashed again and stored in the new double sized array to maintain a low load factor and low complexity.
+
+WHY REHASHING?
+Rehashing is done because whenever key value pairs are inserted into the map, the load factor increases, which implies that the time complexity also increases as explained above. This might not give the required time complexity of O(1).
+
+Hence, rehash must be done, increasing the size of the bucketArray so as to reduce the load factor and the time complexity.
+
+
+HOW REHASHING IS DONE:
+Rehashing can be done as follows:
+
+For each addition of a new entry to the map, check the load factor.
+If it’s greater than its pre-defined value (or default value of 0.75 if not given), then Rehash.
+For Rehash, make a new array of double the previous size and make it the new bucketarray.
+Then traverse to each element in the old bucketArray and call the insert() for each so as to insert it into the new larger bucket array.
+*/
+
+class MyHashMap {
+    private static final double LOAD_FACTOR = 0.75;
+    private Node[] nodes;
+    private int size; // number of keys
+
+    /** Initialize your data structure here. */
+    public MyHashMap() {
+        nodes = new Node[5];
+        size = 0;
+    }
+    
+    /** value will always be non-negative. */
+    public void put(int key, int value) {
+        int idx = hash(key);
+        for (Node x = nodes[idx]; x != null; x = x.next) {
+            if (x.key == key) {
+                x.value = value;
+                return;
+            }
+        }
+        nodes[idx] = new Node(key, value, nodes[idx]);
+        size++;
+        
+        double loadFactor = (double) size / nodes.length;
+        if (loadFactor > LOAD_FACTOR) {
+            rehash();
+        }
+    }
+    
+    /** Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key */
+    public int get(int key) {
+        int idx = hash(key);
+        for (Node x = nodes[idx]; x != null; x = x.next) {
+            if (x.key == key) {
+                return x.value;
+            }
+        }
+        return -1;
+    }
+    
+    /** Removes the mapping of the specified value key if this map contains a mapping for the key */
+    public void remove(int key) {
+        int idx = hash(key);
+        Node pre = new Node(-1, -1, nodes[idx]); // sentinal node before list head
+        for (Node prev = pre; prev.next != null; prev = prev.next) {
+            if (prev.next.key == key) {
+                prev.next = prev.next.next;
+                break;
+            }
+        }
+        nodes[idx] = pre.next;
+		size--;
+    }
+    
+    private int hash(int key) {
+        return key % nodes.length;
+    }
+    
+    private void rehash() {
+        Node[] tmp = nodes;
+        nodes = new Node[tmp.length * 2];
+        size = 0;
+        for (Node head: tmp) {
+            for (Node x = head; x != null; x = x.next) {
+                put(x.key, x.value);
+            }
+        }
+    }
+    
+    class Node {
+        int key;
+        int value;
+        Node next;
+
+        public Node(int key, int value, Node next) {
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
+    }
+}
