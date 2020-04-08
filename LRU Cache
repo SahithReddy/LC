@@ -4,6 +4,8 @@
 
 // The key to solve this problem is using a double linked list which enables us to quickly move nodes.
 
+// The LRU cache is a hash table of keys and double linked nodes. The hash table makes the time of get() to be O(1). The list of double linked nodes make the nodes adding/removal operations O(1).
+
 /*
 The problem can be solved with a hashmap that keeps track of the keys and its values in the double linked list. 
 That results in O(1) time for put and get operations and allows to remove the first added node in O(1) time as well.
@@ -91,8 +93,40 @@ Space complexity : O(capacity) since the space is used only for a hashmap and do
 most capacity + 1 elements.
 */
 
-Just for reference: 
+/* LAZY SOLUTION OF LINKED HASHMAP TOO
+ INSERTS AS WE SEND TO IT
+*/
+
+
+private LinkedHashMap<Integer, Integer> map;
+private int SIZE;
+public LRUCache(int capacity) {
+    map = new LinkedHashMap<>();
+    SIZE = capacity;
+}
+
+public int get(int key) {
+    if(map.containsKey(key)) {
+        int value = map.remove(key);
+        map.put(key, value);
+        return value;
+    }
+    return -1;
+}
+
+public void put(int key, int value) {
+    if(map.containsKey(key)) {
+        map.remove(key);
+    }else if(map.size() + 1 > SIZE) {
+        map.remove(map.keySet().iterator().next());
+    }
+    map.put(key, value);
+}
+
+
+
+/*Just for reference: 
 https://leetcode.com/problems/lru-cache/discuss/45911/Java-Hashtable-%2B-Double-linked-list-(with-a-touch-of-pseudo-nodes)
 https://leetcode.com/problems/lru-cache/discuss/45922/JAVA-Easy-Version-To-Understand!!!!
-
+*/
 
