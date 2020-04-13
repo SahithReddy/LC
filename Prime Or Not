@@ -1,0 +1,46 @@
+/* ALGORITHM:
+Step 1: take a static int p, p is defined “static” because we want to access it globally.
+Step 2: take a variable integer type n, and take input from the user, store it into n.
+Step 3: Apply condition, If the number is less than 1 then it’s obviously  Not A Prime Number.
+
+Step 4: If the condition is false then it will run a loop starting from 2 and ending with n-1. because we know that every number is divisible by 1 and the number itself. So we will check if any other number is available there in between 1 to n which can divide the number, i,e (n%i==0)
+
+Step 5: If we find a number like that which can divide our number then we will print n is not a prime number.
+And we will assign 1 to “p”.
+
+Step 6: If no number is found between 1 to n which can divide our number then we will simply print it’s a prime number. In order to that, we just make a condition after our for loop. If p is not equal to 1 then it is a prime number.( because  for prime number we have assigned p=1)
+
+break;
+is used to end our loop. otherwise, the loop will keep printing same line.
+*/
+
+
+
+// Code:
+import java.util.Scanner;
+public class Codespeedy {
+    static int p;
+    public static void main(String []args) {
+    Scanner input=new Scanner(System.in);
+     System.out.println("Enter a Number:");
+    int n=input.nextInt();
+    if(n<1){
+        System.out.println(n+" is not a prime number");
+    }
+    else
+    {
+       for(int i=2;i<n;i++){
+           if(n%i==0){
+               System.out.println(n+" is not prime number");
+               p=1;
+               break;
+              
+           }  
+     }
+       if(p!=1){
+            System.out.println(n+" is a prime number");
+       }
+    }
+}
+}
+
