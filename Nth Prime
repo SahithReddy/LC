@@ -1,0 +1,31 @@
+// https://www.codespeedy.com/find-the-nth-prime-number-in-java/
+
+/* ALGORITHM:
+First understand prime or not
+This loop continues until the value of the count is less than n. If the condition is true then it will increase the value of num by 1.
+The for loop begins with the initialization of i by 2 till the value is less than or equal to num. Every time when the condition is true it will divide the value of num by i and checks if its equal to zero or not. If it is equal to zero, the loop breaks and checks whether i is equal to num. If it is so then the value of count is increased by 1 and then again checks the condition of while loop.
+When the while loop terminates we get our final value in the variable num.
+*/
+
+// Code:
+import java.util.Scanner;
+public class Prime {
+  public static void main(String[] args) {
+    int num=1, count=0, i;
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Enter a number to find the nth prime number: ");
+    int n = sc.nextInt(); 
+    while (count < n){
+      num=num+1;
+      for (i = 2; i <= num; i++){
+        if (num % i == 0) {
+          break;
+        }
+      }
+      if ( i == num){
+        count = count+1;
+      }
+    }
+    System.out.println("Value of nth prime is: " + num);
+  }
+}
