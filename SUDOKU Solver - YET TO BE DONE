@@ -1,6 +1,41 @@
 /*
+QUESTION:
+Write a program to solve a Sudoku puzzle by filling the empty cells.
 
+A sudoku solution must satisfy all of the following rules:
+
+Each of the digits 1-9 must occur exactly once in each row.
+Each of the digits 1-9 must occur exactly once in each column.
+Each of the the digits 1-9 must occur exactly once in each of the 9 3x3 sub-boxes of the grid.
+Empty cells are indicated by the character '.'.
+
+Note:
+The given board contain only digits 1-9 and the character '.'.
+You may assume that the given Sudoku puzzle will have a single unique solution.
+The given board size is always 9x9.
+*/
+
+
+/*
+ALSO SEE OFFICIAL SOLUTION BACKTRACKING EXPLANATION IF POSSIBLE - WE HAVE A PICTURE OVER THERE
 Try 1 through 9 for each cell. The time complexity should be 9 ^ m (m represents the number of blanks to be filled in), since each blank can have 9 choices. Details see comments inside code.
+
+Let's imagine that one has already managed to put several numbers on the board. But the combination chosen is not the optimal one and there is no way to place the further numbers. What to do? To backtrack. That means to come back, to change the previously placed number and try to proceed again. If that would not work either, backtrack again.
+
+ALGORITHM:
+Now everything is ready to write down the backtrack function backtrack(row = 0, col = 0).
+
+1. Start from the upper left cell row = 0, col = 0. Proceed till the first free cell.
+
+2. Iterate over the numbers from 1 to 9 and try to put each number d in the (row, col) cell.
+
+    i. If number d is not yet in the current row, column and box :
+
+            a. Place the d in a (row, col) cell.
+            b. Write down that d is now present in the current row, column and box.
+            c. If we're on the last cell row == 8, col == 8, That means that we've solved the sudoku.
+            d. Else, Proceed to place further numbers.
+            e. Backtrack if the solution is not yet here : remove the last number from the (row, col) cell.
 
 */
 
@@ -41,7 +76,7 @@ public class Solution {
             if(board[i][col] != '.' && board[i][col] == c) return false; //check row
             if(board[row][i] != '.' && board[row][i] == c) return false; //check column
             if(board[3 * (row / 3) + i / 3][ 3 * (col / 3) + i % 3] != '.' && 
-board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false; //check 3*3 block
+board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false; //check 3*3 block , to enumerate sub-boxes where / is integer divison
         }
         return true;
     }
@@ -49,11 +84,8 @@ board[3 * (row / 3) + i / 3][3 * (col / 3) + i % 3] == c) return false; //check 
 
 
 /*
-Time complexity is constant here since the board size is fixed and there is no N-parameter to measure. Though let's discuss the number of operations needed : (9!)^9(9!) 
-9
- . Let's consider one row, i.e. not more than 99 cells to fill. There are not more than 99 possibilities for the first number to put, not more than 9 \times 89×8 for the second one, not more than 9 \times 8 \times 79×8×7 for the third one etc. In total that results in not more than 9!9! possibilities for a just one row, that means not more than (9!)^9(9!) 
-9
-  operations in total. Let's compare:
+Time complexity is constant here since the board size is fixed and there is no N-parameter to measure. Though let's discuss the number of operations needed : (9!)^9
+Let's consider one row, i.e. not more than 9 cells to fill. There are not more than 9 possibilities for the first number to put,  not more than 9×8 for the second one, not more than 9×8×7 for the third one etc. In total that results in not more than 9! possibilities for a just one row, that means not more than (9!)^9 operations in total.
 
 Space complexity : the board size is fixed, and the space is used to store board, rows, columns and boxes structures, each contains 81 elements.
 
