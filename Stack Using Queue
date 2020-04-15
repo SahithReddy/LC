@@ -19,6 +19,8 @@ stack.empty(); // returns false
 /* ALGORITHM: 
 First, let's see the most easiest way: one queue.
 In this method, the point is that after you add one element to the queue, rotate the queue to make the tail be the head.
+
+When we push an element into a queue, it will be stored at back of the queue due to queue's properties. But we need to implement a stack, where last inserted element should be in the front of the queue, not at the back. To achieve this we can invert the order of queue elements when pushing a new element.
 */
 
 class MyStack 
