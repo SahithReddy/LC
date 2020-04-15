@@ -51,11 +51,9 @@ each result value is:[ad, ae, af, bd, be, bf, cd, ce, cf]
 */
 
 /*
-
 For time complexity, adding one more letter, 4 (for number 7) times more operations, so it is O(4^n). For space complexity, final output will take O(4^n) space.
 
 in worst case you have 4 letters for each digits(9) and you have n digits so.. 4x4x4..n times which is 4^n
-
 */
 ---------------------------------------------------------------------------
 // DFS RECURSION:
@@ -89,7 +87,6 @@ in worst case you have 4 letters for each digits(9) and you have n digits so.. 4
 O(2^n) time complixity
 O(n) space complixity
 n is the length of input.
-
 */
 
 
