@@ -86,7 +86,7 @@ public class Solution {
 // Space: O(1) that is no extra space other than deep copy for output --> Space is O(N) if output is taken to consideration.
 -----------------------------------------------------------------
 /*
-Got a better solution without HashMap(Space O(1)) below this.
+Got a better solution without HashMap(Space O(1)) above this.
 An intuitive solution is to keep a hash table for each node in the list, via which we just need to iterate the list in 2 rounds respectively to create nodes and assign the values for their random pointers. As a result, the space complexity of this solution is O(N), although with a linear time complexity.
 */
 
