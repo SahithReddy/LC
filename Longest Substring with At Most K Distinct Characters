@@ -13,49 +13,98 @@ Output: 2
 Explanation: T is "aa" which its length is 2.
 */
 
-
-
 class Solution {
-public:
-    int lengthOfLongestSubstringKDistinct(string s, int k) {
-        
-        unordered_map<char,int> count; //Char,Count
-        int l=0,distinct=0,res=0;
-        
-        // l is the leftmost starting of substring, r is the rightmost
-        for (int r = 0; r < s.size(); r++) 
-        {
-            //If character not seen before
-            if (count[s[r]] == 0) 
-                distinct++;
-             
-            //Inncrement count of the char
-             count[s[r]]++;
-            
-            //If there are more distinct char
-            //Start removing from left until Distict Chars == k
-            while(distinct > k) 
-            {
-                count[s[l]]--;
-                
-                if(count[s[l]]==0) 
-                    distinct--;
-
-                l++;
-            }
-            
-            res = max(res, r - l + 1);
+public int lengthOfLongestSubstringKDistinct(String s, int k) {
+    int[] count = new int[256]; // there are 256 ASCII characters in the world
+    
+    int l = 0;
+    int distinct = 0;
+    int res = 0;
+    
+    // l is the leftmost starting of substring, r is the rightmost
+    for (int r = 0; r < s.length(); r++) {
+        if (count[s.charAt(r)] == 0) {    // if count[s.charAt(r)] == 0, we know that it is a distinct character
+            distinct++;
         }
         
-
-        return res;
+        //Inncrement count of the char
+        count[s.charAt(r)]++;
+        
+        //If there are more distinct char
+        //Start removing from left until Distict Chars == k
+        while (distinct > k && l < s.length()) {
+            count[s.charAt(l)]--;
+            
+            if (count[s.charAt(l)] == 0){ 
+                distinct--;
+            }
+            
+            l++;
+        }
+        res = Math.max(res, r - l + 1);
     }
-};
-
+    return res;
+}
+}
 
 Time complexity : O(N) in the best case of k distinct characters in the string and O(Nk) in the worst case of N distinct characters in the string.
 
-Space complexity : O(k) since additional space is used only for a hashmap with at most k + 1 elements.
+Space complexity : O(k) since additional space is used only counter with at most k + 1 elements.
 ---------------------------------------------------
 
-There is some solution with LinkedInHashMap too. Need to see that.
+/* LINKED HASHMAP ALGO:
+
+1. Return 0 if the string is empty or k is equal to zero.
+2. Set both set pointers in the beginning of the string left = 0 and right = 0 and init max substring length max_len = 1.
+3. While right pointer is less than N:
+    a. If the current character s[right] is already in the ordered dictionary hashmap -- delete it, to ensure that the first key in hashmap is the leftmost character.
+    b. Add the current character s[right] in the ordered dictionary and move right pointer to the right.
+    c. If ordered dictionary hashmap contains k + 1 distinct characters, remove the leftmost one and move the left pointer so that sliding window contains again k distinct characters only.
+    d. Update max_len.
+*/
+
+class Solution {
+  public int lengthOfLongestSubstringKDistinct(String s, int k) {
+    int n = s.length();
+    if (n*k == 0) return 0;
+
+    // sliding window left and right pointers
+    int left = 0;
+    int right = 0;
+    // hashmap character -> its rightmost position 
+    // in the sliding window
+    LinkedHashMap<Character, Integer> hashmap = new LinkedHashMap<Character, Integer>(k + 1);
+
+    int max_len = 1;
+
+    while (right < n) {
+      Character character = s.charAt(right);
+      // if character is already in the hashmap -
+      // delete it, so that after insert it becomes
+      // the rightmost element in the hashmap
+      if (hashmap.containsKey(character))
+        hashmap.remove(character);
+      hashmap.put(character, right++);
+
+      // slidewindow contains k + 1 characters
+      if (hashmap.size() == k + 1) {
+        // delete the leftmost character
+        Map.Entry<Character, Integer> leftmost = hashmap.entrySet().iterator().next();
+        hashmap.remove(leftmost.getKey());
+        // move left pointer of the slidewindow
+        left = leftmost.getValue() + 1;
+      }
+
+      max_len = Math.max(max_len, right - left);
+    }
+    return max_len;
+  }
+}
+
+/*
+Time complexity : O(N) since all operations with ordered dictionary : insert/get/delete/popitem (put/containsKey/remove) are done in a constant time.
+
+Space complexity : O(k) since additional space is used only for an ordered dictionary with at most k + 1 elements.
+
+*/
+
