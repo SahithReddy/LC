@@ -22,7 +22,67 @@ Output: 4
 Explanation: The longest repeating substring is "aaaa", which occurs twice.
 */
 
+*/
 
+/* ALGORITHM: Binary Search + Rabin Karp
+
+Split into two subtasks
+
+Here we have "two in one" problem :
+
+1. Perform a search by a substring length in the interval from 1 to N.
+
+2. Check if there is a duplicate substring of a given length L.
+
+
+BINARY SEARCH ALGORITHM:
+
+THEORY:
+A naive solution would be to check all possible string length one by one starting from N - 1: if there is a duplicate substring of length N - 1, then of length N - 2, etc. Note that if there is a duplicate substring of length k, that means that there is a duplicate substring of length k - 1. Hence one could use a binary search by string length here, and have the first problem solved in O(logN) time.
+
+PSEUDO CODE:
+1. Use binary search by a substring length to check lengths from 1 to N left = 1, right = N. While left != right:
+
+    a. L = left + (right - left) / 2
+
+    b. If search(L) != -1 (i.e. there is a duplicate substring), left = L + 1
+
+    c. Otherwise (no duplicate substring), right = L.
+
+2. Return duplicate string of length left - 1, or an empty string if there is no such a string.
+
+RABIN KARP ALGORITHM:
+
+THEORY:
+Subtask two, to check if there is duplicate substring of a given length, is a multiple pattern search. Let's use Rabin-Karp algorithm to solve it in a linear time.
+
+The idea is very simple :
+
+1. Move a sliding window of length L along the string of length N.
+
+2. Check if the string in the sliding window is in the hashset of already seen strings.
+
+      a. If yes, the duplicate substring is right here.
+
+      b. If not, save the string in the sliding window in the hashset.
+
+
+PSEUDO CODE: 
+search(L) :
+
+1. Compute the hash of substring S.substring(0, L) and initiate the hashset of already seen substring with this value.
+
+2. Iterate over the start position of substring : from 1 to N−L.
+
+    a. Compute rolling hash based on the previous hash value.
+
+    b. Return start position if the hash is in the hashset, because that means a duplicate string.
+
+    c. Otherwise, add hash in the hashset.
+
+3. Return -1, that means there is no duplicate string of length L.
+
+*/
 
 
 class Solution {
