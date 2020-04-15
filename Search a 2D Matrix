@@ -1,0 +1,67 @@
+/* QUESTION:
+Write an efficient algorithm that searches for a value in an m x n matrix. This matrix has the following properties:
+
+Integers in each row are sorted from left to right.
+The first integer of each row is greater than the last integer of the previous row.
+Example 1:
+
+Input:
+matrix = [
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+target = 3
+Output: true
+Example 2:
+
+Input:
+matrix = [
+  [1,   3,  5,  7],
+  [10, 11, 16, 20],
+  [23, 30, 34, 50]
+]
+target = 13
+Output: false
+*/
+
+/* ALGORITHM:
+Use binary search to find the row where target is in, and then use binary search to find target.
+Two binary searches, one for row and other for column
+
+*/
+
+class Solution {
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) return false;
+        int rows = matrix.length, cols = matrix[0].length;
+
+        // binary search #1: looking for the right row to search for the value
+        int start = 0, end = rows;
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            if (matrix[mid][cols - 1] < target) start = mid + 1;
+            else end = mid;
+        }
+
+        if (start == rows) return false;
+        if (matrix[start][cols - 1] == target) return true;
+
+        int r = start;
+
+        // binary search #2: looking for the target in that row
+        start = 0;
+        end = cols;
+        while (start < end) {
+            int mid = start + (end - start) / 2;
+            if (matrix[r][mid] < target) start = mid + 1;
+            else end = mid;
+        }
+        return start != cols && matrix[r][start] == target;
+    }
+}
+
+/*
+Time: O(log(m) + log(n) ~ log(mn), one for row binary search and other for column binary search
+Space: O(1)
+*/
