@@ -2,7 +2,22 @@
 
 // For Pictures: https://stackoverflow.com/questions/5471731/in-order-successor-in-binary-search-tree
 
-/*
+/* QUESTION:
+Given a binary search tree and a node in it, find the in-order successor of that node in the BST.
+
+The successor of a node p is the node with the smallest key greater than p.val
+
+Input: root = [2,1,3], p = 1
+Output: 2
+Explanation: 1's in-order successor node is 2. Note that both p and the return value is of TreeNode type.
+
+Input: root = [5,3,6,2,4,null,null,1], p = 6
+Output: null
+Explanation: There is no in-order successor of the current node, so the answer is null.
+*/
+
+
+/* ALGORITHM:
 The idea is to compare root's value with p's value if root is not null, and consider the following two cases:
 
 root.val > p.val. In this case, root can be a possible answer, so we store the root node first and call it res. 
@@ -38,6 +53,8 @@ class Solution {
 /*
 The time complexity should be O(h) where h is the depth of the result node.
 Only in a balanced BST O(h) = O(log n). In the worst case h can be as large as n.
+
+Space complexity : O(1) in the best case, when node p has a right child. Otherwise, up to O(H) to keep the stack.
 */
  
 ---------------------------------------------------------------------------------------------------------------------
