@@ -1,1 +1,77 @@
-// Yet to be done
+/* QUESTION:
+You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
+
+struct Node {
+  int val;
+  Node *left;
+  Node *right;
+  Node *next;
+}
+Populate each next pointer to point to its next right node. If there is no next right node, the next pointer should be set to NULL.
+
+Initially, all next pointers are set to NULL
+*/
+
+/*
+ALGORITHM:
+
+CONNECTION 1: 
+The first one is fairly simple to establish given that it's between the two nodes having a common parent. So, we could simply do something like this to link the two children:
+
+node.left.next = node.right
+
+CONNECTION 2:
+For the second type of connection, we have to make use of the next pointers on the current level. Since we already have the next pointers set up on the current level, we use this to set up the correct pointers on the next level.
+
+node.right.next = node.next.left
+
+UPDATING LEFT NODE:
+Once we are done with the current level, we move on to the next one. One last thing that's left here is to update the leftmost node. We need that node to start traversal on a particular level. Think of it as the head of the linked list. Since this is a perfect binary tree, the leftmost node will always be the left child of the current leftmost node. 
+
+*/
+
+class Solution {
+    public Node connect(Node root) {
+        
+        if (root == null) {
+            return root;
+        }
+        
+        // Start with the root node. There are no next pointers
+        // that need to be set up on the first level
+        Node leftmost = root;
+        
+        // Once we reach the final level, we are done
+        while (leftmost.left != null) {
+            
+            // Iterate the "linked list" starting from the head
+            // node and using the next pointers, establish the 
+            // corresponding links for the next level
+            Node head = leftmost;
+            
+            while (head != null) {
+                
+                // CONNECTION 1
+                head.left.next = head.right;
+                
+                // CONNECTION 2
+                if (head.next != null) {
+                    head.right.next = head.next.left;
+                }
+                
+                // Progress along the list (nodes on the current level)
+                head = head.next;
+            }
+            
+            // Move onto the next level
+            leftmost = leftmost.left;
+        }
+        
+        return root;
+    }
+}
+
+/*
+Time Complexity: O(N) since we process each node exactly once.
+Space Complexity: O(1) since we don't make use of any additional data structure for traversing nodes on a particular level like the previous approach does.
+*/
