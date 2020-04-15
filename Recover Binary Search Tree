@@ -1,3 +1,7 @@
+/* Great blog on Morris Traversal:
+https://www.cnblogs.com/AnnieKim/archive/2013/06/15/morristraversal.html
+*/
+
 /* QUESTION:
 Two elements of a binary search tree (BST) are swapped by mistake.
 
@@ -45,7 +49,7 @@ Could you devise a constant space solution?
 
 /* ALGORITHM: RECURSIVE, ITERATIVE & MORRIS ALGORITHM of O(1) Space(Written below) - Say all 3 possible and go with Morris
 
-IDEA OF FINDING THE MISPLACED PAIR:
+GENERAL IDEA OF FINDING THE MISPLACED PAIR:
 In-order traversal is really useful in BST. Following in-order traversal, we should have following order: prev.val < curr.val. If not, then we found at least one incorrectly placed node
 
 So the basic idea is to visit the tree with in-order traversal and search for two swapped nodes. Then swap them back.
@@ -153,6 +157,13 @@ To reduce the space to constant space, we have to use Morris-traversal.
 Morris-traversal is similar to recursive/iterative traversal, but we need to modify the tree structure during the
 traversal. before we visiting the left tree of a root, we will build a back-edge between rightmost node in left tree and the root. So we can go back to the root node after we are done with the left tree. Then we locate the rightmost node in left subtree again, cut the back-edge, recover the tree structure and start visit right subtree. The detection of two incorrect TreeNodes is similar to iterative/recursive in-order traversal.
 We don't use extra data structure here, so the space complexity is reduced to O(1) and the time complexity will be O(n)
+
+EXPLAINED ABOVE ALREADY BUT AGAIN IN SOME DIFFERENT JARGON
+how to specify the first wrong node and second wrong node.
+
+When they are not consecutive, the first time we meet pre.val > root.val ensure us the first node is the pre node, since root should be traversal ahead of pre, pre should be at least at small as root. The second time we meet pre.val > root.val ensure us the second node is the root node, since we are now looking for a node to replace with out first node, which is found before.
+
+When they are consecutive, which means the case pre.val > cur.val will appear only once. We need to take case this case without destroy the previous analysis. So the first node will still be pre, and the second will be just set to root. Once we meet this case again, the first node will not be affected.
 
 */
 // MORRIS ALGO WITH COMMENTS:
