@@ -1,6 +1,8 @@
 /*
 This is a template that can be applied to serialize and deserialize both binary(refer it in this repo) and n-ary trees.
 
+  DFS for serializing  and QUEUE for deserializing using recursion
+  The idea is simple: print the tree in pre-order traversal and use "X" to denote null node and split node with ",". We can use a StringBuilder for building the string on the fly. For deserializing, we use a Queue to store the pre-order traversal and since we have "X" as null node, we know exactly how to where to end building subtress.
 The only difference is that to serialize n-ary tree, we need to append the number of children of a node.
 
 Taken from 2nd most upvoted answer.
@@ -76,13 +78,13 @@ class Codec {
 /*
 Time Complexity:
 
-Serialization: O(N)O(N) where NN are the number of nodes in the tree. For every node, we add 2 different values to the final string and every node is processed exactly once.
-Deserialization: For deserialization, we process the entire string, one character at a time and also construct the tree along the way. So, the overall time complexity for deserialization is 2N2N = O(N)O(N)
+Serialization: O(N) where NN are the number of nodes in the tree. For every node, we add 2 different values to the final string and every node is processed exactly once.
+Deserialization: For deserialization, we process the entire string, one character at a time and also construct the tree along the way. So, the overall time complexity for deserialization is 2N = O(N)O(N)
 */
 
 /*
 Space Complexity:
 
-Serialization: The space occupied by the serialization helper function is through recursion stack and the final string that is produced. We know the size of the final string to be 2N2N. So, that is one part of the space complexity. The other part is the one occupied by the recursion stack which is O(N)O(N). Overall, the space is O(N)O(N).
-Deserialization: For deserialization, the space occupied is by the recursion stack only. We don't use any other intermediate data structures like we did in the previous approach and simply rely on the information in the string and recursion to work it's magic. So, the overall space complexity would be O(N)O(N).
+Serialization: The space occupied by the serialization helper function is through recursion stack and the final string that is produced. We know the size of the final string to be 2N2N. So, that is one part of the space complexity. The other part is the one occupied by the recursion stack which is O(N). Overall, the space is O(N).
+Deserialization: For deserialization, the space occupied is by the recursion stack only. We don't use any other intermediate data structures like we did in the previous approach and simply rely on the information in the string and recursion to work it's magic. So, the overall space complexity would be O(N).
 */
