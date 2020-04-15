@@ -7,11 +7,10 @@ The encoded string should be as compact as possible.
 
 */
 
-/*
+/* ALGO: 
+DFS for serializing  and QUEUE for deserializing using recursion
 use upper and lower boundaries to check whether we should add null
-
 */
-
 
 /**
  * Definition for a binary tree node.
@@ -57,3 +56,5 @@ public class Codec {
         return root;
     }
 }
+
+// Time: O(N), Space: O(width) where width is the max width of the tree
