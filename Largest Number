@@ -1,0 +1,90 @@
+/* QUESTION:
+Given a list of non negative integers, arrange them such that they form the largest number.
+
+Example 1:
+
+Input: [10,2]
+Output: "210"
+Example 2:
+
+Input: [3,30,34,5,9]
+Output: "9534330"
+Note: The result may be very large, so you need to return a string instead of an integer.
+*/
+
+/* ALGORITHM:
+The idea here is basically implement a String comparator to decide which String should come first during concatenation. Because when you have 2 numbers (let's convert them into String), you'll face only 2 cases:
+For example:
+
+String s1 = "9";
+String s2 = "31";
+
+String case1 =  s1 + s2; // 931
+String case2 = s2 + s1; // 319
+
+Apparently, case1 is greater than case2 in terms of value.
+So, we should always put s1 in front of s2.
+*/
+
+
+
+// With inbuilt comparator:
+public class Solution {
+         public String largestNumber(int[] nums) {
+        // 1.Convert to Integer array since Arrays.sort(A,T) forces that
+        String[] strs = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            strs[i] = String.valueOf(nums[i]);
+        }
+
+        // 2.Sort in descending order - Custom built comparator
+             Arrays.sort(strs, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                String s1 = o1 + o2, s2 = o2 + o1;
+                return s2.compareTo(s1);
+            }
+        });
+
+        // 3.Append together and check final result
+        if (strs[0].equals("0")) return "0";
+        StringBuilder res = new StringBuilder(); // use StringBuilder to concact
+        for (String str : strs) res.append(str);
+        return res.toString();
+    }
+}
+-----------------------------------
+// With Lambda Comparator
+
+public class Solution {
+         public String largestNumber(int[] nums) {
+        // 1.Convert to Integer array since Arrays.sort(A,T) forces that
+        String[] strs = new String[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            strs[i] = String.valueOf(nums[i]);
+        }
+
+        // 2.Sort in descending order
+        Arrays.sort(strs, (s1, s2) -> ((s2 + s1).compareTo(s1 + s2)));
+
+        // 3.Append together and check final result
+        if (strs[0].equals("0")) return "0";
+        StringBuilder res = new StringBuilder(); // use StringBuilder to concact
+        for (String str : strs) res.append(str);
+        return res.toString();
+    }
+}
+
+/*
+TC -->
+In terms of Time Complexity:
+Let's assume:
+the length of input array is n,
+average length of Strings in s_num is k,
+Then, compare 2 strings will take O(k).
+Sorting will take O(nlgn)
+Appending to StringBuilder takes O(n).
+So total will be O(nklgnk) + O(n) = O(nklgnk).
+
+SC --> Space is pretty straight forward: O(n).
+*/
