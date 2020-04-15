@@ -1,8 +1,21 @@
-// TreeMap is used here to get all operations add, remove, getlastKey/Maximum as logN.
-// Use a maxHeap to store possible heights
-        // But priority queue does not support remove in lgn time
-        // treemap support add, remove, get max in lgn time, so use treemap here
-        // key: height, value: number of this height
+/* ALGORITHM:
+
+We mark the height as negative for all the left coordinates.
+
+1. Store all the coordinate values in height arraylist and mark the height of each start/left coordinate as negative. We'll discuss it why.
+
+2. Sort the height array such that it considers following conditions:
+        i. When the two points are not equal then sort them by coordinate values.
+        ii. When two coordinate values are same, then check
+                a. if both of them are start/left coordinates. If so, consider the largest height. (That's why left coordinate                  heights are marked negative).
+                b. if both of them are end/right coordinates. If so, consider the shortest height.
+                c. If one of them is end/right and other is start/left then consider the start/left height.
+
+3. Iterate height arraylist and store height values in a TreeMap only if current coordinate is a left/start coordinate. Remove a height values from the map if we encounter a right/end coordinate. TreeMap is used here to get all operations add, remove, getlastKey/Maximum as logN. -->key: height, value: number of this height
+
+
+4. Check if the maximum height changes in map after each iteration. If so then add current maxheight and current coordinate to result array.
+*/
 
 class Solution {
     public List<int[]> getSkyline(int[][] buildings) {
