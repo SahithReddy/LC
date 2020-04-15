@@ -26,7 +26,7 @@ public class Solution {
         if (lists == null || lists.length == 0) return null;
         return sort(lists, 0, lists.length - 1);
     }
-    
+    // Sort --> Merge
     
     private ListNode sort(ListNode[] lists, int lo, int hi) {
         if (lo >= hi) return lists[lo];
