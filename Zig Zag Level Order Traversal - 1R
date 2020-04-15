@@ -56,7 +56,7 @@ class Solution {
 }
 
 // Time Comolexity: O(n) where N is the number of nodes in the tree.
-// Space Complexity: O(N) where N is the number of nodes in the tree.
+// Space Complexity: O(H), where H is the height of the tree, i.e. the number of levels in the tree, which would be roughly log base 2 to N
 -------------------------------------------------------------------------------------
 
 /*
