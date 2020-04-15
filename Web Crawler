@@ -1,0 +1,98 @@
+/* QUESTION: 
+Given a url startUrl and an interface HtmlParser, implement a web crawler to crawl all links that are under the same hostname as startUrl. 
+
+Return all urls obtained by your web crawler in any order.
+
+Your crawler should:
+
+Start from the page: startUrl
+Call HtmlParser.getUrls(url) to get all urls from a webpage of given url.
+Do not crawl the same link twice.
+Explore only the links that are under the same hostname as startUrl.
+
+As shown in the example url above, the hostname is example.org. For simplicity sake, you may assume all urls use http protocol without any port specified. For example, the urls http://leetcode.com/problems and http://leetcode.com/contest are under the same hostname, while urls http://example.org/test and http://example.com/abc are not under the same hostname.
+
+The HtmlParser interface is defined as such: 
+
+interface HtmlParser {
+  // Return a list of all urls from a webpage of given url.
+  public List<String> getUrls(String url);
+}
+Below are two examples explaining the functionality of the problem, for custom testing purposes you'll have three variables urls, edges and startUrl. Notice that you will only have access to startUrl in your code, while urls and edges are not directly accessible to you in code.
+
+Input:
+urls = [
+  "http://news.yahoo.com",
+  "http://news.yahoo.com/news",
+  "http://news.yahoo.com/news/topics/",
+  "http://news.google.com",
+  "http://news.yahoo.com/us"
+]
+startUrl = "http://news.yahoo.com/news/topics/"
+Output: [
+  "http://news.yahoo.com",
+  "http://news.yahoo.com/news",
+  "http://news.yahoo.com/news/topics/",
+  "http://news.yahoo.com/us"
+]
+
+Input: 
+urls = [
+  "http://news.yahoo.com",
+  "http://news.yahoo.com/news",
+  "http://news.yahoo.com/news/topics/",
+  "http://news.google.com"
+]
+startUrl = "http://news.google.com"
+Output: ["http://news.google.com"]
+Explanation: The startUrl links to all other pages that do not share the same hostname.
+
+*/
+
+/* QUESTION AND SOLUTION EXPLANATION:
+The question is a little confusing to understand, so I will try to explain it first. We will be given a "startURL"(for ex, https://www.google.com ) and a class htmlParser which would give the children of given url(for ex, htmlParser.geturl("https://www.google.com")) should return a list of children url's. Now we are asked to find all url's visitable from a starting url such that no url is visited twice and we visit websites of the same name, which is simillar to a graph traversal problem. We can use either DFS or BFS to solve this. A solution which uses DFS is given below:
+
+Classical breadth-first seach that starts with startUrl node explores all neighbors returned by htmlParser.getUrls that have the same hostname as the startUrl and have not yet been explored yet.
+*/
+
+
+/**
+ * // This is the HtmlParser's API interface.
+ * // You should not implement it, or speculate about its implementation
+ * interface HtmlParser {
+ *     public List<String> getUrls(String url) {}
+ * }
+ */
+class Solution {
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+        Set<String> set = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+        String hostname = getHostname(startUrl);
+        
+        queue.offer(startUrl);
+        set.add(startUrl);
+        
+        # bfs: pop a link from the queue. get all the child links and iterate over all the child link.
+        # if the child link is not been visited and in the same domain, we will add that child link to the queue. Also this           child link is one of our result link
+        # we will keep doing until queue is empty.
+        
+        while (!queue.isEmpty()) {
+            String currentUrl = queue.poll();
+            for (String url : htmlParser.getUrls(currentUrl)) {
+                if (url.contains(hostname) && !set.contains(url)) {
+                    queue.offer(url);
+                    set.add(url);
+                }
+            }
+        }
+        
+        return new ArrayList<String>(set);
+    }
+    
+    private String getHostname(String Url) {
+        String[] ss = Url.split("/");
+        return ss[2];
+    }
+}
+
+// Space: O(N), RTC: O(N)
