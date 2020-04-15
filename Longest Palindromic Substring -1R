@@ -53,6 +53,7 @@ Space complexity : O(1).
  
  -------------------------------------------------------------------------------------------------------
  // MANACHERS ALGORITHM: TC O(N)
+ // https://www.baeldung.com/java-palindrome-substrings
  
  // First, we'll guard the input string with a boundary character at the beginning and end before converting the resulting string to a character array:
 String formattedInput = "@" + input + "#";
