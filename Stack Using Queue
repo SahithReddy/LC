@@ -1,5 +1,25 @@
+/* QUESTION:
+Implement the following operations of a stack using queues.
+
+push(x) -- Push element x onto stack.
+pop() -- Removes the element on top of the stack.
+top() -- Get the top element.
+empty() -- Return whether the stack is empty.
+Example:
+
+MyStack stack = new MyStack();
+
+stack.push(1);
+stack.push(2);  
+stack.top();   // returns 2
+stack.pop();   // returns 2
+stack.empty(); // returns false
+*/
+
+/* ALGORITHM: 
 First, let's see the most easiest way: one queue.
 In this method, the point is that after you add one element to the queue, rotate the queue to make the tail be the head.
+*/
 
 class MyStack 
 {
@@ -20,23 +40,23 @@ class MyStack
        }
     }
 
-    // Removes the element on top of the stack.
+    // Removes the element on top of the stack. The last inserted element is always stored at the front of q1 and we can pop it for constant time.
     public void pop() 
     {
         q.poll();
     }
 
-    // Get the top element.
+    // Get the top element. The top element is always positioned at the front of q1. Algorithm return it.
     public int top() 
     {
         return q.peek();
     }
 
-    // Return whether the stack is empty.
+    // Return whether the stack is empty. Queue q1 contains all stack elements, so the algorithm checks if q1 is empty.
     public boolean empty() 
     {
         return q.isEmpty();
     }
 }
 
-Only push is O(n), others are O(1).
+// TC Only push is O(n), others are O(1). Also, SC for all is always O(1)
