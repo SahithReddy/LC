@@ -1,0 +1,138 @@
+/* QUESTION: The problem is a follow-up of Longest Repeating Substring(where only length is returned)
+
+Given a string S, consider all duplicated substrings: (contiguous) substrings of S that occur 2 or more times.  (The occurrences may overlap.)
+
+Return any duplicated substring that has the longest possible length.  (If S does not have a duplicated substring, the answer is "".)
+
+Input: "banana"
+Output: "ana"
+
+
+Input: "abcd"
+Output: ""
+ 
+
+Note:
+2 <= S.length <= 10^5
+S consists of lowercase English letters.
+*/
+
+/* ALGORITHM: Binary Search + Rabin Karp
+
+Split into two subtasks
+
+Here we have "two in one" problem :
+
+1. Perform a search by a substring length in the interval from 1 to N.
+
+2. Check if there is a duplicate substring of a given length L.
+
+
+BINARY SEARCH ALGORITHM:
+
+THEORY:
+A naive solution would be to check all possible string length one by one starting from N - 1: if there is a duplicate substring of length N - 1, then of length N - 2, etc. Note that if there is a duplicate substring of length k, that means that there is a duplicate substring of length k - 1. Hence one could use a binary search by string length here, and have the first problem solved in O(logN) time.
+
+PSEUDO CODE:
+1. Use binary search by a substring length to check lengths from 1 to N left = 1, right = N. While left != right:
+
+    a. L = left + (right - left) / 2
+
+    b. If search(L) != -1 (i.e. there is a duplicate substring), left = L + 1
+
+    c. Otherwise (no duplicate substring), right = L.
+
+2. Return duplicate string of length left - 1, or an empty string if there is no such a string.
+
+RABIN KARP ALGORITHM:
+
+THEORY:
+Subtask two, to check if there is duplicate substring of a given length, is a multiple pattern search. Let's use Rabin-Karp algorithm to solve it in a linear time.
+
+The idea is very simple :
+
+1. Move a sliding window of length L along the string of length N.
+
+2. Check if the string in the sliding window is in the hashset of already seen strings.
+
+      a. If yes, the duplicate substring is right here.
+
+      b. If not, save the string in the sliding window in the hashset.
+
+
+PSEUDO CODE: 
+search(L) :
+
+1. Compute the hash of substring S.substring(0, L) and initiate the hashset of already seen substring with this value.
+
+2. Iterate over the start position of substring : from 1 to N−L.
+
+    a. Compute rolling hash based on the previous hash value.
+
+    b. Return start position if the hash is in the hashset, because that means a duplicate string.
+
+    c. Otherwise, add hash in the hashset.
+
+3. Return -1, that means there is no duplicate string of length L.
+
+*/
+
+
+class Solution {
+  /*
+  Rabin-Karp with polynomial rolling hash.
+      Search a substring of given length
+      that occurs at least 2 times.
+      Return start position if the substring exits and -1 otherwise.
+      */
+  public int search(int L, int a, long modulus, int n, int[] nums) {
+    // compute the hash of string S[:L]
+    long h = 0;
+    for(int i = 0; i < L; ++i) h = (h * a + nums[i]) % modulus;
+
+    // already seen hashes of strings of length L
+    HashSet<Long> seen = new HashSet();
+    seen.add(h);
+    // const value to be used often : a**L % modulus
+    long aL = 1;
+    for (int i = 1; i <= L; ++i) aL = (aL * a) % modulus;
+
+    for(int start = 1; start < n - L + 1; ++start) {
+      // compute rolling hash in O(1) time
+      h = (h * a - nums[start - 1] * aL % modulus + modulus) % modulus;
+      h = (h + nums[start + L - 1]) % modulus;
+      if (seen.contains(h)) return start;
+      seen.add(h);
+    }
+    return -1;
+  }
+
+  public String longestDupSubstring(String S) {
+    int n = S.length();
+    // convert string to array of integers
+    // to implement constant time slice
+    int[] nums = new int[n];
+    for(int i = 0; i < n; ++i) nums[i] = (int)S.charAt(i) - (int)'a';
+    // base value for the rolling hash function
+    int a = 26;
+    // modulus value for the rolling hash function to avoid overflow
+    long modulus = (long)Math.pow(2, 32);
+
+    // binary search, L = repeating string length
+    int left = 1, right = n;
+    int L;
+    while (left <= right) {
+      L = left + (right - left) / 2;
+      if (search(L, a, modulus, n, nums) != -1) left = L + 1;
+      else right = L - 1;
+    }
+
+    int start = search(left - 1, a, modulus, n, nums);
+    return S.substring(start, start + left - 1);
+  }
+}
+
+/*
+Time complexity : Overall O(NlogN). O(logN) for the binary search and O(N) for Rabin-Karp algorithm.
+Space complexity : O(N) to keep the hashset.
+*/
