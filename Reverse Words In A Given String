@@ -8,6 +8,8 @@ Output :"Programming Java love I"
 */
 
 ---------------------------------------------------------------------------------------------------------------------------------------
+// Using inbuilt functions: For not using inbuilt functions see below
+
 class Solution {
   public String reverseWords(String s) {
     // remove leading spaces
@@ -48,6 +50,11 @@ return out + parts[0];
 Explanation of algo without using any inbuilt function:
 
 startIdx: the current position available for insertion.
+
+storeIndex basically stores the start position of next word. The new word that I mean is
+space + new word
+except the first word(where storeIdx = 0). Obviously we need a space between two words.
+
 j: the end of one word(including one trailing space), used for copying word one by one.
 i: the beginning of one word.
 
