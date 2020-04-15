@@ -20,6 +20,23 @@ Input: board = ["XOX", "O O", "XOX"]
 Output: true
 */
 
+/* ALGORITHM:
+
+The necessary conditions for a tic-tac-toe board to be valid.
+
+1. Since players take turns, the number of 'X's must be equal to or one greater than the number of 'O's.
+
+2. A player that wins has to win on the move that they make:
+
+        a. If the first player wins, the number of 'X's is one more than the number of 'O's
+        b. If the second player wins, the number of 'X's is equal to the number of 'O's.
+3. The board can't simultaneously have three 'X's and three 'O's in a row: once one player has won (on their move), there are no subsequent moves.
+
+We'll also use a helper function Gameover(player) which checks if that player has won. This checks the 8 horizontal, vertical, or diagonal lines of the board for if there are three in a row equal to that player.
+
+We just have to check our conditions as stated above.
+
+*/
 
 public boolean validTicTacToe(String[] board) {
     if (board.length == 0) {
