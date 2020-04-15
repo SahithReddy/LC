@@ -12,3 +12,100 @@ Input: (7 -> 2 -> 4 -> 3) + (5 -> 6 -> 4)
 Output: 7 -> 8 -> 0 -> 7
 */
 
+/* Multiple Solutions:
+1. Using 2 Stacks
+2. Recursion
+*/
+
+/* STACK SOLUTION:
+This solution does not modify the given input list, it's just iterating through it in natural order and store it in a stack. While it is true that the purpose of the stack is LIFO and intended to compute in reverse order, it is not explictly mutating the input list in reverse order. Thus, this solution is fine.
+*/
+
+ public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        Stack<ListNode> l1Stack = new Stack<>();
+        
+        while(l1 != null) {
+            l1Stack.push(l1);
+            l1 = l1.next;
+        }
+        
+        Stack<ListNode> l2Stack = new Stack<>();
+        
+        while(l2 != null) {
+            l2Stack.push(l2);
+            l2 = l2.next;
+        }
+        
+        int carry = 0;
+        ListNode dummy = null;
+        
+        while(!l1Stack.isEmpty() || !l2Stack.isEmpty() ||  carry != 0) {
+            int f = l1Stack.isEmpty() ? 0 : l1Stack.pop().val;
+            int s = l2Stack.isEmpty() ? 0 : l2Stack.pop().val;
+            
+            int t = f + s + carry;
+            
+            ListNode newNode = new ListNode(t % 10);
+            
+            newNode.next = dummy;
+            dummy = newNode;
+            carry = t/10;
+            
+        }
+        
+        return dummy;
+        
+    }
+/*
+TC: O(N)
+SC: O(N)
+*/
+-----------------------------------------------------    
+/* RECURSION:
+Java O(n) recursive solution by counting the difference of length.
+
+*/
+
+public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        int size1 = getLength(l1);
+        int size2 = getLength(l2);
+        ListNode head = new ListNode(1);
+        // Make sure l1.length >= l2.length
+        head.next = size1 < size2 ? helper(l2, l1, size2 - size1) : helper(l1, l2, size1 - size2);
+        // Handle the first digit
+        if (head.next.val > 9) {
+            head.next.val = head.next.val % 10;
+            return head;
+        }
+        return head.next;
+    }
+    // get length of the list
+    public int getLength(ListNode l) {
+        int count = 0;
+        while(l != null) {
+            l = l.next;
+            count++;
+        }
+        return count;
+    }
+    // offset is the difference of length between l1 and l2
+    public ListNode helper(ListNode l1, ListNode l2, int offset) {
+        if (l1 == null) return null;
+        // check whether l1 becomes the same length as l2
+        ListNode result = offset == 0 ? new ListNode(l1.val + l2.val) : new ListNode(l1.val);
+        ListNode post = offset == 0 ? helper(l1.next, l2.next, 0) : helper(l1.next, l2, offset - 1);
+        // handle carry 
+        if (post != null && post.val > 9) {
+            result.val += 1;
+            post.val = post.val % 10;
+        }
+        // combine nodes
+        result.next = post;
+        return result;
+    }
+    
+/*
+TC: O(N)
+SC: O(N), because of call stack.
+*/
+
