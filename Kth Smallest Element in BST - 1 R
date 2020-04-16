@@ -1,5 +1,39 @@
+/* QUESTION:
+
+Given a binary search tree, write a function kthSmallest to find the kth smallest element in it.
+
+Note:
+You may assume k is always valid, 1 ≤ k ≤ BST's total elements.
+
+Example 1:
+
+Input: root = [3,1,4,null,2], k = 1
+   3
+  / \
+ 1   4
+  \
+   2
+Output: 1
+Example 2:
+
+Input: root = [5,3,6,2,4,null,null,1], k = 3
+       5
+      / \
+     3   6
+    / \
+   2   4
+  /
+ 1
+Output: 3
+
+*/
+
+/* ALGORITHM:
+The above recursion could be converted into iteration, with the help of stack. This way one could speed up the solution because there is no need to build the entire inorder traversal, and one could stop after the kth element.
+
 // Here it is:
 https://leetcode.com/problems/validate-binary-search-tree/discuss/32112/Learn-one-iterative-inorder-traversal-apply-it-to-multiple-tree-questions-(Java-Solution)
+*/
 
 class Solution {
     public int kthSmallest(TreeNode root, int k) {
@@ -16,14 +50,21 @@ class Solution {
         } return root.val;
     }
 }
+
+/*
 Time complexity : O(H+k), where H is a tree height. This complexity is defined by the stack, which contains at 
 least H+k elements, since before starting to pop out one has to go down to a leaf. 
 This results in O(logN+k) for the balanced tree and O(N+k) for completely unbalanced tree 
 with all the nodes in the left subtree.
 
 Space complexity : O(H+k), the same as for time complexity, O(N+k) in the worst case, and O(logN+k) in the average case.
+*/
 -----------------------------------------------------------------------------------------------------------------
-Recursive: https://www.youtube.com/watch?v=C6r1fDKAW_o
+// Recursive: https://www.youtube.com/watch?v=C6r1fDKAW_o
+/* ALGORITHM:
+It's a very straightforward approach with O(N) time complexity. The idea is to build an inorder traversal of BST which is an array sorted in the ascending order. Now the answer is the k - 1th element of this array.
+
+*/
 
 class Solution {
     public int kthSmallest(TreeNode root, int k) {
@@ -45,7 +86,9 @@ class Solution {
     
 }
 
-Time: O(n);
-Space: O(n);
+/*
+Time: O(n); to build a traversal.
+Space: O(n); to keep an inorder traversal.
+*/
 
 // Look at the follow up question answer. Whenever you free.
