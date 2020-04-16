@@ -1,14 +1,30 @@
+/* QUESTION:
+Find the kth largest element in an unsorted array. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Example 1:
+
+Input: [3,2,1,5,6,4] and k = 2
+Output: 5
+Example 2:
+
+Input: [3,2,3,1,2,4,5,5,6] and k = 4
+Output: 4
+Note:
+You may assume k is always valid, 1 ≤ k ≤ array's length.
+
+*/
 // https://leetcode.com/problems/kth-largest-element-in-an-array/solution/
 
-// Brute Force
+/* Brute Force
 Naive Solution:
 Approach 0: Sort
 The naive solution would be to sort an array first and then return kth element from the end, 
-something like sorted(nums)[-k] on Python. That would be an algorithm of \mathcal{O}(N \log N)O(NlogN) t
-ime complexity and \mathcal{O}(1)O(1) space complexity. This time complexity is not really exciting so let's 
+something like sorted(nums)[-k] on Python. That would be an algorithm of O(NlogN) t
+ime complexity and O(1) space complexity. This time complexity is not really exciting so let's 
 check how to improve it by using some additional space.
 
-Time : NlogN, Space:O(n)
+Time : NlogN, Space:O(1)
+*/
 --------------------------------------------------------------------------------------
 // Min Heap Solution:
 class Solution {
@@ -31,6 +47,45 @@ class Solution {
 Time: NlogK -- log is for insert operation in a min heap and doing it N times
 Space: O(K)
 --------------------------------------------------------------------------------------
-// There is one better one with quick sort but I didn't do it because of time crunch. Do it later.
+/* Quick Select:
+Simplifying the indices, everytime during partition we're partitioning by pivot which is nums[hi].
+After partitioning, if the pivot's correct location i turns out to be the index we're looking for, then we return it, else we search in appropriate left / right partition.
+*/
+
+    int findKthLargest(int[] nums, int k) {
+        // the kth largest element's final position would be `nums.length-k`
+        return quickSelect(nums, 0, nums.length-1, nums.length-k);
+    }
+
+    //after partition only the pivot element moves into it's correct position
+    private int quickSelect(int[] nums, int lo, int hi, int k /* index we're looking for */) {
+        int i=lo, j = hi, pivot = nums[hi];
+
+        //partition numbers into either side of pivot
+        while(i < j) {
+            if (nums[i++] > pivot) swap(nums, --i, --j);
+        }
+
+        swap(nums, i, hi);
+
+        //how many elements were greater than pivot
+        if(i == k)
+            return nums[i];
+        else if(i > k)
+            return quickSelect(nums, lo, i-1, k);
+        else
+            return quickSelect(nums, i+1, hi, k);
+    }
+
+    void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+/*
+Time complexity : O(N) in the average case, {O}(N^2)in the worst case.
+Space complexity : O(1).
+
+*/
 
 
