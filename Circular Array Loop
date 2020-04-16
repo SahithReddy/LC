@@ -39,10 +39,13 @@ public class Solution {
      * Moves the pointer 'i' ahead one iteration.
      */
     private int advance(int[] nums, int i) {
-        i += nums[i];
-        if (i < 0) i += len;
-        else if (i > len - 1) i %= len;
-        return i;
+    // advance by i pointer value
+    i += nums[i];
+    i %= len;
+    if (i < 0) {
+        i += len;
+    }
+    return i;
     }
     
     public boolean circularArrayLoop(int[] nums) {
