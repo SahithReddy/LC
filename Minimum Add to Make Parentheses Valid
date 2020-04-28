@@ -7,6 +7,51 @@ It is the empty string, or
 It can be written as AB (A concatenated with B), where A and B are valid strings, or
 It can be written as (A), where A is a valid string.
 Given a parentheses string, return the minimum number of parentheses we must add to make the resulting string valid.
+*/
+
+/* ALGORITHM:
+Keep track of the number of unmatched open and closed parentheses.
+
+INTUITON:
+To make a string valid,
+we can add some ( on the left,
+and add some ) on the right.
+We need to find the number of each.
+
+EXPLANATION:
+unmatchedClose records the number of ( we need to add on the left of S.
+unmatchedOpen records the number of ) we need to add on the right of S,which equals to the number of current opened parentheses.
 
 
+Loop char c in the string S:
+if (c == '('), we increment unmatchedOpen,
+if (c == ')'), we decrement unmatchedOpen.
+When unmatchedOpen is already 0, we increment unmatchedClose
+Return unmatchedClose + unmatchedOpen in the end
+*/
+
+class Solution {
+    public int minAddToMakeValid(String S) {
+	int unmatchedOpen = 0;
+	int unmatchedClose = 0;
+    
+	for (char c : S.toCharArray()) {
+		if (c == '(') {
+       unmatchedOpen++;
+        } else if (unmatchedOpen > 0){
+			unmatchedOpen--;
+        } else {
+		    // This is a closed paren and there 
+			// isn't an open one to balance it out
+            unmatchedClose++;
+        }
+	}
+        
+    return unmatchedClose + unmatchedOpen;
+}
+}
+
+/*
+Time O(N)
+Space O(1)
 */
