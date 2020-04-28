@@ -3,7 +3,7 @@
 // Explanation: https://leetcode.com/problems/design-hashmap/solution/
 
 
-/*QUESTIONS TO ASK BEFORE IMPLEMENTING:
+/* QUESTIONS TO ASK BEFORE IMPLEMENTING:
 SHOULD I ASSUME: 
 All keys and values will be in the range of [0, 1000000].
 The number of operations will be in the range of [1, 10000].
@@ -18,8 +18,8 @@ Can we assume this fits memory?
 
 */
 
-// THEORY:
-/*The most distinguish characteristic about hashmap is that it provides a fast access to a value that is associated with a given key.
+/* THEORY:
+The most distinguish characteristic about hashmap is that it provides a fast access to a value that is associated with a given key.
 
 There are two main issues that we should tackle, in order to design an efficient hashmap data structure: 1). hash function design and 2). collision handling.
 
@@ -34,8 +34,7 @@ we call 'collision'. Since the collision is inevitable, it is important that we 
 Depending on how we deal with each of the above two issues, we could have various implementation of hashmap data structure.
 */
 
-// ALGORITHM:
-/*
+/* ALGORITHM:
 For each of the methods in hashmap data structure, namely get(), put() and remove(), 
 it all boils down to the method to locate the value that is stored in hashmap, given the key.
 
@@ -45,8 +44,8 @@ For a given key value, first we apply the hash function to generate a hash key, 
 Now that we found the bucket, we simply iterate through the bucket to check if the desired <key, value> pair does exist.
 */
 
-// IMPLEMENTATION: 
-/* Below is Hash-Table Implementation - Using Array of LinkedList
+/* IMPLEMENTATION:  
+Below is Hash-Table Implementation - Using Array of LinkedList
 1. The general implementation of HashMap uses bucket which is basically a chain of linked lists and each node containing <key, value> pair.
 2. So if we have duplicate nodes, that doesn't matter - it will still replicate each key with it's value in linked list node.
 3. When we insert the pair (10, 20) and then (10, 30), there is technically no collision involved. We are just replacing 
@@ -56,10 +55,20 @@ the old value with the new value for a given key 10, since in both cases, 10 is 
 distinguish between those keys. Chaining collision resolution is one of those techniques which is used for this.
 */
 
-
 // CODE:
 class MyHashMap
 {
+	private static class ListNode
+	{
+		int key, val;
+		ListNode next;
+
+		ListNode(int key, int val)
+		{
+			this.key = key;
+			this.val = val;
+		}
+	}
 	ListNode[] nodes = new ListNode[10000];
 	
 	// ORDER: getIndex --> findElement --> put --> get --> remove
@@ -92,11 +101,13 @@ class MyHashMap
             prev.next = prev.next.next;
         }
 	}
-
+	
+	/* Generating the hashcode */
 	private int getIndex(int key){
         return Integer.hashCode(key)% nodes.length;
-    }
-
+    	}
+	
+	/* Find element with that hash*/
 	private ListNode findElement(int index, int key)
 	{
 		if(nodes[index]==null){
@@ -109,18 +120,6 @@ class MyHashMap
             prev = prev.next;
         }
         return prev;
-	}
-
-	private static class ListNode
-	{
-		int key, val;
-		ListNode next;
-
-		ListNode(int key, int val)
-		{
-			this.key = key;
-			this.val = val;
-		}
 	}
 }
 
