@@ -14,7 +14,7 @@ class Solution {
     }
 }
 
-// In case of overflow, approach 4 can be optimized as follow:
+// In case of overflow, the above approach can be optimized as follow:
 
 int missingNumber(vector<int>& nums) {
     int result = 0;
