@@ -11,12 +11,10 @@ Example 2:
 Input: [[1,4],[4,5]]
 Output: [[1,5]]
 Explanation: Intervals [1,4] and [4,5] are considered overlapping.
-
-
 */
 
 
-// Sorting in reverse order
+// Sorting in reverse order,that is based on end times
 
 class Solution {
     public int[][] merge(int[][] intervals) {
