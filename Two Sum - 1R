@@ -1,5 +1,5 @@
 // Without illegal argument exceptiomn bjt it is creating object twice 'new'
-
+// Follow Solutions in the order mentioned
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         int[] result= new int[2];
@@ -13,6 +13,21 @@ class Solution {
     }
 }
 T : O(N), S: O(N)
+
+---------------------------------------------------------------------------------------------------------------------
+    public int[] twoSum(int[] nums, int target) {
+    Map<Integer,Integer> map = new HashMap<>();
+        for(int i=0; i<nums.length; i++){
+
+            int complement = target - nums[i];
+            if(map.containsKey(complement){
+                return new int [] {map.get(complement),i};
+            }
+            else map.put(nums[i],i);
+        }
+    throw new IllegalArgumentException("No two sum solution");
+    }
+    T : O(N), S: O(N)
 ------------------------------------------------------------------------------------------------------------------------
 
 class Solution {
@@ -26,20 +41,6 @@ class Solution {
                 return result;
             }
             else tooSum.put(nums[i],i);
-        }
-    throw new IllegalArgumentException("No two sum solution");
-    }
-    T : O(N), S: O(N)
-   ---------------------------------------------------------------------------------------------------------------------
-    public int[] twoSum(int[] nums, int target) {
-    Map<Integer,Integer> map = new HashMap<>();
-        for(int i=0; i<nums.length; i++){
-
-            int complement = target - nums[i];
-            if(map.containsKey(complement){
-                return new int [] {map.get(complement),i};
-            }
-            else map.put(nums[i],i);
         }
     throw new IllegalArgumentException("No two sum solution");
     }
