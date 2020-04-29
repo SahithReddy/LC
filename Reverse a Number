@@ -6,7 +6,7 @@ Input : num = 876
 Output : 678
 */
 
-/* ITERATIVE WAY
+/* ITERATIVE WAY -- OVERFLOW HANDLING CODE IS BELOW - ASK IF WE NEED TO HANDLE IT.
 Algorithm:
 
 Input:  num
@@ -36,6 +36,8 @@ num = num/10 = 0
 
 Note that this below program doesn’t consider leading zeroes. For example, for 100 program will print 1
 */
+
+
 class GFG 
 { 
     /* Iterative function to reverse 
@@ -147,6 +149,24 @@ WARNING OVERFLOWED!!!
 Reverse of no. is 0
 */
 
+// SHORTER VERSION OF ABOVE CODE
+
+public int reverse(int x)
+{
+    int result = 0;
+
+    while (x != 0)
+    {
+        int tail = x % 10;
+        int newResult = result * 10 + tail;
+        if ((newResult - tail) / 10 != result)
+        { return 0; }
+        result = newResult;
+        x = x / 10;
+    }
+
+    return result;
+}
 
 
 
