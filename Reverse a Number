@@ -1,0 +1,154 @@
+/*
+Input : num = 12345
+Output : 54321
+
+Input : num = 876
+Output : 678
+*/
+
+/* ITERATIVE WAY
+Algorithm:
+
+Input:  num
+(1) Initialize rev_num = 0
+(2) Loop while num > 0
+     (a) Multiply rev_num by 10 and add remainder of num  
+          divide by 10 to rev_num
+               rev_num = rev_num*10 + num%10;
+     (b) Divide num by 10
+(3) Return rev_num
+
+Example:
+num = 4562
+rev_num = 0
+
+rev_num = rev_num *10 + num%10 = 2
+num = num/10 = 456
+
+rev_num = rev_num *10 + num%10 = 20 + 6 = 26
+num = num/10 = 45
+
+rev_num = rev_num *10 + num%10 = 260 + 5 = 265
+num = num/10 = 4
+
+rev_num = rev_num *10 + num%10 = 265 + 4 = 2654
+num = num/10 = 0
+
+Note that this below program doesn’t consider leading zeroes. For example, for 100 program will print 1
+*/
+class GFG 
+{ 
+    /* Iterative function to reverse 
+    digits of num*/
+    static int reversDigits(int num) 
+    { 
+        int rev_num = 0; 
+        while(num > 0) 
+        { 
+            rev_num = rev_num * 10 + num % 10; 
+            num = num / 10; 
+        } 
+        return rev_num; 
+    } 
+      
+    // Driver code 
+    public static void main (String[] args)  
+    { 
+        int num = 4562; 
+        System.out.println("Reverse of no. is " 
+                           + reversDigits(num)); 
+    } 
+} 
+
+//O(Log(n)) where n is the input number.
+-----------------------
+// RECURSIVEE
+class GFG 
+{ 
+static int rev_num = 0; 
+static int base_pos = 1; 
+static int reversDigits(int num) 
+{ 
+    if(num > 0) 
+    { 
+        reversDigits(num / 10); 
+        rev_num += (num % 10) * base_pos; 
+        base_pos *= 10; 
+    } 
+return rev_num; 
+} 
+  
+// Driver Code 
+public static void main(String[] args) 
+{ 
+    int num = 4562; 
+    System.out.println(reversDigits(num)); 
+} 
+} 
+
+// O(Log(n)) where n is the input number.
+------------------
+/*
+How to handle overflow?
+The idea is to store previous value of the sum can be stored in a variable which can be checked every time to see if the reverse overflowed or not.
+
+*/
+
+class ReverseDigits 
+{ 
+    /* Iterative function to reverse digits of num*/
+    static int reversDigits(int num) 
+    { 
+        // Handling negative numbers 
+        boolean negativeFlag = false; 
+        if (num < 0) 
+        { 
+            negativeFlag = true; 
+            num = -num ; 
+        } 
+       
+        int prev_rev_num = 0, rev_num = 0; 
+        while (num != 0) 
+        { 
+            int curr_digit = num%10; 
+       
+            rev_num = (rev_num*10) + curr_digit; 
+       
+            // checking if the reverse overflowed or not. 
+            // The values of (rev_num - curr_digit)/10 and 
+            // prev_rev_num must be same if there was no 
+            // problem. 
+            if ((rev_num - curr_digit)/10 != prev_rev_num) 
+            { 
+                System.out.println("WARNING OVERFLOWED!!!"); 
+                return 0; 
+            } 
+       
+            prev_rev_num = rev_num; 
+            num = num/10; 
+        } 
+       
+        return (negativeFlag == true)? -rev_num : rev_num; 
+    } 
+      
+    public static void main (String[] args)  
+    { 
+        int num = 12345; 
+        System.out.println("Reverse of no. is " + reversDigits(num)); 
+       
+        num = 1000000045; 
+        System.out.println("Reverse of no. is " + reversDigits(num)); 
+    } 
+}
+
+/* RESULT:
+Reverse of no. is 54321
+WARNING OVERFLOWED!!!
+Reverse of no. is 0
+*/
+
+
+
+
+
+
