@@ -2,10 +2,17 @@
 
 // One more : https://www.youtube.com/watch?v=6N6QQpoU7H4
 
-
 // VERY INTELLIGENT/CLEVER/SHORT SOLUTION
 // Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/  (has a picture)
+// Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
 
+/* ALGORITHM:
+
+We can use heap to solve this problem. In Java, the PriorityQueue class is a priority heap. We can use two heaps to store the lower half and the higher half of the data stream. The size of the two heaps differs at most 1.
+
+First of all, it seems that the best time complexity we can get for this problem is O(log(n)) of add() and O(1) of getMedian(). This data structure seems highly likely to be a tree.
+*/
+------------------------------
 class MedianFinder {
 
     /** initialize your data structure here. */
@@ -37,10 +44,8 @@ class MedianFinder {
         else return min.peek();
     }
 }
-
-// Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
-
-/*
+--------------------------------
+/* COMPLEXITY:
 At worst, there are three heap insertions and two heap deletions from the top. Each of these takes about O(logn) time.
 Finding the mean takes constant O(1)O(1) time since the tops of heaps are directly accessible. So O(logN).
 
