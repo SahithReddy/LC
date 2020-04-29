@@ -1,0 +1,32 @@
+/* QUESTION:
+list = {"stack", "overflow", "stack", 
+        "yahoo", "google", "msn", 
+        "MSN", "stack", "overflow", "user" }
+Result should be:
+
+stack = 3
+overflow = 2
+google = 1
+msn = 2
+yahoo =1
+user = 1
+
+*/
+----------------
+
+List<String> strings = new ArrayList<String>();
+strings.put("stack", "overflow", "stack", "yahoo", "google", "msn", "MSN", "stack", "overflow", "user");
+
+Map<String, Integer> counts = new HashMap<String, Integer>();
+
+for (String str : strings) {
+    if (counts.containsKey(str)) {
+        counts.put(str, counts.get(str) + 1);
+    } else {
+        counts.put(str, 1);
+    }
+}
+
+for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+    System.out.println(entry.getKey() + " = " + entry.getValue());
+}
