@@ -1,3 +1,16 @@
+/*
+Given a non-empty string s, you may delete at most one character. Judge whether you can make it a palindrome.
+
+Example 1:
+Input: "aba"
+Output: True
+Example 2:
+Input: "abca"
+Output: True
+Explanation: You could delete the character 'c'.
+
+*/
+
 class Solution {
     public boolean validPalindrome(String s) {
         int b=0; 
@@ -22,6 +35,6 @@ class Solution {
     }
 }
 
-Time Complexity: O(N)O(N) where NN is the length of the string. Each of two checks of whether some substring is a palindrome is O(N)O(N).
+// Time Complexity: O(N)O(N) where NN is the length of the string. Each of two checks of whether some substring is a palindrome is O(N)O(N).
 
-Space Complexity: O(1)O(1) additional complexity. Only pointers were stored in memory.
+// Space Complexity: O(1)O(1) additional complexity. Only pointers were stored in memory.
