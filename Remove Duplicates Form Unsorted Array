@@ -1,25 +1,57 @@
-GFG - https://www.geeksforgeeks.org/remove-duplicates-from-unsorted-array-using-map-data-structure/
+/*
+Given an unsorted array of integers, Print the array after removing the duplicate elements from it. We need to print distinct array elements according to their first occurrence.
 
+Examples:
+
+Input : arr[] = { 1, 2, 5, 1, 7, 2, 4, 2}
+Output : 1 2 5 7 4
+Explanation : {1, 2} appear more than one time.
 We need to print distinct array elements according to their first occurrence.
+*/
 
-static void removeDups(int[] arr, int n)  
-    { 
-  
-        // Hash map which will store the 
-        // elements which has appeared previously. 
-        HashMap<Integer,  
-                Boolean> mp = new HashMap<>(); 
-  
-        for (int i = 0; i < n; ++i) 
-        { 
-            // Print the element if it is not 
-            // there in the hash map 
-            if (mp.get(arr[i]) == null) 
-                System.out.print(arr[i] + " "); 
-  
-            // Insert the element in the hash map 
-            mp.put(arr[i], true); 
-        } 
-    } 
-    
-    Time Complexity – O(N)
+/* ALGORITHM:
+Take a hash map, in which will store all the elements which has appeared before.
+Traverse the array.
+Check if the element is present in the hash map.
+If yes, continue traversing the array.
+Else Print the element.
+*/
+
+
+import java.util.HashMap; 
+
+class GFG 
+{ 
+	static void removeDups(int[] arr, int n) 
+	{ 
+
+		// Hash map which will store the 
+		// elements which has appeared previously. 
+		HashMap<Integer, 
+				Boolean> mp = new HashMap<>(); 
+
+		for (int i = 0; i < n; ++i) 
+		{ 
+
+			// Print the element if it is not 
+			// there in the hash map 
+			if (mp.get(arr[i]) == null) 
+				System.out.print(arr[i] + " "); 
+
+			// Insert the element in the hash map 
+			mp.put(arr[i], true); 
+		} 
+	} 
+
+	// Driver Code 
+	public static void main(String[] args) 
+	{ 
+		int[] arr = { 1, 2, 5, 1, 7, 2, 4, 2 }; 
+		int n = arr.length; 
+		removeDups(arr, n); 
+	} 
+} 
+
+
+
+Time Complexity – O(N)
