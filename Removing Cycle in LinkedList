@@ -1,0 +1,106 @@
+/*
+Write a function detectAndRemoveLoop() that checks whether a given Linked List contains loop and if loop is present then removes the loop and returns true. If the list doesn’t contain loop then it returns false. Below diagram shows a linked list with a loop. detectAndRemoveLoop() must change the below list to 1->2->3->4->5->NULL.
+*/
+/* ALGORITHM: SAME AS HESAD OF LINKEDLIST
+Define two pointers slow and fast. Both start at head node, fast is twice as fast as slow. If it reaches the end it means there is no cycle, otherwise eventually it will eventually catch up to slow pointer somewhere in the cycle.
+
+Let the distance from the first node to the the node where cycle begins be A, and let say the slow pointer travels travels A+B. The fast pointer must travel 2A+2B to catch up. The cycle size is N. Full cycle is also how much more fast pointer has traveled than slow pointer at meeting point.
+
+A + B + kN = 2A + 2B
+kN = A +B
+
+From our calculation slow pointer traveled exactly full cycle when it meets fast pointer, and since originally it travled A before starting on a cycle, it must travel A to reach the point where cycle begins! We can start another slow pointer at head node, and move both pointers until they meet at the beginning of a cycle.
+
+Can they meet before also? No because slow pointer enters the cycle first time after m steps.
+
+https://leetcode.com/problems/linked-list-cycle-ii/discuss/44774/Java-O(1)-space-solution-with-detailed-explanation.
+*/
+
+// Java program to detect and remove loop in linked list 
+
+class LinkedList { 
+
+	static Node head; 
+
+	static class Node { 
+
+		int data; 
+		Node next; 
+
+		Node(int d) 
+		{ 
+			data = d; 
+			next = null; 
+		} 
+	} 
+
+	// Function that detects loop in the list 
+	void detectAndRemoveLoop(Node node) 
+	{ 
+
+		// If list is empty or has only one node 
+		// without loop 
+		if (node == null || node.next == null) 
+			return; 
+
+		Node slow = node, fast = node; 
+
+		// Move slow and fast 1 and 2 steps 
+		// ahead respectively. 
+		slow = slow.next; 
+		fast = fast.next.next; 
+
+		// Search for loop using slow and fast pointers 
+		while (fast != null && fast.next != null) { 
+			if (slow == fast) 
+				break; 
+
+			slow = slow.next; 
+			fast = fast.next.next; 
+		} 
+
+		/* If loop exists */
+		if (slow == fast) { 
+			slow = node; 
+			while (slow.next != fast.next) { 
+				slow = slow.next; 
+				fast = fast.next; 
+			} 
+
+			/* since fast->next is the looping point */
+			fast.next = null; /* remove loop */
+		} 
+	} 
+
+	// Function to print the linked list 
+	void printList(Node node) 
+	{ 
+		while (node != null) { 
+			System.out.print(node.data + " "); 
+			node = node.next; 
+		} 
+	} 
+
+	// Driver program to test above functions 
+	public static void main(String[] args) 
+	{ 
+		LinkedList list = new LinkedList(); 
+		list.head = new Node(50); 
+		list.head.next = new Node(20); 
+		list.head.next.next = new Node(15); 
+		list.head.next.next.next = new Node(4); 
+		list.head.next.next.next.next = new Node(10); 
+
+		// Creating a loop for testing 
+		head.next.next.next.next.next = head.next.next; 
+		list.detectAndRemoveLoop(head); 
+		System.out.println("Linked List after removing loop : "); 
+		list.printList(head); 
+	} 
+} 
+
+/*
+TC: O(N)
+SC: O(1)
+*/
+
