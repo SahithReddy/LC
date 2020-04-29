@@ -70,3 +70,8 @@ public class Solution {
                 return null;
             }
         }
+
+/*
+TC: O(N)
+SC: O(1)
+*/
