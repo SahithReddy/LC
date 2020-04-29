@@ -1,0 +1,92 @@
+/*QUESTION:
+Numbers can be regarded as product of its factors. For example,
+
+8 = 2 x 2 x 2;
+  = 2 x 4.
+Write a function that takes an integer n and return all possible combinations of its factors.
+
+Note:
+
+You may assume that n is always positive.
+Factors should be greater than 1 and less than n.
+Example 1:
+
+Input: 1
+Output: []
+Example 2:
+
+Input: 37
+Output:[]
+Example 3:
+
+Input: 12
+Output:
+[
+  [2, 6],
+  [2, 2, 3],
+  [3, 4]
+]
+Example 4:
+
+Input: 32
+Output:
+[
+  [2, 16],
+  [2, 2, 8],
+  [2, 2, 2, 4],
+  [2, 2, 2, 2, 2],
+  [2, 4, 4],
+  [4, 8]
+]
+*/
+
+/* ALGORITHM:
+The upper bound for the factors of n is (int)sqrt(n), and when you find one factor of n, then put the factor and its corresponding factor to a temp list, and add the temp list to the result list. Then we remove the larger factor from the temp list, and recursively do the larger factor from the smaller factor to upper bound for the same procedure.
+
+For example, n = 16. Let the variable i be from 2 to 4, when i = 2, then i is one factor of 16, and its corresponding factor is 8, so we add 2 and 8 to a temp list, then add the temp list to the result list. And remove 8 from the temp list, and recursively do 8 from 2 to 2 for the same procedure.
+
+The result should be:
+[2, 8]
+[2, 2, 4]
+[2, 2, 2, 2]
+[4, 4]
+
+*/
+
+public List<List<Integer>> getFactors(int n) {
+    List<List<Integer>> res = new LinkedList<>();
+    backtrack(2, n, new LinkedList<>(), res);
+    return res;
+}
+
+void backtrack(int start, int n, List<Integer> list, List<List<Integer>> res) {
+    for(int i = start; i * i <= n; i++) {
+        if(n % i == 0) {
+            list.add(i);
+            list.add(n / i);
+            res.add(new LinkedList<>(list));
+            list.remove(list.size() - 1);
+            backtrack(i, n / i, list, res);
+            list.remove(list.size() - 1);
+        }
+    }
+}
+
+
+
+/*
+Time complexity: O(NlogN). The explns are in the following:
+
+formula 1: time = (the number of nodes in the recursive tree) * (the time each node takes up)
+formula 2: the number of nodes in the recursive tree  = 
+                 (the most number of branches among each node) ^ (the height of the tree)
+For the number of branches, it has at most N (from 2 to n) and in terms of the height of the tree, it should be logN since when the given number n is only decomposed by 2 will lead to the solution which has the longest length (pls take 32 as example in the description page). Thus, the number of nodes = (N)^(logN). And since each node only takes up O(1) time, therefore, the total time should be O(N^(logN))
+
+Space complexity: O(logN)
+Things will cost EXTRA space:
+1. the number of call stacks invoked = the height of the recursive tree = logN
+2. the item used to store the current solution which takes up logN at most (again, when the input n is only decomposed by 2)
+
+Alright, hopefully, my explns help :) and if you find any flaws in my explns above, pls point that out and I will appreciate so much.
+
+*/
