@@ -1,0 +1,45 @@
+/* QUESTION:
+Count the number of prime numbers less than a non-negative number, n.
+
+Example:
+
+Input: 10
+Output: 4
+Explanation: There are 4 prime numbers less than 10, they are 2, 3, 5, 7.
+
+*/
+/* ALGO:
+A prime number is a natural number that has exactly two distinct natural number divisors: the number 1 and itself.
+
+To find all the prime numbers less than or equal to a given integer n by Eratosthenes' method:
+
+Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
+Initially, let p equal 2, the smallest prime number.
+Enumerate the multiples of p by counting in increments of p from 2p to n, and mark them in the list (these will be 2p, 3p, 4p, ...; the p itself should not be marked).
+Find the first number greater than p in the list that is not marked. If there was no such number, stop. Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
+When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
+The main idea here is that every value given to p will be prime, because if it were composite it would be marked as a multiple of some other, smaller prime. Note that some of the numbers may be marked more than once (e.g., 15 will be marked both for 3 and 5).
+
+
+GIF: https://leetcode.com/static/images/solutions/Sieve_of_Eratosthenes_animation.gif
+*/
+
+public class Solution {
+    public int countPrimes(int n) {
+        if(n <=1 ) return 0;
+        boolean[] notPrime = new boolean[n];
+        int count = 0;
+        for (int i = 2; i < n; i++) { // O(n)
+            if (notPrime[i] == false) {
+                count++;
+                for (int j = 2; i*j < n; j++) { // O(log(log(n)))
+                    notPrime[i*j] = true;
+                }
+            }
+        }
+        
+        return count;
+    }
+}
+
+// Time Complexity O(log(log(n))
