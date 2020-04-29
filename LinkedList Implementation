@@ -1,0 +1,29 @@
+/*
+https://www.geeksforgeeks.org/implementing-a-linked-list-in-java-using-class/
+
+https://letstalkalgorithms.com/linkedlist-implementation-java/
+
+*/
+/*
+Like arrays, Linked List is a linear data structure. Unlike arrays, linked list elements are not stored at the contiguous location, the elements are linked using pointers as shown below.
+In Java, LinkedList can be represented as a class and a Node as a separate class. The LinkedList class contains a reference of Node class type.
+
+*/
+class LinkedList { 
+	Node head; // head of list 
+
+	/* Linked list Node*/
+	class Node { 
+		int data; 
+		Node next; 
+
+		// Constructor to create a new node 
+		// Next is by default initialized 
+		// as null 
+		Node(int d) { data = d; } 
+	} 
+}
+
+/*
+NOT WRITTEN OVER HERE BUT COMPLETE THIS. FOR NOW REFER GFG
+*/
