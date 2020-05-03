@@ -13,21 +13,18 @@ Minimize the total number of operations.
 */
 
 
-
 class Solution {
     public void moveZeroes(int[] nums) {
        int count = 0;
         int l = nums.length;
         for(int i =0; i<l; i++){
-            if(nums[i]!=0){
-                if(count>0){
-                    nums[i-count]= nums[i];
-                }
+            if(nums[i]!=0){ // if this digit is not a zero
+                nums[i-count]= nums[i]; // Move non zero items to the left
             }
-            else count++;
+            else count++; // else increasing the count of zeros
         }
-        if(count>0){
-           for(int i=l-1; i>=l-count; i--){
+        if(count>0){ // only if there are zeros
+           for(int i=l-1; i>=l-count; i--){ // filling zeros(number equal to count) at the end of the array
                nums[i]=0;
            } 
         } 
