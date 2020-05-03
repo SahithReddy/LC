@@ -1,0 +1,59 @@
+/*
+Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum equals to k.
+
+Example 1:
+Input:nums = [1,1,1], k = 2
+Output: 2
+Note:
+The length of the array is in range [1, 20,000].
+The range of numbers in the array is [-1000, 1000] and the range of the integer k is [-1e7, 1e7].
+
+*/
+
+/* BASIC NAIVE O(N^2) and Space O(1) Approach - Below has O(N) and Space O(N) approach
+
+We can choose a particular startstart point and while iterating over the endend points, we can add the element corresponding to the endend point to the sum formed till now. Whenver the sumsum equals the required kk value, we can update the countcount value. We do so while iterating over all the endend indices possible for every startstart index. Whenver, we update the startstart index, we need to reset the sumsum value to 0.
+
+*/
+
+public class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        for (int start = 0; start < nums.length; start++) {
+            int sum=0;
+            for (int end = start; end < nums.length; end++) {
+                sum+=nums[end];
+                if (sum == k)
+                    count++;
+            }
+        }
+        return count;
+    }
+}
+
+/*
+Time complexity : O(n^2). We need to consider every subarray possible.
+
+Space complexity : O(1). Constant space is used.
+*/
+---------------------------------------------------------
+
+/*
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
