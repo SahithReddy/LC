@@ -56,7 +56,8 @@ The if(i >= k - 1) is just to skip the first few elements that is less than k. F
 
 */
 
-public int[] maxSlidingWindow(int[] a, int k) {		
+class Solution {
+    public int[] maxSlidingWindow(int[] a, int k) {		
 		if (a == null || k <= 0) {
 			return new int[0];
 		}
@@ -66,8 +67,8 @@ public int[] maxSlidingWindow(int[] a, int k) {
 		// store index
 		Deque<Integer> q = new ArrayDeque<>();
 		for (int i = 0; i < a.length; i++) {
-			// remove numbers out of range k
-			while (!q.isEmpty() && q.peek() < i - k + 1) {
+			// remove numbers out of range k, we only pop out one out of range element in one round at most. (one round we only accept one element, so we pop at most one element out
+			if (!q.isEmpty() && q.peek() < i - k + 1) {
 				q.poll();
 			}
 			// remove smaller numbers in k range as they are useless
@@ -82,6 +83,7 @@ public int[] maxSlidingWindow(int[] a, int k) {
 		}
 		return r;
 	}
+}
 
 /*
 Time complexity : O(N), since each element is processed exactly twice - it's index added and then removed from the deque.
