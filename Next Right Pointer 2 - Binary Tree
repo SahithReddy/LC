@@ -66,6 +66,7 @@ class Solution {
     
     Node prev, leftmost;
     
+    // support method
     public void processChild(Node childNode) {
         
         if (childNode != null) {
@@ -87,7 +88,8 @@ class Solution {
             this.prev = childNode; 
         }
     }
-        
+    
+    // Main Method   
     public Node connect(Node root) {
         
         if (root == null) {
