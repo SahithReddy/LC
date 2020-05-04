@@ -1,5 +1,16 @@
 // https://leetcode.com/problems/moving-average-from-data-stream/discuss/81491/Java-O(1)-time-solution.  - First Comment
 
+/* QUESTION: 
+Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
+
+Example:
+
+MovingAverage m = new MovingAverage(3);
+m.next(1) = 1
+m.next(10) = (1 + 10) / 2
+m.next(3) = (1 + 10 + 3) / 3
+m.next(5) = (10 + 3 + 5) / 3
+*/
 
 class MovingAverage {
     Queue<Integer> q;
@@ -22,7 +33,8 @@ class MovingAverage {
     }
 }
 
-Time Complexity: O(N) where N is the size of the moving window, since we need to retrieve N 
-elements from the queue at each invocation of next(val) function.
+/*
+Time Complexity: O(1), as we can see that there is no loop in the next(val) function.
 Space Complexity: O(M), where M is the length of the queue which would grow at each invocation 
 of the next(val) function.
+*/
