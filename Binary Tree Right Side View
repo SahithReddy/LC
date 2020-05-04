@@ -1,0 +1,117 @@
+/* QUESTION:
+Given a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
+
+Example:
+
+Input: [1,2,3,null,5,null,4]
+Output: [1, 3, 4]
+Explanation:
+
+   1            <---
+ /   \
+2     3         <---
+ \     \
+  5     4       <---
+
+*/
+
+
+/* ALGORITHM: DFS
+The core idea of this algorithm:
+
+1.Each depth of the tree only select one node.
+2. View depth is current size of result list.
+
+(1) the traverse of the tree is NOT standard pre-order traverse. It checks the RIGHT node first and then the LEFT. for each level, the first appear number is the rightmost of current level.
+(2) the line to check currDepth == result.size() makes sure the first element of that level will be added to the result list
+(3) if reverse the visit order, that is first LEFT and then RIGHT, it will return the left view of the tree.
+
+
+This solution is similar to recursive level order traversal solution
+The key idea is just to modify the above solution in a way that visit the right first, then for each level, the first appear number is the rightmost of current level.
+*/
+
+public class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        List<Integer> result = new ArrayList<Integer>();
+        rightView(root, result, 0);
+        return result;
+    }
+    
+    public void rightView(TreeNode curr, List<Integer> result, int currDepth){
+        if(curr == null){
+            return;
+        }
+        if(currDepth == result.size()){
+            result.add(curr.val);
+        }
+        
+        rightView(curr.right, result, currDepth + 1);
+        rightView(curr.left, result, currDepth + 1);
+        
+    }
+}
+
+/*
+It should be O(n) time cost where n is the total node of the tree.
+Space: (O(height(tree)))
+*/
+-----------------------------------------------
+/* BFS 
+
+BFS way is much more intuitive. Do the level order traversal, and add the last node on every layer.
+
+*/
+
+class Solution {
+    public List<Integer> rightSideView(TreeNode root) {
+        if (root == null)
+            return new ArrayList();
+        Queue<TreeNode> queue = new LinkedList();
+        queue.offer(root);
+        List<Integer> res = new ArrayList();
+        
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            
+            while (size -- > 0){
+                TreeNode cur = queue.poll();
+                if (size == 0)
+                    // last element in current level
+                    res.add(cur.val);
+                
+                if (cur.left != null)
+                    queue.offer(cur.left);
+                if (cur.right != null)
+                    queue.offer(cur.right);
+            }
+        }
+        
+        return res;
+    }
+}
+
+/*
+Time: O(N), Space: O(N)
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
