@@ -49,6 +49,7 @@ Notice each digit has it's own entry in the array.
 */
 
 // Java O(n), two pointers and a counter
+// https://leetcode.com/problems/string-compression/discuss/92530/Java-O(n)-two-pointers-and-a-counter
 
 public int compress(char[] chars) {        
         int start = 0;
