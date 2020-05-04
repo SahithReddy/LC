@@ -26,7 +26,9 @@ The flattened tree should look like:
 
 */
 
-/* ALGORITHM: MORRIS TRAVERSAL - TC: O(N) & SC: O(1)
+/* ALGORITHM: MORRIS TRAVERSAL - TC: O(N) & SC: O(1) - Below is O(N) space post-order recursive solution
+If possible try to see official solution it is clear and long over there to explain.
+
 
 
 */
