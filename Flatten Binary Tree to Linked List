@@ -1,0 +1,95 @@
+/* QUESTION:
+ Given a binary tree, flatten it to a linked list in-place.
+
+For example, given the following tree:
+
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+The flattened tree should look like:
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+
+
+
+*/
+
+/* ALGORITHM: MORRIS TRAVERSAL - TC: O(N) & SC: O(1)
+
+
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+   
+    public void flatten(TreeNode root) {
+        
+        // Handle the null scenario
+        if (root == null) {
+            return;
+        }
+        
+        TreeNode node = root;
+        
+        while (node != null) {
+            
+            // If the node has a left child
+            if (node.left != null) {
+                
+                // Find the rightmost node
+                TreeNode rightmost = node.left;
+                while (rightmost.right != null) {
+                    rightmost = rightmost.right;
+                }
+                
+                // rewire the connections
+                rightmost.right = node.right;
+                node.right = node.left;
+                node.left = null;
+            }
+            
+            // move on to the right side of the tree
+            node = node.right;
+        }
+    }
+}
+
+/*
+Time Complexity: O(N) since we process each node of the tree at most twice. If you think about it, we process the nodes once when we actually run our algorithm on them as the currentNode. The second time when we come across the nodes is when we are trying to find our rightmost node. Sure, this algorithm is slower than the previous two approaches but it doesn't use any additional space which is a big win.
+
+Space Complexity: O(1) boom!.
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
