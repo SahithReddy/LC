@@ -89,7 +89,7 @@ public static void main(String[] args)
 } 
 
 // O(Log(n)) where n is the input number.
-------------------
+-------------------------------------------------
 /*
 How to handle overflow?
 The idea is to store previous value of the sum can be stored in a variable which can be checked every time to see if the reverse overflowed or not.
@@ -148,8 +148,8 @@ Reverse of no. is 54321
 WARNING OVERFLOWED!!!
 Reverse of no. is 0
 */
-
-// SHORTER VERSION OF ABOVE CODE
+---------------------------------------------------------------------------
+// SHORTER VERSION OF ABOVE CODE -  THIS IS FROM LEETCODE
 
 public int reverse(int x)
 {
