@@ -1,0 +1,107 @@
+/* QUESTION:
+Given a non-empty string s and a dictionary wordDict containing a list of non-empty words, determine if s can be segmented into a space-separated sequence of one or more dictionary words.
+
+Note:
+
+The same word in the dictionary may be reused multiple times in the segmentation.
+You may assume the dictionary does not contain duplicate words.
+Example 1:
+
+Input: s = "leetcode", wordDict = ["leet", "code"]
+Output: true
+Explanation: Return true because "leetcode" can be segmented as "leet code".
+Example 2:
+
+Input: s = "applepenapple", wordDict = ["apple", "pen"]
+Output: true
+Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+             Note that you are allowed to reuse a dictionary word.
+Example 3:
+
+Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
+Output: false
+*/
+
+/* BFS: TC: O(N^2), SC: O(N) - Same as DP
+
+1. Visualize the string as a tree where each node represents the prefix upto index endend. Two nodes are connected only if the substring between the indices linked with those nodes is also a valid string which is present in the dictionary. 
+2. In order to form such a tree, we start with the first character of the given string (say s) which acts as the root of the tree being formed and find every possible substring starting with that character which is a part of the dictionary. 
+3. Further, the ending index (say i) of every such substring is pushed at the back of a queue which will be used for Breadth First Search. 
+4. Now, we pop an element out from the front of the queue and perform the same process considering the string s(i+1,end) to be the original string and the popped node as the root of the tree this time. 
+5. This process is continued, for all the nodes appended in the queue during the course of the process. If we are able to obtain the last element of the given string as a node (leaf) of the tree, this implies that the given string can be partitioned into substrings which are all a part of the given dictionary.
+
+
+We can use a graph to represent the possible solutions. The vertices of the graph are simply the positions of the first characters of the words and each edge actually represents a word. For example, the input string is "nightmare", there are two ways to break it, "night mare" and "nightmare". The graph would be
+
+0-->5-->9
+
+|__ __ _^
+
+The question is simply to check if there is a path from 0 to 9. The most efficient way is traversing the graph using BFS with the help of a queue and a hash set. The hash set is used to keep track of the visited nodes to avoid repeating the same work.
+
+For this problem, the time complexity is O(n^2) and space complexity is O(n), the same with DP. This idea can be used to solve the problem word break II. We can simple construct the graph using BFS, save it into a map and then find all the paths using DFS.
+*/
+
+class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+     if (wordDict.contains(s)) return true;
+    Queue<Integer> queue = new LinkedList<Integer>();
+    queue.offer(0);
+    // use a set to record checked index to avoid repeated work.
+    // This is the key to reduce the running time to O(N^2).
+    Set<Integer> visited = new HashSet<Integer>();
+    visited.add(0);
+    while (!queue.isEmpty()) {
+        int curIdx = queue.poll();
+        for (int i = curIdx+1; i <= s.length(); i++) {
+            if (visited.contains(i)) continue;
+            if (wordDict.contains(s.substring(curIdx, i))) {
+                if (i == s.length()) return true;
+                queue.offer(i);
+                visited.add(i);
+            }
+        }
+    }
+    return false;  
+    }
+}
+
+/*
+Time complexity : O(n^2) For every starting index, the search can continue till the end of the given string.
+
+Space complexity : O(n). Queue of atmost nn size is needed.
+
+*/
+---------------------------------------------------------
+// DP
+
+
+
+public class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        Set<String> wordDictSet=new HashSet(wordDict);
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+}
+
+/*
+Time complexity : O(n^2) Two loops are their to fill dp array.
+
+Space complexity : O(n). Length of pp array is n+1.
+*/
+
+
+
+
+
+
