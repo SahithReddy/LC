@@ -1,4 +1,15 @@
-/*
+/* QUESTION:
+Given an array nums of n integers where n > 1,  return an array output such that output[i] is equal to the product of all the elements of nums except nums[i].
+
+Example:
+
+Input:  [1,2,3,4]
+Output: [24,12,8,6]
+Constraint: It's guaranteed that the product of the elements of any prefix or suffix of the array (including the whole array) fits in a 32 bit integer.
+
+*/
+
+/* ALGORITHM: NO DIVISION ALLOWED 
 The idea is simply. The product basically is calculated using the numbers before the current number and the numbers after
 the current number. Thus, we can scan the array twice. First, we calcuate the running product of the part before the current
 number. Second, we calculate the running product of the part after the current number through scanning from the end of
@@ -23,7 +34,34 @@ class Solution {
 }
 }
 
-// Time: O(n), Space: O(1)
+// Time: O(n), Space: O(N) because of FB interview constraints the extra array for result is considered as extra space
+
+----------------------------------------
+// Division is performed and kept track of 0s here for O(1) space complexity
+
+class Solution {
+    public int[] productExceptSelf(int[] nums) {
+    int product = 1;
+    int zeroCount = 0;
+    for(int n : nums)
+	{
+		if(n == 0)
+		{
+			if(++zeroCount > 1) break; // if 2 or more zeroes then all will be zero, we can quit computing
+		}
+		else 
+			product *= n;
+	}
+    for(int i = 0; i<nums.length; i++){
+        if(zeroCount == 0) nums[i] = product/nums[i];
+        else if (zeroCount == 1 && nums[i] == 0) nums[i] = product;
+        else nums[i] = 0;
+        }
+    return nums;
+    }
+}
+
+// TC: O(N) SC: O(1) 
 ------------------------------------------------------------------------------------------------
 // https://leetcode.com/problems/product-of-array-except-self/discuss/65667/My-one-pass-Java-solution-without-extra-spaces
 
