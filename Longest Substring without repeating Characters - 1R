@@ -24,9 +24,7 @@ Explanation: The answer is "wke", with the length of 3.
 
 */
 
-/*
-
-ALGORITHM: 
+/* HASHMAP ALGORITHM: 
 The basic idea is, keep a hashmap which stores the characters in string as keys and their positions as values, and keep two pointers which define the max substring. move the right pointer to scan through the string , and meanwhile update the hashmap. If the character is already in the hashmap, then move the left pointer to the right of the same character last found. Note that the two pointers can only move forward.
 
 The reason is that if s[j] have a duplicate in the range [i,j) with index j 
@@ -53,7 +51,18 @@ class Solution {
 // Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the Set
 
 ---------------------------------------------------------------------------------------------------
-// Here is the same algo with int[256] rather than HashMap. Faster than map and shorter code.
+/* FIXED SIZE ARRAY ALGORITHM
+
+Here is the same algo with int[256] rather than HashMap. Faster than map and shorter code.
+
+The previous implements all have no assumption on the charset of the string s.
+
+If we know that the charset is rather small, we can replace the Map with an integer array as direct access table.
+Commonly used tables are:
+int[26] for Letters 'a' - 'z' or 'A' - 'Z'
+int[128] for ASCII
+int[256] for Extended ASCII
+*/
 
 public class Solution {
     public int lengthOfLongestSubstring(String s) {
@@ -70,4 +79,4 @@ public class Solution {
 
 // Time complexity : Directly O(n). Index j will iterate n times.
 
-// Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the Set
+// Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the charSet
