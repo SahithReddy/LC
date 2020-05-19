@@ -1,4 +1,4 @@
-/* 31: QUESTION
+/* 31: QUESTION : Same as Next Greater Element-3
 Implement next permutation, which rearranges numbers into the lexicographically next greater permutation of numbers.
 
 If such arrangement is not possible, it must rearrange it as the lowest possible order (ie, sorted in ascending order).
@@ -11,4 +11,65 @@ Here are some examples. Inputs are in the left-hand column and its corresponding
 3,2,1 → 1,2,3
 1,1,5 → 1,5,1
 
+*/
+
+/* ALGORITHM:
+At first, lets look at the edge cases -
+
+1. If all digits sorted in descending order, then output is always “Not Possible”. For example, 4321.
+2. If all digits are sorted in ascending order, then we need to swap last two digits. For example, 1234.
+3. For other cases, we need to process the number from rightmost side (why? because we need to find the smallest of all greater numbers)
+
+Now the main algorithm works in following steps -
+
+I) Traverse the given number from rightmost digit, keep traversing till you find a digit which is smaller than the previously traversed digit. For example, if the input number is “534976”, we stop at 4 because 4 is smaller than next digit 9. If we do not find such a digit, then output is “Not Possible”.
+
+II) Now search the right side of above found digit ‘d’ for the smallest digit greater than ‘d’. For “534976″, the right side of 4 contains “976”. The smallest digit greater than 4 is 6.
+
+III) Swap the above found two digits, we get 536974 in above example.
+
+IV) Now reverse all digits from position next to ‘d’ to the end of number. The number that we get after reversing is the output. For above example, we sort digits in bold 536974. We get “536479” which is the next greater number for input 534976.
+
+*/
+
+class Solution {
+    public void nextPermutation(int[] nums) {
+    // I) Start from the 2nd right most digit and find the first digit that is smaller than the digit to its right
+    int i = nums.length - 2;
+    while (i >= 0 && nums[i] >= nums[i + 1]){
+        i--;
+    }
+        
+    if (i >= 0) {
+        // II) Find the smallest digit on right side of (i-1)'th digit that is greater than number[i-1]
+        int j = nums.length - 1;
+        
+        while (nums[j] <= nums[i]){
+            j--;
+        }
+        // III) Swap the above found two digits
+        swap(nums, i, j);
+    }
+    // IV) Reverse from i till end to get the desired number
+    reverse(nums, i + 1, nums.length - 1);  
+    }
+    
+    static void swap(int[] arr, int i, int j) {
+    arr[i] ^= arr[j];
+    arr[j] ^= arr[i];
+    arr[i] ^= arr[j];
+    }
+
+    static void reverse(int[] arr, int i, int j) {
+    int l = i, h = j;
+    while (l < h){
+        swap(arr, l++, h--);
+    }
+    }
+}
+
+/* COMPLEXITY:
+Time complexity : O(n). In worst case, only two scans of the whole array are needed.
+
+Space complexity : O(1). No extra space is used. In place replacements are done.
 */
