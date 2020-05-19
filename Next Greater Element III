@@ -37,15 +37,14 @@ class Solution {
 
     // I) Start from the 2nd right most digit and find the first digit that is smaller than the digit to its right
     int i = arr.length - 2;
-    while (i >= 0 && arr[i] >= arr[i + 1])
-        i--;
+    while (i >= 0 && arr[i] >= arr[i + 1]) { i--; }
+        
     // If no such digit is found, its the edge case 1.
     if (i < 0) return -1;
     
     // II) Find the smallest digit on right side of (i-1)'th digit that is greater than number[i-1]
     int j = arr.length - 1;
-    while (arr[j] <= arr[i])
-        j--;
+    while (arr[j] <= arr[i]) { j--; }
     
     // III) Swap the above found two digits
     swap(arr, i, j);
@@ -68,8 +67,9 @@ static void swap(char[] arr, int i, int j) {
 
 static void reverse(char[] arr, int i, int j) {
     int l = i, h = j;
-    while (l < h)
-        swap(arr, l++, h--);
+    while (l < h){
+     swap(arr, l++, h--);
+    }   
 }
 }
 
