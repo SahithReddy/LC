@@ -1,48 +1,45 @@
-class Solution {
-    public boolean isPalindrome(String s) {
-        int i=0;
-        int j=s.length()-1;
-        char[] c = s.toCharArray();
-        while(i<j){
-            if(!Character.isLetterOrDigit(c[i])) i++;
-            else if(!Character.isLetterOrDigit(c[j])) j--;
-            else if(Character.toLowerCase(c[i++]) != Character.toLowerCase(c[j--])) return false;
-            
-        } return true;
-    }
-}
+/* 125:
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
 
-Time : O(n) Space: O(n) - Character Array
-This code is creating a new character array to store s for easy indexing, which uses O(n) space,
-------------------------------------------------------------------------------------------------------------
-// Nice Readability
+Note: For the purpose of this problem, we define empty string as valid palindrome.
+
+Example 1:
+
+Input: "A man, a plan, a canal: Panama"
+Output: true
+Example 2:
+
+Input: "race a car"
+Output: false
+
+*/
+
 public class Solution {
     public boolean isPalindrome(String s) {
-        if (s.isEmpty()) {
-        	return true;
+        for (int start = 0, end = s.length()-1; start < end;) {
+            if (!Character.isLetterOrDigit(s.charAt(start)))
+                start++;
+            else if (!Character.isLetterOrDigit(s.charAt(end)))
+                end--;
+            else if (Character.toLowerCase(s.charAt(start++)) != Character.toLowerCase(s.charAt(end--)))
+                return false;
         }
-        int head = 0, tail = s.length() - 1;
-        char cHead, cTail;
-        while(head <= tail) {
-        	cHead = s.charAt(head);
-        	cTail = s.charAt(tail);
-        	if (!Character.isLetterOrDigit(cHead)) {
-        		head++;
-        	} else if(!Character.isLetterOrDigit(cTail)) {
-        		tail--;
-        	} else {
-        		if (Character.toLowerCase(cHead) != Character.toLowerCase(cTail)) {
-        			return false;
-        		}
-        		head++;
-        		tail--;
-        	}
-        }
-        
         return true;
     }
 }
-Time : O(n) Space: O(1)
-does not create new space for arrays and leverages charAt() method to index s, so the original code space complexity is O(1).
+
+/*
+Time complexity : O(n), in length nn of the string. We traverse over each character at-most once, until the two pointers meet in the middle, or when we break and return early.
+
+Space complexity : O(1). No extra space required, at all.
+
+*/
 ------------------------------------------------------------------------------------------------------------
+// Ugly, but works:
+
+boolean isPalindrome(String s) {
+  s = s.toLowerCase().replaceAll("\\W+", "");
+  return s.equals(new StringBuilder(s).reverse().toString());
+}
+
 
