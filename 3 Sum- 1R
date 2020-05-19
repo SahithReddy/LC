@@ -1,3 +1,22 @@
+/* 15: QUESTION
+Given an array nums of n integers, are there elements a, b, c in nums such that a + b + c = 0? Find all unique triplets in the array which gives the sum of zero.
+
+Note:
+
+The solution set must not contain duplicate triplets.
+
+Example:
+
+Given array nums = [-1, 0, 1, 2, -1, -4],
+
+A solution set is:
+[
+  [-1, 0, 1],
+  [-1, -1, 2]
+]
+
+*/
+
 // Explanation is here https://www.youtube.com/watch?v=qJSPYnS35SE
 
 /*The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
@@ -8,48 +27,6 @@ Also we want to skip equal elements to avoid duplicates in the answer without ma
 // I wrote the below solution
 
 class Solution {
-    public List<List<Integer>> threeSum(int[] nums) {
-        Arrays.sort(nums);
-        List<List<Integer>> answer = new LinkedList();
-        for(int i=0;i<nums.length-2;i++){
-            if(i == 0 || nums[i]!=nums[i-1]){
-                int front = i+1;
-                int back = nums.length-1;
-                int target = 0-nums[i];
-                
-                while(front<back){
-                    if(nums[front] + nums[back] == target){
-                        answer.add(Arrays.asList(nums[i],nums[front],nums[back]));
-                    while(front<back && nums[front]==nums[front+1]) front++;
-                    while(front<back && nums[back] ==nums[back-1]) back--;
-                    front++;
-                    back--;
-                    }
-                    else if(nums[front] + nums[back]>target){
-                        // improve: skip duplicates
-                        while(front<back && nums[back] ==nums[back-1]) back--;
-                        back--;
-                    }
-                    else {
-                        // improve: skip duplicates
-                        while(front<back && nums[front]==nums[front+1]) front++;
-                        front++;
-                    }
-                }
-            }
-        } return answer;
-    }
-}
-
-/* time O(n^2), space O(n)
-(1) Sort the array - O(nlogn)
-(2) Iterate the array - O(n)
-(3) Find valid triplets - O(n)
-Overall time complexity: O(n^2)
-*/
-------------------------------------------------------------------------------------------------------------------
-// Below is the same solution but with small names and better to understand
-
 public List<List<Integer>> threeSum(int[] num) {
     Arrays.sort(num);
     List<List<Integer>> res = new LinkedList<>(); 
@@ -76,7 +53,16 @@ public List<List<Integer>> threeSum(int[] num) {
         }
     }
     return res;
+   }
 }
+
+/* time O(n^2), space O(n)
+(1) Sort the array - O(nlogn)
+(2) Iterate the array - O(n)
+(3) Find valid triplets - O(n)
+Overall time complexity: O(n^2)
+*/
+
 ------------------------------------------------------------------------------------------------------------------
 
 // Brilliant and SMall upto yhe point - Took Set to avoid duplicates
