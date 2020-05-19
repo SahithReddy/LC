@@ -1,14 +1,34 @@
+/* 49 QUESTION
+Given an array of strings, group anagrams together.
+
+Example:
+
+Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+Output:
+[
+  ["ate","eat","tea"],
+  ["nat","tan"],
+  ["bat"]
+]
+Note:
+
+All inputs will be in lowercase.
+The order of your output does not matter.
+*/
+
 // Optimal Solution
 
 class Solution {
     public List<List<String>> groupAnagrams(String[] strs) {
         if (strs == null || strs.length == 0) return new ArrayList<>();
         Map<String, List<String>> map = new HashMap<>();
+        
         for (String s : strs) {
             //only lower-case letters. so array of size 26 is enough
             char[] ca = new char[26];
-            //Iterate the string and increment corresponding index
-            //char - 'a' , so the index will be between 0 and 25
+            
+            //Iterate the string and increment corresponding index char - 'a' , so the index will be between 0 and 25
+           
             for (char c : s.toCharArray()) ca[c - 'a']++;
             String keyStr = String.valueOf(ca);
             if (!map.containsKey(keyStr)) map.put(keyStr, new ArrayList<>());
@@ -18,7 +38,7 @@ class Solution {
     }
 }
 /*
-The overall time complexity is O(m*n) or O( sum of all chars in strs). Use int[26] as bucket to count the frequency instead of Arrays.sort, this can reduce the O(nlgn) to O(n) when calculate the key.
+Time Complexity: O(NK), where N is the length of strs, and K is the maximum length of a string in strs. Counting each string is linear in the size of the string, and we count every string.
 
 Space Complexity: O(NK), the total information content stored in ans.
 */
