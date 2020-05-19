@@ -1,3 +1,47 @@
+/* 13:
+Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
+
+Symbol       Value
+I             1
+V             5
+X             10
+L             50
+C             100
+D             500
+M             1000
+
+For example, two is written as II in Roman numeral, just two one's added together. Twelve is written as, XII, which is simply X + II. The number twenty seven is written as XXVII, which is XX + V + II.
+
+Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, the number four is written as IV. Because the one is before the five we subtract it making four. The same principle applies to the number nine, which is written as IX. There are six instances where subtraction is used:
+
+I can be placed before V (5) and X (10) to make 4 and 9. 
+X can be placed before L (50) and C (100) to make 40 and 90. 
+C can be placed before D (500) and M (1000) to make 400 and 900.
+Given a roman numeral, convert it to an integer. Input is guaranteed to be within the range from 1 to 3999.
+
+Example 1:
+Input: "III"
+Output: 3
+
+Example 2:
+Input: "IV"
+Output: 4
+
+Example 3:
+Input: "IX"
+Output: 9
+
+Example 4:
+Input: "LVIII"
+Output: 58
+Explanation: L = 50, V= 5, III = 3.
+
+Example 5:
+Input: "MCMXCIV"
+Output: 1994
+Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
+*/
+
 class Solution {
     	public static int romanToInt(String s) {
 	if (s == null || s.length() == 0)
@@ -27,14 +71,17 @@ Time: O(1)
 
 As there is a finite set of roman numerals, the maximum number possible number can be 3999, which in roman numerals is MMMCMXCIX. As such the time complexity is O(1).
 
-If roman numerals had an arbitrary number of symbols, then the time complexity would be proportional to the length of the input, i.e. O(n). This is assuming that looking up the value of each symbol is O(1).
+O(n) time complexity represents how your code complexity grows with the increase in the size of the input. For example if the input is of size 10 your for loop runs 10 times but what if it was 1 million ? It will run 1 million times. But in this problem there is a
+constant number of inputs that you can use as input. 3999, which in roman numerals is MMMCMXCIX. Your for loop will run say a maximum of 9 times which is a constant time. So code time complexity is O(1).
+
+-->If the roman numerals had an arbitrary number of symbols, then the time complexity would be proportional to the length of the input, i.e. O(n). This is assuming that looking up the value of each symbol is O(1).
 
 */
 
 /*
 
 Space: O(1) n=7 different romans
-Because only a constant number of single-value variables are used, the space complexity is O(1)O(1).
+Because only a constant number of single-value variables are used, the space complexity is O(1).
 */
 --------------------------------------------------------------------------
 
