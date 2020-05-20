@@ -1,4 +1,4 @@
-/*
+/* 680:
 Given a non-empty string s, you may delete at most one character. Judge whether you can make it a palindrome.
 
 Example 1:
@@ -11,6 +11,16 @@ Explanation: You could delete the character 'c'.
 
 */
 
+/* ALGO: 
+Follow normal way (two pointers) to check if s is palindrome. When two chars are not equal, try to skip (pseudo delete) either left one or right one and continue checking.
+
+Assuming i = 0, j = s.length() - 1;, s is a valid palindrome (as defined in the problem) if
+
+1. there is only one pair of i, j such that s.charAt(i) != s.charAt(j)
+after the different pair hit, we try removing i or j, the characters in middle should be a palindrome.
+2. there is no pair of i, j such that s.charAt(i) != s.charAt(j)
+*/
+
 class Solution {
     public boolean validPalindrome(String s) {
         int b=0; 
@@ -20,7 +30,7 @@ class Solution {
             b++;
             e--;
             }
-            else return isPalindrome(s, b+1, e) || isPalindrome(s,b, e-1);
+            else return isPalindrome(s, b+1, e) || isPalindrome(s,b, e-1); // // delete char at left or right
         } return true;
     }
     
@@ -35,6 +45,6 @@ class Solution {
     }
 }
 
-// Time Complexity: O(N)O(N) where NN is the length of the string. Each of two checks of whether some substring is a palindrome is O(N)O(N).
+// Time Complexity: O(N) where N is the length of the string. Each of two checks of whether some substring is a palindrome is O(N).
 
-// Space Complexity: O(1)O(1) additional complexity. Only pointers were stored in memory.
+// Space Complexity: O(1) additional complexity. Only pointers were stored in memory.
