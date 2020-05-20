@@ -84,6 +84,7 @@ public class Solution {
 
 // Time: O(N)
 // Space: O(1) that is no extra space other than deep copy for output --> Space is O(N) if output is taken to consideration.
+// You need at least O(n) space to keep the list copy, which is for the output. So IMHO, it is correct to say that the space complexity is O(1).
 -----------------------------------------------------------------
 /*
 Got a better solution without HashMap(Space O(1)) above this.
@@ -136,4 +137,4 @@ class Solution {
 
 // Time: O(N), because we make one pass over the original linked list.
 // Space is O(N) because of HashMap. as we have a dictionary containing mapping from old list nodes to new list nodes. Since there are N nodes, we have O(N) space complexity.
-// Below is a better solution without HashMap i.e Space:O(1)
+// Above is a better solution without HashMap i.e Space:O(1)
