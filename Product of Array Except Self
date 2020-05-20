@@ -37,7 +37,7 @@ class Solution {
 // Time: O(n), Space: O(N) because of FB interview constraints the extra array for result is considered as extra space
 
 ----------------------------------------
-// Division is performed and kept track of 0s here for O(1) space complexity
+// If DIVISION is allowed is performed and keep track of 0s here then O(1) space complexity can be achieved
 
 class Solution {
     public int[] productExceptSelf(int[] nums) {
