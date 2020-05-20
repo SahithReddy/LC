@@ -80,8 +80,19 @@ Realize the corner case where buf = "abcdef", n = 5. The last iteration within t
 
 Don't forget about n, it is kind of limitation. Suppose you have abcd, n = 3, you only want to read abc. In this case, you need to take min(4, 3 - 0) to decide how many chars to copy from the tmp buffer to result buffer.
 */
+-----------------------------------------
+/**
+ * The read4 API is defined in the parent class Reader4.
+ *     int read4(char[] buf);
+ */
 
-public int read(char[] buf, int n) {
+public class Solution extends Reader4 {
+    /**
+     * @param buf Destination buffer
+     * @param n   Number of characters to read
+     * @return    The number of actual characters read
+     */
+    public int read(char[] buf, int n) {
 
         char[] temp = new char[4];  //Store our read chars from Read4
         int total = 0;
@@ -106,8 +117,9 @@ public int read(char[] buf, int n) {
         
         return total;
     }
+}
 
-
+---------------------------------------
 /*
 Time O (N) Space O (1)
 */
