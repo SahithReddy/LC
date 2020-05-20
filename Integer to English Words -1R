@@ -1,3 +1,27 @@
+/* 273 QUESTION:
+Convert a non-negative integer to its english words representation. Given input is guaranteed to be less than 2^31 - 1.
+
+Example 1:
+
+Input: 123
+Output: "One Hundred Twenty Three"
+Example 2:
+
+Input: 12345
+Output: "Twelve Thousand Three Hundred Forty Five"
+Example 3:
+
+Input: 1234567
+Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+Example 4:
+
+Input: 1234567891
+Output: "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety One"
+
+*/
+
+
+
 // Combine belowTen and belowTwenty into LESS_THAN_20 array
 
 private final String[] LESS_THAN_20 = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
@@ -25,5 +49,6 @@ String help(int num) {
     }
     return ret.trim();
 }
+
 // Time complexity : O(N). Intuitively the output is proportional to the number N of digits in the input.
 // Space complexity : O(1) since the output is just a string.
