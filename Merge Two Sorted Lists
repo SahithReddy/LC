@@ -1,4 +1,4 @@
-/*
+/* 21 : QUESTION
 Merge two sorted linked lists and return it as a new list. The new list should be made by splicing together the nodes of the first two lists.
 
 Example:
@@ -9,6 +9,15 @@ Output: 1->1->2->3->4->4
 */
 
 // This is iterative approach - Prefer this
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
 
 class Solution {
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
@@ -25,6 +34,7 @@ class Solution {
             }
             head = head.next;
         }
+	// exactly one of l1 and l2 can be non-null at this point, so connect the non-null list to the end of the merged list.
         if(l1==null){
             head.next = l2;
         }
@@ -42,6 +52,8 @@ Because exactly one of l1 and l2 is incremented on each loop iteration, the whil
 iterations equal to the sum of the lengths of the two lists. All other work is constant, so the overall complexity is linear.
 
 Space complexity : O(1)
+
+We're not creating new ListNode instances on each iteration, just rearranging the links between existing objects. So the only memory overhead are new reference(s) for manipulating the lists, so it's constant.
 
 The iterative approach only allocates a few pointers, so it has a constant overall memory footprint.
 */
