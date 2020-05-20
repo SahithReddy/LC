@@ -1,7 +1,9 @@
 /* 157 QUESTION
 Given a file and assume that you can only read the file using a given method read4, implement a method to read n characters.
+
+My Understanding: It should explicitly say read4 reads 4 characters from a file into "buf" char array, and implement a function that reads n characters from the file into "buf" char array.
 ------------------------------------
-Method read4:
+Method READ4:
 
 The API read4 reads 4 consecutive characters from the file, then writes those characters into the buffer array buf.
 
@@ -24,7 +26,7 @@ read4(buf); // read4 returns 4. Now buf = "abcd", fp points to 'e'
 read4(buf); // read4 returns 4. Now buf = "efgh", fp points to 'i'
 read4(buf); // read4 returns 3. Now buf = "ijk", fp points to end of file
 -------------------------------------
-Method read:
+Method READ:
 
 By using the read4 method, implement the method read that reads n characters from the file and store it in the buffer array buf. Consider that you cannot manipulate the file directly.
 
@@ -58,6 +60,56 @@ Input: file = "leetcode", n = 5
 Output: 5
 Explanation: After calling your read method, buf should contain "leetc". We read a total of 5 characters from the file, so return 5.
 
+*/
+
+/* ALGORITHM:
+1.We need a temporary array to pass to read4 to read the characters.
+2. Count gives the characters read.
+3. Actual count is the minimum of the count of character read and actual character counts. Why? Because if all characters are read from the input file (from the client of the code), then we have to take the value which is real. Not the value given out by read4 method.
+4. We copy the read characters to buffer.
+5. When readCount is less than 4, then it means that we are end of the file which was given by the client.
+6. Return the actual characters read in the file.
+*/
+
+/* UNDERSTAND AND CLARIFICATION: About one line: count = Math.min(count, n-total); 
+
+Also, the reason we need Math.min(count, n-total) is because we only want to read N characters even if we have all 4 characters returned from Read4.
+Say, N = 18 and we're implentening Read18, then Read4 will takes us to 4*4 = 16 chars. After that, we only want to read 2 more chars (even if the next Read4 returns 3 or 4 characters).
+
+Realize the corner case where buf = "abcdef", n = 5. The last iteration within the while loop gets count = 2, while we only need 1 last character. This is why we need to compare "count" with "n - total".
+
+Don't forget about n, it is kind of limitation. Suppose you have abcd, n = 3, you only want to read abc. In this case, you need to take min(4, 3 - 0) to decide how many chars to copy from the tmp buffer to result buffer.
+*/
+
+public int read(char[] buf, int n) {
+
+        char[] temp = new char[4];  //Store our read chars from Read4
+        int total = 0;
+        
+        while(total < n){
+            /*Read and store characters in Temp. Count will store total chars read from Read4*/
+            int count = read4(temp);
+        
+            /*Even if we read 4 chars from Read4, 
+            we don't want to exceed N and only want to read chars till N.*/
+            count = Math.min(count, n-total); 
+            
+            //Transfer all the characters read from Read4 to our buffer
+            for(int i = 0;  i < count; i++){
+                buf[total] = temp[i];
+                total++;
+            }
+            
+            //done. We can't read more characters.
+            if(count < 4) break;
+        }
+        
+        return total;
+    }
+
+
+/*
+Time O (N) Space O (1)
 */
 
 
