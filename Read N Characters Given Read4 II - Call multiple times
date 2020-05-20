@@ -64,14 +64,61 @@ You may assume the destination buffer array, buf, is guaranteed to have enough s
 It is guaranteed that in a given test case the same buffer buf is called by read.
 
 */
+-------------------------
+/* ALGORITHM: 
+Keep a buffer of size 4 as a class variable, call it prevBuf.
+Whenever we call read(n), read from prevBuf first until all characters in prevBuf are consumed (to do this, we need 2 more int variables prevSize and prevIndex, which tracks the actual size of prevBuf and the index of next character to read from prevBuf). Then call read4 to read characters into prevBuf.
+*/
 
+--------------------------
 
+/**
+ * The read4 API is defined in the parent class Reader4.
+ *     int read4(char[] buf); 
+ */
 
+public class Solution extends Reader4 {
+private char[] prevBuffer = new char[4];
+private int prevIndex = 0;
+private int prevSize = 0;
+/**
+ * @param buf Destination buffer
+ * @param n   Number of characters to read
+ * @return    The number of actual characters read
+ */
+public int read(char[] buf, int n) {
+    
+    int currentIndex = 0;
+    
+    // Check to ensure we don't read more than n
+    while(currentIndex < n) {
+        
+        // Using 'read4' we could have read more than n in the previous call
+        // In such event, we want to first continue reading from there
+        // In the first call we'll directly go to else clause as both prevIndex and prevSize will be 0
+        if (prevIndex < prevSize) {
+            buf[currentIndex] = prevBuffer[prevIndex];
+            currentIndex++;
+            prevIndex++;
+        }
+        // We are done reading from prevBuffer, so we can fetch new data
+        // Since it's new data we need to reset the prevIndex
+        else {
+            prevIndex = 0;
+            prevSize = read4(prevBuffer);
+        }
+        
+        // If we got nothing back on calling read4, we are at the eof, hence done!
+        if (prevSize == 0) break;
+    }
+    return currentIndex;
+}
+}
+---------------------------
+TC: O(N)
+SC: O(1)
 
-
-
-
-
+// https://leetcode.com/problems/read-n-characters-given-read4-ii-call-multiple-times/discuss/49615/Clean-solution-in-Java
 
 
 
