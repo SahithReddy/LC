@@ -124,7 +124,7 @@ public class Solution extends Reader4 {
 Time O (N) Space O (1)
 */
 
-
+// https://leetcode.com/problems/read-n-characters-given-read4/discuss/49496/Another-accepted-Java-solution  - 1st Comment
 
 
 
