@@ -1,3 +1,8 @@
+/* QUESTION: 47
+Given a collection of numbers that might contain duplicates, return all possible unique permutations.
+
+Example:
+
 Input: [1,1,2]
 Output:
 [
@@ -5,6 +10,60 @@ Output:
   [1,2,1],
   [2,1,1]
 ]
+
+*/
+
+/* ALGORITHM: ALMOST SIMILAR TO ORIGINAL PERMUTATIONS QUESTION BUT WITH BELOW ADDITIONS/CHANGES
+
+Use an extra boolean array " boolean[] used" to indicate whether the value is added to list.
+
+Sort the array "int[] nums" to make sure we can skip the same value.
+
+when a number has the same value with its previous, we can use this number only if his previous is used
+
+--------------> If asked why !used[i-1]? <-----------------
+First of all, the conclusion is both !use[i - 1] and use[i - 1] work, but the !use[i - 1] is more efficient.
+
+If we use
+if(i > 0 && nums[i] == nums[i - 1] && use[i - 1]) continue;
+Chances are that we have the same value,and we will never have chance to use the second one, which causes the list will never grow to the length of nums.length, and waste exists.
+Here we have an example of the simple [1, 2, 2']. We start at list = [], and in the first level of backtrack, we have:
+[1]
+[2]
+[2']
+In the second level, when list = [1], ve:
+[1, 2]
+[1, 2']
+When list = [2], when i = 0 we have [2, 1] without difficulty, when i = 1, "2" is already used so we simply continue. But when i = 2, we found that nums[2] = nums[1] and nums[1] is already used, so we discard it and the list is still [1]. The problem is that when we have to figure out the next element of this track, we will find that the "2'" will never be used because nums[2] == nums[1] && used(nums[1]) is always true. This track will never reach the recursive base and be added to the final answer.
+
+If we use
+if(i > 0 && nums[i] == nums[i - 1] && !use[i - 1]) continue;
+When we figure out the first element of the list,when i = 2 we find that nums[2] == nums[1] true and used(nums[1]) false, so we directly skip the list starting with "2'", and we get
+[1] and
+[2]
+only. The same rule continues on the next steps so every list we generated will reach to an end and return. That why !use[i - 1] is better. 
+
+----------------------------------
+if (i > 0 && nums[i] == nums[i - 1] && !use[i - 1]) continue; means, in other words, if previous identical number is used, then use the current number.
+
+why?
+
+because if you use the opposite way, if (i > 0 && nums[i] == nums[i - 1] && use[i - 1]) continue; which means if previous identical number is NOT used, use this number, you are going to have to keep running the program until the next identical number first populates the temp/list array before the previous identical number, and then you backtrack into the first identical number which then populates the temp/list array.
+
+Take a look at the second picture by @msmohitsharma10.
+That one is using if (i > 0 && nums[i] == nums[i - 1] && use[i - 1]) continue;. You will see that the result array really starts to populate near the end of for loop when i = 2.
+In contrast, the first picture using if (i > 0 && nums[i] == nums[i - 1] && !use[i - 1]) continue; shows that the result array starts populating in the beginning.
+
+That's why !use[i - 1] is more efficient.
+----------------------------------
+The difficulty is to handle the duplicates.
+With inputs as [1a, 1b, 2a],
+If we don't handle the duplicates, the results would be: [1a, 1b, 2a], [1b, 1a, 2a]...,
+so we must make sure 1a goes before 1b to avoid duplicates
+By using nums[i-1]==nums[i] && !used[i-1], we can make sure that 1b cannot be choosed before 1a
+
+
+*/
 
 public List<List<Integer>> permuteUnique(int[] nums) {
     List<List<Integer>> list = new ArrayList<>();
@@ -28,3 +87,15 @@ private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] 
     }
 }
 
+/*
+
+Time Complexity:
+The worst-case time complexity is O(n! * n).
+
+For any recursive function, the time complexity is O(branches^depth) * amount of work at each node in the recursive call tree. However, in this case, we have n*(n-1)*(n*2)*(n-3)*...*1 branches at each level = n!, so the total recursive calls is O(n!)
+We do n-amount of work in each node of the recursive call tree, (a) the for-loop and (b) at each leaf when we add n elements to an ArrayList. So this is a total of O(n) additional work per node.
+Therefore, the upper-bound time complexity is O(n! * n).
+
+Space Complexity: 
+O(N!) since one has to keep N! solutions.
+*/
