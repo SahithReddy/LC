@@ -15,31 +15,24 @@ Although the above answer is in lexicographical order, your answer could be in a
 */
 
 /*
-ALGORITHM: BFS
-This is a iterative solution. For each digit added, remove and copy every element in the queue and add the possible letter to each element, then add the updated elements back into queue again. Repeat this procedure until all the digits are iterated.
+ALGORITHM: BFS using QUEUE
+This is a iterative solution. 
 
-*/
+1. For each digit added, remove and copy every element in the queue.
+2. Then add the possible letter to each element.
+3. Then add the updated elements back into queue again. 
+4. Repeat this procedure until all the digits are iterated.
 
-// CODE: BFS USING QUEUE
+Let's take the problem statement's example- Input: "23"
 
-public List<String> letterCombinations(String digits) {
-		LinkedList<String> ans = new LinkedList<String>();
-		if(digits.isEmpty()) return ans;
-		String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
-		ans.add("");
-		for(int i =0; i<digits.length();i++){
-			int x = Character.getNumericValue(digits.charAt(i));
-			while(ans.peek().length()==i){
-				String t = ans.remove();
-				for(char s : mapping[x].toCharArray())
-					ans.add(t+s);
-			}
-		}
-		return ans;
-	}
-	
-/*
-VARIABLE TRACKING: For String t and List ans in the above code
+Suppose we have filled the queue with - a, b, c when i was 0
+Next, we need to permute it with 'def' and i right now is 1
+-We peek queue and get a whose length = 1, we go in the while loop and put ad,ae,af in the queue
+-We do the same thing for b and c, since their lengths are also 1
+-We now encounter ad but its length is 2 which is not equal to i (which is 1 right now) and we stop here
+
+
+VARIABLE TRACKING: For String t and List ans in the below code - Input: "23"
 t value is:
 each result value is:[a, b, c]
 t value is:a
@@ -50,13 +43,47 @@ t value is:c
 each result value is:[ad, ae, af, bd, be, bf, cd, ce, cf]
 */
 
+// CODE: BFS Solution
+
+public List<String> letterCombinations(String digits) {
+		LinkedList<String> ans = new LinkedList<String>();
+		if(digits.isEmpty()) return ans;
+		String[] mapping = new String[] {"0", "1", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+		ans.add("");
+		for(int i =0; i<digits.length();i++){
+			int x = digits.charAt(i) - '0'; // Parse the given input by each numeric characterand assign it to 'x'
+			while(ans.peek().length()==i){ // while the first element's length in the queue==i, we will add a character to queue (which will change its length to i+1) and we will be good for that particular iteration.
+				String t = ans.remove(); // each time, first element in the queue is removed and assigned to 't'
+				for(char s : mapping[x].toCharArray()) // Iterate through each alphabetic character mapped to the numeric 'x'
+					ans.add(t+s); // permutate or concatenate 't' & 's' from above
+			}
+		}
+		return ans;
+	}
+	
+/*
+
+*/
+
 /*
 For time complexity, adding one more letter, 4 (for number 7) times more operations, so it is O(4^n). For space complexity, final output will take O(4^n) space.
 
 in worst case you have 4 letters for each digits(9) and you have n digits so.. 4x4x4..n times which is 4^n
 */
 ---------------------------------------------------------------------------
-// DFS RECURSION:
+/* DFS RECURSION: https://leetcode.com/problems/letter-combinations-of-a-phone-number/discuss/8118/Easy-understand-Java-Solution
+
+method combine is to add new letters to old list, using 2 for-loop.
+
+for example:
+
+gave digits = "23"
+
+i=0 -> result=combine("abc", [""]) ---> [a,b,c];
+
+i=1 -> result=combine("def", [a,b,c]) ---> [ad,bd,cd, ae,be,ce, af,bf,cf];
+
+*/
 
   public class Solution {
         public static List<String> letterCombinations(String digits) {
@@ -67,7 +94,7 @@ in worst case you have 4 letters for each digits(9) and you have n digits so.. 4
             
             result.add("");
             for (int i=0; i<digits.length(); i++) 
-                result = combine(digitletter[digits.charAt(i)-'0'],result);
+                result = combine(digitletter[digits.charAt(i)-'0'],result); // This is simply the way of converting a char to an int
             
             return result;
         }
@@ -76,8 +103,8 @@ in worst case you have 4 letters for each digits(9) and you have n digits so.. 4
             List<String> result = new ArrayList<String>();
             
             for (int i=0; i<digit.length(); i++) 
-                for (String x : l) 
-                    result.add(x+digit.charAt(i));
+                for (String s : l) 
+                    result.add(s+digit.charAt(i));
     
             return result;
         }
@@ -85,7 +112,7 @@ in worst case you have 4 letters for each digits(9) and you have n digits so.. 4
 
 /*
 O(2^n) time complixity
-O(n) space complixity
+O(2^n)  space complixity
 n is the length of input.
 */
 
