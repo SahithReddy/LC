@@ -1,2 +1,99 @@
+/* 143:
+Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
 
-// Not done yet
+You may not modify the values in the list's nodes, only nodes itself may be changed.
+
+Example 1:
+
+Given 1->2->3->4, reorder it to 1->4->2->3.
+Example 2:
+
+Given 1->2->3->4->5, reorder it to 1->5->2->4->3.
+
+*/
+/* ALGORITHM:
+
+This problem is a combination of these three easy problems:
+
+Middle of the Linked List.
+
+Reverse Linked List.
+
+Merge Two Sorted Lists.
+--------------------------------- OVERVIEW ---------------------------
+1. Find a middle node of the linked list. If there are two middle nodes, return the second middle node. Example: for the list 1->2->3->4->5->6, the middle element is 4.
+
+2. Once a middle node has been found, reverse the second part of the list. Example: convert 1->2->3->4->5->6 into 1->2->3->4 and 6->5->4.
+
+3. Now merge the two sorted lists. Example: merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4.
+--------------------------------- DETAILED ------------------------
+1. Let's use two pointers, slow and fast. While the slow pointer moves one step forward slow = slow.next, the fast pointer moves two steps forward fast = fast.next.next, i.e. fast traverses twice as fast as slow. When the fast pointer reaches the end of the list, the slow pointer should be in the middle.
+
+2. Let's traverse the list starting from the middle node slow and its virtual predecessor None. For each current node, save its neighbours: the previous node prev and the next node tmp = curr.next.
+
+While you're moving along the list, change the node's next pointer to point to the previous node: curr.next = prev, and shift the current node to the right for the next iteration: prev = curr, curr = tmp.
+
+3. Let's pick the first node of each list - first and second, and save their successors. While you're traversing the list, set the first node's next pointer to point to the second node, and the second node's next pointer to point to the successor of the first node. For this iteration the job is done, and for the next iteration move to the previously saved nodes' successors.
+
+*/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) { val = x; }
+ * }
+ */
+
+class Solution {
+  public void reorderList(ListNode head) {
+    if (head == null) return;
+
+    // find the middle of linked list [Problem 876]
+    // in 1->2->3->4->5->6 find 4 
+    ListNode slow = head, fast = head;
+    while (fast != null && fast.next != null) {
+      slow = slow.next;
+      fast = fast.next.next;
+    }
+
+    // reverse the second part of the list [Problem 206]
+    // convert 1->2->3->4->5->6 into 1->2->3->4 and 6->5->4
+    // reverse the second half in-place
+    ListNode prev = null, curr = slow, tmp;
+    while (curr != null) {
+      tmp = curr.next;
+
+      curr.next = prev;
+      prev = curr;
+      curr = tmp;
+    }
+
+    // merge two sorted linked lists [Problem 21]
+    // merge 1->2->3->4 and 6->5->4 into 1->6->2->5->3->4
+    ListNode first = head, second = prev;
+    while (second.next != null) {
+      tmp = first.next;
+      first.next = second;
+      first = tmp;
+
+      tmp = second.next;
+      second.next = first;
+      second = tmp;
+    }
+  }
+}
+
+/*
+Time complexity: O(N). There are three steps here. To identify the middle node takes O(N) time. To reverse the second part of the list, one needs N/2 operations. The final step, to merge two lists, requires N/2 operations as well. In total, that results in O(N) time complexity.
+
+Space complexity: O(1), since we do not allocate any additional data structures.
+*/
+
+
+
+
+
+
