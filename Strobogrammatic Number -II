@@ -1,0 +1,115 @@
+/* 247:
+A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+
+Find all strobogrammatic numbers that are of length = n.
+
+Example:
+
+Input:  n = 2
+Output: ["11","69","88","96"]
+*/
+
+
+/*
+It's given that the length of the number is n,
+if n = 1,  0   1   8
+if n = 2,              11    88     69     96
+if n = 3, 101 111 181 
+          808 818 888
+          609 619 689
+          906 916 986
+if n = 4,             1111  1881   1691   1961   1001
+                      8118  8888   8698   8968   8008
+                      6119  6889   6699   6969   6009
+                      9116  9886   9696   9966   9006
+                      
+if n = ..., ...
+After careful observation, it's inductive that 
+if s is strobogrammatic
+  1s1,
+  8s8,
+  6s9,
+  9s6,
+..0s0
+      are also strobogrammatic.
+*/
+
+// RECURSIVE
+class Solution {
+    public List<String> findStrobogrammatic(int n) {
+        return helper(n,n);    
+    }
+
+    /*
+    why in recursion we need n and CurLen two values?
+    valid number should not start with zero
+    Because number like "0690" is not valid, and using m to record the origin n value so that we know when the recursion return to the first layer, and do not append 0 to it.
+    */
+    private List<String> helper(int curLen, int n){
+        
+        if(curLen == 0) return new ArrayList(Arrays.asList(""));
+        if(curLen == 1) return new ArrayList(Arrays.asList("1","8","0"));
+        
+        /*
+        curLen-2 is the new size of the strings that you need to find. Initially it was n, then you find results for curLen-2 and add two more characters one at the starting and one at the end of the strings of size curLen-2 so total size of the strings in the result will be n.
+        */
+        List<String> sub = helper(curLen-2, n);
+        List<String> cur = new ArrayList();
+        for(String s: sub){
+            /*
+            Here curLen is just the given value of n. You can't add 0 at the starting or ending of the number that's why add 0 only if curLen != n i.e. you will later append more characters to this string
+            */
+            /*  "0" can not be put at the first digit of a number. No number starts with 0;. It is to handle the "0" case. You only handle them when you haven't reached extremis so that we avoid numbers such as "010" but still accept "101". Since we decrease n at each recursive iteration, only the first call will have n == m.
+            */
+            System.out.println(curLen);
+            if(curLen != n){
+                cur.add("0" + s + "0");
+            }
+            cur.add("6" + s + "9");
+            cur.add("9" + s + "6");
+            cur.add("8" + s + "8");
+            cur.add("1" + s + "1");	
+        }
+        return cur;
+    }
+}
+
+/*
+TC: O(5^(n/2)). Since we have 5 branches in each layer and total would be n/2 layers.The recursive depth is indeed O(N/2), but during each recursive call, we iterate through the list, and the list size increases exponentially with a factor of 5(0, 1, 8, 6, 9). Therefore, the time complexity should be 5 + 5^2 + 5^3 + ... + 5^(N/2) ~= 5^(N/2)
+n / 2 indices for choices, each index has 5 choices.
+
+helper(curLen-2, n) meaning that the items left to consider is shrunk by two. Therefore our tree(Like a 5-ary tree.) is actually only N/2 deep.
+That's O(5**(N/2)) in time.
+
+For a Picture: https://leetcode.com/problems/strobogrammatic-number-ii/discuss/67376/My-python-solution
+
+
+space complexity O(5 ^ (n / 2)). Space complexity means the number of resulting num.
+
+*/
+
+
+---------------------------------------
+// ITERATIVE
+public class Solution {
+    public List<String> findStrobogrammatic(int n) {
+        List<String> cur, ans;
+        ans = new ArrayList<String>((n & 1) == 0 ? Arrays.asList("") : Arrays.asList("0", "1", "8"));
+        if (n < 2) return ans;
+        
+        for (;n > 1; n -= 2) {
+            cur = ans;
+            ans = new ArrayList<String>();
+            for (String i : cur) {
+                if (n > 3) ans.add('0' + i + '0');
+                ans.add('1' + i + '1');
+                ans.add('8' + i + '8');
+                ans.add('6' + i + '9');
+                ans.add('9' + i + '6');
+            }
+        }
+        
+        return ans;
+    }
+}
+-----------------------------------
