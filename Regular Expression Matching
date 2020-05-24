@@ -194,7 +194,13 @@ time complexity: O(m*n)
 space complexity: O(m*n)
 */
 
+/*
+SOURCES
+ FOR TRACING DIAGRAM: https://leetcode.com/problems/regular-expression-matching/discuss/191830/Java-DP-solution-beats-100-with-explanation
+ 
+ FOR CODE AND EXPLANATION: First comment here: https://leetcode.com/problems/regular-expression-matching/discuss/5651/Easy-DP-Java-Solution-with-detailed-Explanation
 
+*/
 
 
 
