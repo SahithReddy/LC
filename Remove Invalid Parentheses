@@ -19,7 +19,7 @@ Output: [""]
 
 */
 
-/* BFS ALGORITHM
+/* BFS ALGORITHM - STRAIGHT FORWARD THAN DFS - BUT DFS IS LOT MORE FASTER THAN BFS - TRY TO EXPLAIN BOTH AT FIRST
 The idea is straightforward, with the input string s, we generate all possible states by removing one ( or ), check if they are valid, if found valid ones on the current level, put them to the final result list and we are done, otherwise, add them to a queue and carry on to the next level.
 
 The good thing of using BFS is that we can guarantee the number of parentheses that need to be removed is minimal, also no recursion call is needed in BFS.
@@ -101,9 +101,76 @@ Finally we have this formula:
 
 T(n) = n x C(n, n) + (n-1) x C(n, n-1) + ... + 1 x C(n, 1) = n x 2^(n).
 
-SPace Complexity:
+Space Complexity:
 I thought in the worst case, we have to put every substring in the queue so it will be O(2^n) right
 */
+--------------------------------------------
+/* DFS
+We all know how to check a string of parentheses is valid using a stack. Or even simpler use a counter.
+The counter will increase when it is ‘(‘ and decrease when it is ‘)’. Whenever the counter is negative, we have more ‘)’ than ‘(‘ in the prefix.
+
+To make the prefix valid, we need to remove a ‘)’. The problem is: which one? The answer is any one in the prefix. However, if we remove any one, we will generate duplicate results, for example: s = ()), we can remove s[1] or s[2] but the result is the same (). Thus, we restrict ourself to remove the first ) in a series of concecutive )s.
+
+After the removal, the prefix is then valid. We then call the function recursively to solve the rest of the string. However, we need to keep another information: the last removal position. If we do not have this position, we will generate duplicate by removing two ‘)’ in two steps only with a different order.
+For this, we keep tracking the last removal position and only remove ‘)’ after that.
+
+Now one may ask. What about ‘(‘? What if s = ‘(()(()’ in which we need remove ‘(‘?
+The answer is: do the same from right to left.
+However a cleverer idea is: reverse the string and reuse the code!
+Here is the final implement in Java.
+
+*/
+
+
+class Solution {
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> output = new ArrayList<>();
+        removeHelper(s, output, 0, 0, '(', ')');
+        return output;
+    }
+
+    public void removeHelper(String s, List<String> output, int iStart, int jStart, char openParen, char closedParen) {
+        int numOpenParen = 0, numClosedParen = 0;
+        for (int i = iStart; i < s.length(); i++) {
+            if (s.charAt(i) == openParen) numOpenParen++;
+            if (s.charAt(i) == closedParen) numClosedParen++;
+            if (numClosedParen > numOpenParen) { // We have an extra closed paren that we need to remove
+                for (int j = jStart; j <= i; j++) // Try removing one at each position, skipping duplicates
+                    if (s.charAt(j) == closedParen && (j == jStart || s.charAt(j - 1) != closedParen))
+                    /* Recursion: iStart = i since we now have valid # closed parenthesis thru i. jStart = j prevents duplicates
+                    This is for duplication when dealing with case like '())' noted that you are trying out every possible remove of excessive par[1]. so in the above case, both ")" will be checked, but the later one shoudn't matter.
+                    */
+                    /* normally we should use i + 1 and j + 1 as next starting location but after deleting one char, i and j are effectivelly increased by 1 already*/
+                        removeHelper(s.substring(0, j) + s.substring(j + 1, s.length()), output, i, j, openParen, closedParen);
+                return; // Stop here. The recursive calls handle the rest of the string.
+            }
+        }
+        // if we reach here, current s is valid without any fix. 
+        // But each s should go through two pass, the second pass is for reversed string.
+        // so we need to check if this is the first pass, if yes, reverse s and check again
+        // if this is second pass, just save result
+        // how to check if it's first pass? use the order of open/close Parentheses as flag
+        String reversed = new StringBuilder(s).reverse().toString();
+        if (openParen == '(') // first pass
+            removeHelper(reversed, output, 0, 0, ')','(');
+        else // second pass, save result
+            output.add(reversed);
+    }
+}
+
+/*
+Time complexity:
+The program only generates valid answers. Every path in the search generates one valid answer. The whole search space is a tree with k leaves. The number of nodes in the tree is roughly O(k). But this is not always true, for example a degenerated tree.
+
+To generate one node it requires O(n) time from the string concatenation among other things. So roughly O(nk). Accurately O(nm) where m is the total "number of recursive calls" or "nodes in the search tree". Then you need to relate m to n in the worst case.
+
+Space Complexity : The space complexity remains the same i.e. O(N). We have to go to a maximum recursion depth of N before hitting the base case. Note that we are not considering the space required to store the valid expressions. We only count the intermediate space here.
+
+*/
+
+
+
+
 
 
 
