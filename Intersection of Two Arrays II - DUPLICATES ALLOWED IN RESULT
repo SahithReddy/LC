@@ -13,20 +13,90 @@ Note:
 
 Each element in the result should appear as many times as it shows in both arrays.
 The result can be in any order.
-Follow up:
 
-What if the given array is already sorted? How would you optimize your algorithm?
-What if nums1's size is small compared to nums2's size? Which algorithm is better?
-What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
+Follow up:
+1. What if the given array is already sorted? How would you optimize your algorithm?
+2. What if nums1's size is small compared to nums2's size? Which algorithm is better?
+3. What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
 */
 
+/* ALGOTRITHM:
+Create a hashmap base on number frequency of nums1(whichever one is longer). Then for every element of nums2, look upon the hashmap. If we found an intersection, deduct by 1 to avoid duplicate.
+*/
 
+public int[] intersect(int[] nums1, int[] nums2) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        for(int i : nums1){
+            int freq = map.getOrDefault(i, 0);
+            map.put(i, freq + 1);
+        }
+        ArrayList<Integer> list = new ArrayList<>();
+        for(int i : nums2){
+            if(map.get(i) != null && map.get(i) > 0){
+                list.add(i);
+                map.put(i, map.get(i) - 1);
+            }
+        }
+        int[] ret = new int[list.size()]; 
+        for(int i = 0; i < list.size();i++){
+            ret[i] = list.get(i);
+        }
+        return ret;
+    }
 
+/*
+This solution is O(N + M) time complexity, O(N) for iterate one of the array to create a hashmap and O(M) to iterate the other array. O(N) space to store such hashmap.
+*/
+---------------------------------------------------
+// FOLLOW-UP 1
+/*
+What if the given array is already sorted? How would you optimize your algorithm?
 
+Classic two pointer iteration, i points to nums1 and j points to nums2. Because a sorted array is in ascending order, so if nums1[i] > nums[j], we need to increment j, and vice versa. Only when nums1[i] == nums[j], we add it to the result array. Time Complexity O(min(N, M)). Worst case, for example, would be nums1 = {100}, and nums2 = {1, 2, ..., 100 }. as the loop will terminate once we finish iterating through the smaller one.
+*/
 
+public int[] intersect(int[] nums1, int[] nums2) {
+        Arrays.sort(nums1);
+        Arrays.sort(nums2);
+        int n = nums1.length, m = nums2.length;
+        int i = 0, j = 0;
+        List<Integer> list = new ArrayList<>();
+        while(i < n && j < m){
+            int a = nums1[i], b= nums2[j];
+            if(a == b){
+                list.add(a);
+                i++;
+                j++;
+            }else if(a < b){
+                i++;
+            }else{
+                j++;
+            }
+        }
+        int[] ret = new int[list.size()];
+        for(int k = 0; k < list.size();k++) ret[k] = list.get(k);
+        return ret;
+    }
+------------------------------
+// FOLLOW-UP 2
+/*
+What if nums1's size is small compared to nums2's size? Which algorithm is better?
 
+This one is a bit tricky. Let's say nums1 is K size. Then we should do binary search for every element in nums1. Each lookup is O(log N), and if we do K times, we have O(K log N).
+If K this is small enough, O(K log N) < O(max(N, M)). Otherwise, we have to use the previous two pointers method.
+*/
+------------------------------
+// FOLLOW-UP 3
+/*
+What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
 
+1. Store the two strings in distributed system(whether self designed or not), then using MapReduce technique to solve the problem;
 
+2. Processing the Strings by chunk, which fits the memory, then deal with each chunk of data at a time;
+Using external sort, read (let's say) 2G of each into memory and then using the 2 pointer technique, then read 2G more from the array that has been exhausted. Repeat this until no more data to read from disk.
+
+It is a classical question in database perspective. External sort(merge sort) is a trick used to implement JOIN, basically called sort-merge join.
+*/
 
 
 
