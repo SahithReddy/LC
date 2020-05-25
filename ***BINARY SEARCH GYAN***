@@ -1,0 +1,16 @@
+/* QUESTION
+I have been doing some binary search problems. I have seen many similar solutions for binary search but with subtle differences:
+
+in some solutions, each loop shrink the search range using : left = mid +1, or right = mid -1;
+some other solutions use: left = mid + 1, or right = mid
+Can some one help me understand when to use 1) and when to use 2)? Thank you very much!
+
+In addition, about the termination condition, I saw some solution uses left < right, while other solution uses left <= right. Is there a rule of thumb when to use which? Appreciate any tips!
+
+*/
+
+/* SOLUTION:
+
+https://leetcode.com/explore/learn/card/binary-search/126/template-ii/937/
+
+*/
