@@ -1,32 +1,101 @@
-// put attention on the parentheses -(n/2). As we know MAX_INT32 < -MIN_INT32, 
+/* QUESTION: 50
+Implement pow(x, n), which calculates x raised to the power n (xn).
+
+Example 1:
+
+Input: 2.00000, 10
+Output: 1024.00000
+Example 2:
+
+Input: 2.10000, 3
+Output: 9.26100
+Example 3:
+
+Input: 2.00000, -2
+Output: 0.25000
+Explanation: 2-2 = 1/22 = 1/4 = 0.25
+
+NOTE:
+-100.0 < x < 100.0
+n is a 32-bit signed integer, within the range [−231, 231 − 1]
+*/
+
+
+/* As we know MAX_INT32 < -MIN_INT32, 
 so if we directly write like this n = -n then overflow will happen. However, 
-if we write n = n/2, n = -n or just n = -(n/2), then we will avoid overflow :-)
+if we write n = n/2, n = -n or just n = -(n/2), then we will avoid overflow
+*/
 
 //Recursive Solution
 
 class Solution {
+    public double myPow(double x, int n){
+    
+    if (n == 0){
+        return 1;
+    } else {  
+        double half = myPow(x, n/2);
+        if (n%2 == 0){
+            return half*half;
+        } else {
+            if (n > 0){
+                return half*half*x;
+            } else {
+                return half*half/x;
+            }                
+        }   
+    }
+}
+}
+
+Time complexity : O(logn). Each time we apply the formula (x ^ n) ^ 2 = x ^ {2 * n}
+
+n is reduced by half. Thus we need at most O(logn) computations to get the result.
+
+Space complexity : O(logn). For each computation, we need to store the result of x ^ {n / 2}. We need to do the computation for O(logn) times, so the space complexity is O(logn).
+--------------------------------------------------------------------------------------
+/* ITERATIVE SOLUTION:
+
+I couldn't find a clear explanation for an interative Log(n) solution so here's mine. The basic idea is to decompose the exponent into powers of 2, so that you can keep dividing the problem in half. For example, lets say
+
+N = 9 = 2^3 + 2^0 = 1001 in binary. Then:
+
+x^9 = x^(2^3) * x^(2^0)
+
+We can see that every time we encounter a 1 in the binary representation of N, we need to multiply the answer with x^(2^i) where i is the ith bit of the exponent. Thus, we can keep a running total of repeatedly squaring x - (x, x^2, x^4, x^8, etc) and multiply it by the answer when we see a 1.
+
+To handle the case where N=INTEGER_MIN we use a long (64-bit) variable. 
+
+x & 1 produces a value that is either 1 or 0, depending on the least significant bit of x: if the last bit is 1, the result of x & 1 is 1; otherwise, it is 0. This is a bitwise AND operation.
+
+x >>= 1 means "set x to itself shifted by one bit to the right". The expression evaluates to the new value of x after the shift.
+
+
+Below is solution:
+*/
+
+public class Solution {
     public double myPow(double x, int n) {
-        if(n==0) return 1;
-        if(n<0){
-            x=1/x;
-            return (n%2==0)? myPow(x*x, -(n/2)): x*myPow(x*x, -(n/2));
+        double ans = 1;
+        long absN = Math.abs((long)n);
+        while(absN > 0) {
+            /* x & 1 is equivalent to x % 2.
+            x >> 1 is equivalent to x / 2
+            So, these things are basically the result and remainder of divide by two.
+            */
+            if((absN&1)==1) ans *= x;
+            absN >>= 1;
+            x *= x;
         }
-            return (n%2==0)? myPow(x*x, n/2): x*myPow(x*x, n/2);
+        return n < 0 ?  1/ans : ans;
     }
 }
 
-Time complexity : O(logn). Each time we apply the formula (x ^ n) ^ 2 = x ^ {2 * n}(x 
-n
- ) 
-2
- =x 
-2∗n
- , nn is reduced by half. Thus we need at most O(\log n)O(logn) computations to get the result.
+/*
+TC: Yes, since you're dividing N by 2 every iteration that's why it is O(Log N). However, since N is a fixed number of bits (32) you could view it as O(1) where the maximum number iterations is 32. Hope this helps.
 
-Space complexity : O(logn). For each computation, we need to store the result of x ^ {n / 2}x 
-n/2
- . We need to do the computation for O(\log n)O(logn) times, so the space complexity is O(\log n)O(logn).
---------------------------------------------------------------------------------------
-//Iterative but I didn't understand
+SC: O(1)
+*/
+
 
 https://leetcode.com/problems/powx-n/discuss/19733/Simple-iterative-lg-n-solution
