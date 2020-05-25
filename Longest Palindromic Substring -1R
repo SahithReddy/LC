@@ -13,7 +13,7 @@ Output: "bb"
 /* ALGORITHM:
 We observe that a palindrome mirrors around its center. Therefore, a palindrome can be expanded from its center, and there are only 2n−1 such centers.
 
-You might be asking why there are 2n−1 but not nn centers? The reason is the center of a palindrome can be in between two letters. Such palindromes have even number of letters (such as "abba") and its center are between the two 'b's.
+You might be asking why there are 2n−1 but not n centers? The reason is the center of a palindrome can be in between two letters. Such palindromes have even number of letters (such as "abba") and its center are between the two 'b's.
 
 */
 
@@ -55,14 +55,16 @@ Space complexity : O(1).
  // MANACHERS ALGORITHM: TC O(N)
  // https://www.baeldung.com/java-palindrome-substrings
  
- // First, we'll guard the input string with a boundary character at the beginning and end before converting the resulting string to a character array:
+/* ALGORITHM: 
+First, we'll guard the input string with a boundary character at the beginning and end before converting the resulting string to a character array:
 String formattedInput = "@" + input + "#";
 char inputCharArr[] = formattedInput.toCharArray();
 
-// Then, we'll use a two-dimensional array radius with two rows — one to store the lengths of odd-length palindromes, and the other to store lengths of even-length palindromes:
+Then, we'll use a two-dimensional array radius with two rows — one to store the lengths of odd-length palindromes, and the other to store lengths of even-length palindromes:
 int radius[][] = new int[2][input.length() + 1];
 
-// Next, we'll iterate over the input array to find the length of the palindrome centered at position i and store this length in radius[][]:
+Next, we'll iterate over the input array to find the length of the palindrome centered at position i and store this length in radius[][]:
+*/
 
 Set<String> palindromes = new HashSet<>();
 int max;
@@ -160,8 +162,9 @@ class Solution {
     }
 }
  -------------------------------------------------------------------------------------------------------
-DP - Watch this video. This has a good basic explanation of understanding this problem in DP
+/*DP - Watch this video. This has a good basic explanation of understanding this problem in DP
 https://www.youtube.com/watch?v=Fi5INvcmDos
+*/
 
 public class Solution {
     public static String longestPalindrome(String s) {
@@ -191,8 +194,9 @@ public class Solution {
         return s.substring(palindromeStartsAt, palindromeStartsAt+maxLen);
     }
 }
-Time - O(n^2) Space: O(n^2)
+// Time - O(n^2) Space: O(n^2)
 
+/*
 A little explanation for why the indices in the for loops are set the way they are (I was really confused for a long time):
 
 j must be greater than or equal i at all times. Why? i is the start index of the substring, 
@@ -205,4 +209,5 @@ Why are we counting down for i, but counting up for j? Each sub-problem dp[i][j]
 
 All this explanations are here in below:
 https://leetcode.com/problems/longest-palindromic-substring/discuss/2921/Share-my-Java-solution-using-dynamic-programming
+*/
  -------------------------------------------------------------------------------------------------------
