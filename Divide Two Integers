@@ -1,0 +1,208 @@
+/* 29 QUESTION: FOR THIS, RULES AND RESTRICTIONS ARE IMPORTANT
+Given two integers dividend and divisor, divide two integers without using multiplication, division and mod operator.
+
+Return the quotient after dividing dividend by divisor.
+
+The integer division should truncate toward zero, which means losing its fractional part. For example, truncate(8.345) = 8 and truncate(-2.7335) = -2.
+
+Example 1:
+
+Input: dividend = 10, divisor = 3
+Output: 3
+Explanation: 10/3 = truncate(3.33333..) = 3.
+Example 2:
+
+Input: dividend = 7, divisor = -3
+Output: -2
+Explanation: 7/-3 = truncate(-2.33333..) = -2.
+
+NOTE:
+Both dividend and divisor will be 32-bit signed integers.
+The divisor will never be 0.
+Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−2^31,  2^31 − 1]. For the purpose of this problem, assume that your function returns 2^31 − 1 when the division result overflows.
+
+
+*/
+
+/* LEARNING:
+
+***Without using multiplication, division and mod operator.****
+While you might be tempted to use multiplication and division for a few "simple" tasks, this is unnecessary. Here are some alternatives:
+1. Instead of a = a * -1 for making numbers negative, use a = -a.
+2. Instead of using a / 2 for dividing by 2, use the right shift operator; a >> 1.
+3. Instead of using a * 2 for doubling, use a = a + a, a += a, or even the left shift operator; a << 1.
+
+*/
+
+/* ALGORITHM: SEE Approach 3: Adding Powers of Two in OFFICIAL SOLUTION with TC & SC of O(logN).
+
+APPROACH 4 CAN MAKE BE SPACE OPTIMIZED TO O(1). SEE THAT BELOW USING BIT WISE OPERATORS.
+
+*/
+
+class Solution {
+    private static int HALF_INT_MIN = -1073741824; // That is -2^31 divided by 2: -2**30;
+
+public int divide(int dividend, int divisor) {
+
+    // Special case: overflow. To handle the -2147483648 / -1 case.
+    if (dividend == Integer.MIN_VALUE && divisor == -1) {
+        return Integer.MAX_VALUE;
+    }
+
+    /* We need to convert both numbers to negatives. The key observation to make is that the problems are occurring because there are more negative signed 32-bit integers than there are positive signed 32-bit integers. Each positive signed 32-bit integer has a corresponding negative signed 32-bit integer. However, the same is not true for negative signed 32-bit integers. The smallest one, -2147483648, is alone. It is this number that causes the problems. The best solution is to work with negative, instead of positive, numbers.*/
+    
+    /* Also, we count the number of negatives signs so that we can use this count later at the end to make adjustments of Poitive/Negatives to the result. */
+    int negatives = 2;
+    if (dividend > 0) {
+        negatives--;
+        dividend = -dividend;
+    }
+    if (divisor > 0) {
+        negatives--;
+        divisor = -divisor;
+    }
+    
+    /*One way of quickly increasing numbers, without using multiplication, is to double them repeatedly. So let's try doubling the divisor until it no longer fits into the dividend.*/
+    // divide(93706, 157).
+    ArrayList<Integer> doubles = new ArrayList<>(); // 157, 314, 628, 1256, 2512, 5024,....
+    ArrayList<Integer> powersOfTwo = new ArrayList<>(); // 1,2,4,8,16,32...
+
+    /* Nothing too exciting here, we're just making a list of doubles of 1 and
+     * the divisor. This is pretty much the same as Approach 2, except we're
+     * actually storing the values this time. */
+    int powerOfTwo = -1;
+    while (divisor >= dividend) {
+        doubles.add(divisor);
+        powersOfTwo.add(powerOfTwo);
+        // Prevent needless overflows from occurring...
+        if (divisor < HALF_INT_MIN) {
+            break;
+        }
+        divisor += divisor;
+        powerOfTwo += powerOfTwo;
+    }
+
+    int quotient = 0;
+    /* Go from largest double to smallest, checking if the current double fits.
+     * into the remainder of the dividend. */
+    for (int i = doubles.size() - 1; i >= 0; i--) {
+        if (doubles.get(i) >= dividend) {
+            // If it does fit, add the current powerOfTwo to the quotient.
+            quotient += powersOfTwo.get(i);
+            // Update dividend to take into account the bit we've now removed.
+            dividend -= doubles.get(i);
+        }
+    }
+
+    /* At the end, we'll need to convert the result back to a positive. If there was originally one negative sign, then the quotient remains negative. Otherwise, switch it to positive. */
+    /* Recall that positive * negative = negative, and negative * negative = positive. In other words, if there was exactly one negative sign in the inputs, the final result is negative. Otherwise, it's positive. */
+    if (negatives != 1) {
+        return -quotient;
+    }
+    return quotient;
+}
+}
+
+
+/*
+Time Complexity : O(logn).
+
+We take O(logn) time in the first loop to create our list of doubles (and powers of two).
+
+For the second loop, because there's O(logn) items in the list of doubles, it only takes O(logn)time for this loop as well.
+
+Combined, our total time complexity is just O(logn+logn)=O(logn).
+
+Space Complexity : O(logn).
+
+The length of the list of doubles of the divisor is proportional to O(logn) so our space complexity is O(logn).
+*/
+---------------------------------------------------
+/* BIT OPERATORS ALGORITHM
+Above, we put doubles of the divisor, and powers of two into lists. This was so that we could easily refer back to them.
+
+However, we don't need to save them—we can simply find the largest double, along with it's corresponding power of two, and then generate the rest by dividing by two repeatedly. But we can't divide by two, that breaks the rules..., you might be thinking. The solution is to use the right-shift bitwise operator!
+
+int a = 1020;
+a = a >> 1;
+System.out.println(a);
+// Prints 510.
+ 
+*/
+
+class Solution {
+private static int HALF_INT_MIN = -1073741824; // That is -2^31 divided by 2: -2**30;
+
+public int divide(int dividend, int divisor) {
+
+    // Special case: overflow. To handle the -2147483648 / -1 case.
+    if (dividend == Integer.MIN_VALUE && divisor == -1) {
+        return Integer.MAX_VALUE;
+    }
+
+    /* We need to convert both numbers to negatives. The key observation to make is that the problems are occurring because there are more negative signed 32-bit integers than there are positive signed 32-bit integers. Each positive signed 32-bit integer has a corresponding negative signed 32-bit integer. However, the same is not true for negative signed 32-bit integers. The smallest one, -2147483648, is alone. It is this number that causes the problems. The best solution is to work with negative, instead of positive, numbers.*/
+    
+    /* Also, we count the number of negatives signs so that we can use this count later at the end to make adjustments of Poitive/Negatives to the result. */
+    int negatives = 2;
+    if (dividend > 0) {
+        negatives--;
+        dividend = -dividend;
+    }
+    if (divisor > 0) {
+        negatives--;
+        divisor = -divisor;
+    }
+        /*One way of quickly increasing numbers, without using multiplication, is to double them repeatedly. So let's try doubling the divisor until it no longer fits into the dividend.*/
+    // divide(93706, 157).
+    // Doubles : 157, 314, 628, 1256, 2512, 5024,....
+    // PowerOfTwo: 1,2,4,8,16, 32...
+    
+    /* In the first loop, we simply find the largest double of divisor
+     * that fits into the dividend.
+     * The >= is because we're working in negatives. In essence, that
+     * piece of code is checking that we're still nearer to 0 than we
+     * are to INT_MIN. */
+    int highestDouble = divisor;
+    int highestPowerOfTwo = -1;
+    while (highestDouble >= HALF_INT_MIN && dividend <= highestDouble + highestDouble) {
+        highestPowerOfTwo += highestPowerOfTwo;
+        highestDouble += highestDouble;
+    }
+
+    /* In the second loop, we work out which powers of two fit in, by
+     * halving highestDouble and highestPowerOfTwo repeatedly.
+     * We can do this using bit shifting so that we don't break the
+     * rules of the question :-) */
+    int quotient = 0;
+    while (dividend <= divisor) {
+        if (dividend <= highestDouble) {
+            quotient += highestPowerOfTwo;
+            dividend -= highestDouble;
+        }
+        /* We know that these are always even, so no need to worry about the
+         * annoying "bit-shift-odd-negative-number" case. */
+        highestPowerOfTwo >>= 1;
+        highestDouble >>= 1;
+    }
+
+    /* At the end, we'll need to convert the result back to a positive. If there was originally one negative sign, then the quotient remains negative. Otherwise, switch it to positive. */
+    /* Recall that positive * negative = negative, and negative * negative = positive. In other words, if there was exactly one negative sign in the inputs, the final result is negative. Otherwise, it's positive. */
+    if (negatives != 1) {
+        return -quotient;
+    }
+    return quotient;
+}
+}
+
+/*
+Time Complexity : O(logn).
+
+Same as Approach 3, except instead of looping over a generated array, we simply perform an O(1) halving operation to get the next values we need.
+
+Space Complexity : O(1).
+
+We only use a fixed number of integer variables, so the space complexity is O(1).
+*/
+
+
