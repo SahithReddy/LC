@@ -1,0 +1,177 @@
+/* 32: QUESTION
+Given a string containing just the characters '(' and ')', find the length of the longest valid (well-formed) parentheses substring.
+
+Example 1:
+
+Input: "(()"
+Output: 2
+Explanation: The longest valid parentheses substring is "()"
+Example 2:
+
+Input: ")()())"
+Output: 4
+Explanation: The longest valid parentheses substring is "()()"
+*/
+
+/* ALGORITHM: USING STACK - TC & SC - O(N) - BELOW IS A 2 POINTER APPROACH With O(1) SPACE
+
+The idea is simple, we only update the result (max) when we find a "pair".
+If we find a pair. We throw this pair away and see how big the gap is between current and previous invalid.
+EX: "( )( )"
+stack: -1, 0,
+when we get to index 1 ")", the peek is "(" so we pop it out and see what's before "(".
+In this example it's -1. So the gap is "current_index" - (-1) = 2.
+
+The idea only update the result (max) when we find a "pair" and push -1 to stack first covered all edge cases.
+*/
+
+// https://leetcode.com/problems/longest-valid-parentheses/discuss/14278/Two-Java-solutions-with-explanation.-Stack-and-DP.-Short-and-easy-to-understand.
+
+// SELF EXPLANATORY CODE:
+public class Solution {
+    public int longestValidParentheses(String s) {
+        LinkedList<Integer> stack = new LinkedList<>();
+        int result = 0;
+        stack.push(-1);
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ')' && stack.size() > 1 && s.charAt(stack.peek()) == '(') {
+                stack.pop();
+                result = Math.max(result, i - stack.peek());
+            } else {
+                stack.push(i);
+            }
+        }
+        return result;
+    }
+}
+
+/*
+Time complexity : O(n). n is the length of the given string..
+
+Space complexity : O(n). The size of stack can go up to n.
+*/
+-------------------------------------
+/* WITHOUT EXTRA SPACE: TWO POINTER APPROACH
+
+In this approach, we make use of two counters leftleft and rightright. First, we start traversing the string from the left towards the right and for every \text{‘(’}‘(’ encountered, we increment the leftleft counter and for every \text{‘)’}‘)’ encountered, we increment the rightright counter. Whenever leftleft becomes equal to rightright, we calculate the length of the current valid string and keep track of maximum length substring found so far. If rightright becomes greater than leftleft we reset leftleft and rightright to 00.
+
+Next, we start traversing the string from right to left and similar procedure is applied.
+
+There are only three cases for a string:
+
+1. '(' are more than ')'
+2. '(' are less than ')'
+3. '(' and ')' are the same
+
+Now, when you scan from left to right, you can only find the correct maxLength for cases 2 and 3, because if it is case 1, where '(' are more than ')' (e.g., "((()"), then left is always greater than right and maxLength does not have the chance to be updated.
+
+Similarly, when you scan from right to left, you can only find the maxLength for cases 1 and 3.
+
+Therefore, a two-pass scan covers all the cases and is guaranteed to find the correct maxLength
+----------------------
+PROOF OF CORRECTNESS:
+
+Assume the longest valid substring is s[i,j].
+
+IN THE FORWARD PASS:
+
+-> The invariant is left >= right (if not, we set left = right = 0).
+-> After processing index i-1, there are 2 cases:
+
+1. left == right:
+Substring s[i,j] adds equal number of '(' and ')',
+so after processing index j, left == right. So
+the forward pass will find the optimal substring.
+
+2. left > right:
+Substring s[i,j] adds equal number of '(' and ')',
+so after processing index j, left > right. So
+forward pass will -NOT- find the optimal substring.
+
+IN THE BACKWARD PASS:
+
+-> The invariant is left <= right (if not, we set left = right = 0).
+-> After processing index j+1, there are 2 cases:
+
+1. left == right:
+Substring s[i,j] adds equal number of '(' and ')',
+so after processing index i, left == right, and
+the backward pass finds the optimal substring.
+
+2. left < right:
+We know the following is true:
+a) In the forward pass: prior to processing index i: left > right
+(the forward pass failed to find the optimal substring).
+b) In the backward pass: prior to processing index j: left < right
+
+For example consider the sequence below, with i=3 and j=6.
+Substring s[3,6] is highlighted using '-' for clarity.
+
+ (()-(())-())()
+If both (2a) and (2b) are true, the maximality of
+substring s[i,j] is contradicted. How so?
+
+We can:
+a) increase j to a larger j' such that
+s[j+1, j'] has 1 more ')' than '('.
+b) decrease i to a smaller i' such that
+s[i', i-1] has 1 more '(' than ')'.
+
+The net result is that s[i', j'] is a longer valid
+substring, which violates our initial assumption
+about the maximality of the substring s[i,j].
+
+Concretely, in our above example, we can increase
+j from 6 to 9, and reduce i from 3 to 0. Note
+s[0,9] is also valid and is now longer than s[3,6].
+
+Therefore, this scenario will never occur.
+
+We can therefore conclude that either the forward
+pass or the backward pass (or both passes) will
+find the optimal substring.
+
+*/
+
+public class Solution {
+    public int longestValidParentheses(String s) {
+        int left = 0, right = 0, maxlength = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                maxlength = Math.max(maxlength, 2 * right);
+            } else if (right > left) {
+                left = right = 0;
+            }
+        }
+        left = right = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            if (s.charAt(i) == '(') {
+                left++;
+            } else {
+                right++;
+            }
+            if (left == right) {
+                maxlength = Math.max(maxlength, 2 * left);
+            } else if (left > right) {
+                left = right = 0;
+            }
+        }
+        return maxlength;
+    }
+}
+
+/*
+Time complexity : O(n). n is the length of the given string..
+
+Space complexity : O(1).
+*/
+
+
+
+
+
