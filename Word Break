@@ -21,8 +21,69 @@ Example 3:
 Input: s = "catsandog", wordDict = ["cats", "dog", "sand", "and", "cat"]
 Output: false
 */
+-------------------------------
+/* ALGORITHM: DP - But it is O(n^3)
 
-/* BFS: TC: O(N^2), SC: O(N) - Same as DP
+The idea is the following:
+
+dp is an array that contains booleans
+
+dp[i] is True if there is a word in the dictionary that ends at ith index of s AND d is also True at the beginning of the word
+
+Example:
+
+s = "leetcode"
+
+words = ["leet", "code"]
+
+dp[3] is True because there is "leet" in the dictionary that ends at 3rd index of "leetcode"
+
+dp[7] is True because there is "code" in the dictionary that ends at the 7th index of "leetcode" AND dp[3] is True
+
+The result is the last index of dp.
+
+
+dp[i] stands for whether subarray(0, i), means 0 to i-1 inclusive,  can be segmented into words from the dictionary. So dp[0] means whether subarray(0, 0) (which is an empty string) can be segmented, and of course the answer is yes.
+
+Boolean dp array is created which is of size 1 plus the length of string s, 1 is added because the empty string is very much part of wordDict. Thus here we initialized the array with f[0]=true because worddict contains empty string.
+
+The default value for boolean array is false. Therefore we need to set dp[0] to be true.
+*/
+
+public class Solution {
+    public boolean wordBreak(String s, List<String> wordDict) {
+        // If you use set,you can find the element in O(1).But if you use List,you may find the element in O(n)
+        Set<String> wordDictSet=new HashSet(wordDict);
+        
+        // dp[i] represents whether s[0...i] can be formed by dict
+        boolean[] dp = new boolean[s.length() + 1];
+        
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true; // Can make a word from the last point to here
+                    break; // No need to look at more words, we found a continuation
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+}
+
+/*
+Time complexity : O(n^3) Two loops are there to fill dp array. with substring(a,b) taking O(N) time.
+
+Time complexity O(n^3), analyse; substring() O(n) => O(n^3)
+2. detailed:
+inner substring(): O(1 + 2 + 3 + ... + i) = O(i^2)
+total time complexity: O(1^2 + 2^2 + 3^2 ... + n^2) < O(n*n^2) = O(n^3)
+strictly if you want to know: O(1^2 + 2^2 + 3^2 ... + n^2) = O(n(n+1)(2n+1)/6) = O(n^3)
+
+Space complexity : O(n). Length of dp array is n+1.
+*/
+--------------------------------------------
+/* BFS: TC: O(N^3), SC: O(N) - Same as DP
 
 1. Visualize the string as a tree where each node represents the prefix upto index endend. Two nodes are connected only if the substring between the indices linked with those nodes is also a valid string which is present in the dictionary. 
 2. In order to form such a tree, we start with the first character of the given string (say s) which acts as the root of the tree being formed and find every possible substring starting with that character which is a part of the dictionary. 
@@ -67,38 +128,13 @@ class Solution {
 }
 
 /*
-Time complexity : O(n^2) For every starting index, the search can continue till the end of the given string.
+Time complexity : O(n^3) For every starting index, the search can continue till the end of the given string. with substring(a,b) taking O(N) time.
 
 Space complexity : O(n). Queue of atmost nn size is needed.
 
 */
 ---------------------------------------------------------
-// DP
 
-
-
-public class Solution {
-    public boolean wordBreak(String s, List<String> wordDict) {
-        Set<String> wordDictSet=new HashSet(wordDict);
-        boolean[] dp = new boolean[s.length() + 1];
-        dp[0] = true;
-        for (int i = 1; i <= s.length(); i++) {
-            for (int j = 0; j < i; j++) {
-                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
-                    dp[i] = true;
-                    break;
-                }
-            }
-        }
-        return dp[s.length()];
-    }
-}
-
-/*
-Time complexity : O(n^2) Two loops are their to fill dp array.
-
-Space complexity : O(n). Length of pp array is n+1.
-*/
 
 
 
