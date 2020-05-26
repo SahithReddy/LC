@@ -1,12 +1,35 @@
-// Good Theory: https://www.interviewcake.com/concept/java/lru-cache
+/* QUESTION:
+Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
 
-// Solution from this video: https://www.youtube.com/watch?v=NDpwj0VWz1U 
+get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
+put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
 
+The cache is initialized with a positive capacity.
+
+Follow up:
+Could you do both operations in O(1) time complexity?
+
+Example:
+LRUCache cache = new LRUCache( 2 /* capacity */ );
+
+cache.put(1, 1);
+cache.put(2, 2);
+cache.get(1);       // returns 1
+cache.put(3, 3);    // evicts key 2
+cache.get(2);       // returns -1 (not found)
+cache.put(4, 4);    // evicts key 1
+cache.get(1);       // returns -1 (not found)
+cache.get(3);       // returns 3
+cache.get(4);       // returns 4
+
+
+*/
+--------------------------------------------
 // The key to solve this problem is using a double linked list which enables us to quickly move nodes.
 
 // The LRU cache is a hash table of keys and double linked nodes. The hash table makes the time of get() to be O(1). The list of double linked nodes make the nodes adding/removal operations O(1).
 
-/*
+/* ALGORITHM: HASHMAP + DLL
 The problem can be solved with a hashmap that keeps track of the keys and its values in the double linked list. 
 That results in O(1) time for put and get operations and allows to remove the first added node in O(1) time as well.
 
@@ -14,7 +37,7 @@ One advantage of double linked list is that the node can remove itself without o
 In addition, it takes constant time to add and remove nodes from the head or tail.
 
 One particularity about the double linked list implemented here is that there are pseudo head and pseudo tail 
-to mark the boundary, so that we don't need to check the null node during the update.
+to mark the boundary, so that we don't need to check the NULL node during the update.
 */
 
 // CODE:
@@ -39,16 +62,36 @@ class LRUCache {
     }
     // first write insert to head -> remove -> get -> put
     
+    // Always add the new node right after head
+    private void insertToHead(Node node){
+      Node head_next = head.next;
+        head.next = node;
+        node.prev = head;
+        node.next = head_next;
+        head_next.prev = node;
+    }
+    
+    // Remove an existing node from the linked list.
+    private void remove(Node node){
+      Node next_node = node.next;
+        Node prev_node = node.prev;
+        
+        next_node.prev = prev_node;
+        prev_node.next = next_node;
+    }
+    
+    // This method works in O(1) 
     public int get(int key) {
-        int result = -1;
+        int result = -1; 
         Node node = map.get(key);
           if(node!=null){
               result = node.val;
               remove(node);
               insertToHead(node);
-          } return result;  
+          } return result;
     }
     
+    // This method works in O(1) 
     public void put(int key, int value) {
         Node node = map.get(key);
         if(node!=null){
@@ -67,22 +110,6 @@ class LRUCache {
             insertToHead(new_node);
         }
     }
-    
-    private void remove(Node node){
-      Node next_node = node.next;
-        Node prev_node = node.prev;
-        
-        next_node.prev = prev_node;
-        prev_node.next = next_node;
-    }
-    
-    private void insertToHead(Node node){
-      Node head_next = head.next;
-        head.next = node;
-        node.prev = head;
-        node.next = head_next;
-        head_next.prev = node;
-    }
 }
 
 /*
@@ -92,7 +119,7 @@ time of get() to be O(1). The list of double linked nodes make the nodes adding/
 Space complexity : O(capacity) since the space is used only for a hashmap and double linked list with at 
 most capacity + 1 elements.
 */
-
+----------------------------------------
 /* LAZY SOLUTION OF LINKED HASHMAP TOO
  INSERTS AS WE SEND TO IT
 */
@@ -129,4 +156,8 @@ public void put(int key, int value) {
 https://leetcode.com/problems/lru-cache/discuss/45911/Java-Hashtable-%2B-Double-linked-list-(with-a-touch-of-pseudo-nodes)
 https://leetcode.com/problems/lru-cache/discuss/45922/JAVA-Easy-Version-To-Understand!!!!
 */
+
+// Good Theory: https://www.interviewcake.com/concept/java/lru-cache
+
+// Solution from this video: https://www.youtube.com/watch?v=NDpwj0VWz1U 
 
