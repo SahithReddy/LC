@@ -1,0 +1,148 @@
+/* 282 QUESTION
+Given a string that contains only digits 0-9 and a target value, return all possibilities to add binary operators (not unary) +, -, or * between the digits so they evaluate to the target value.
+
+Example 1:
+
+Input: num = "123", target = 6
+Output: ["1+2+3", "1*2*3"] 
+Example 2:
+
+Input: num = "232", target = 8
+Output: ["2*3+2", "2+3*2"]
+Example 3:
+
+Input: num = "105", target = 5
+Output: ["1*0+5","10-5"]
+Example 4:
+
+Input: num = "00", target = 0
+Output: ["0+0", "0-0", "0*0"]
+Example 5:
+
+Input: num = "3456237490", target = 9191
+Output: []
+
+*/
+
+
+/* ALGORITHM:
+
+Let's assume our expression string is 123
+dfs(List<String> res, StringBuilder sb, char[] num, int pos, int target, long prev, long multi)
+
+this recursive algorithm evaluates the expression from left -> right
+and once we have evaluated the whole expression, if it is equal to the target then we add the expression to the result-set
+
+here we start evaluating the expression from index pos
+the expression evaluated till pos has resulted in value 'prev'
+
+Let say the expression string formed so far is 1 + 2 (eval is 3)
+in current step let say we 'curr' is 3 (i.e. the remnant string expression till end)
+we can choose to add, subtract or multiply 3 to the evaluated value
+however, if we choose multiply 3 (i.e. 1 + 2 * 3), then the answer should be 7
+this is where 'multi' shall help us, which is basically the last value that contributed to the current 'prev'
+
+dfs(res, sb.append("*").append(curr), num, i + 1, target, prev - multi + multi * curr, multi * curr); 
+so, to ensure we take operator precedence in computing the current value of eval and compute the expression as 1 + (2 * 3) = 7 and not (1 + 2) * 3 = 9
+we do following :
+prev - multi + multi * curr
+prev : 3
+multi : 2
+curr : 3
+
+and set the last contributed value to eval as multi * curr
+------------------------------
+FOR EXAMPLE, if you have a sequence of 12345 and you have proceeded to 1 + 2 + 3, now your eval is 6 right? If you want to add a * between 3 and 4, you would take 3 as the digit to be multiplied, so you want to take it out from the existing eval. You have 1 + 2 + 3 * 4 and the eval now is (1 + 2 + 3) - 3 + (3 * 4). 
+-----------------------------
+This problem has a lot of edge cases to be considered:
+
+1. overflow: we use a long type once it is larger than Integer.MAX_VALUE or minimum, we get over it.
+2. 0 sequence: because we can't have numbers with multiple digits started with zero, we have to deal with it too.
+3. a little trick is that we should save the value that is to be multiplied in the next recursion.
+
+*/
+
+class Solution {
+    /**
+ * When we use dfs to do this question, the most tricky part is that how to deal with multiplication. For every 
+ * addition and subtraction, we just directly adding or subtracting the new number. However, for multiplication, 
+ * we should multiply current number and previous number firstly, and then add previous previous number.
+ * So we can use a variable preNum to record every previous number in each recursion step. If current recursive 
+ * call is trying multiplication, we should use previous calculation value subtract previous number, and then 
+ * adding multiplication result between previous number and current number.
+ * */
+
+public List<String> addOperators(String num, int target) {
+    List<String> res = new ArrayList<>();
+    StringBuilder sb = new StringBuilder();
+    dfs(res, sb, num.toCharArray(), 0, target, 0, 0);
+    return res;
+
+}
+
+/**
+ * @param res: result list to store valid expressions
+ * @param num: input num candidates
+ * @param target: input target number
+ * @param sb: current expression stringbuilder
+ * @param prev: current calculation value
+ * @param multi: previous number, in order to multiply current number if we want to put * between multi and curr
+ * @param pos: current index in the input num array
+ * */
+
+public void dfs(List<String> res, StringBuilder sb, char[] num, int pos, int target, long prev, long multi) { 
+    if(pos == num.length) {
+        if(target == prev) res.add(sb.toString());
+        return;
+    }
+    long curr = 0;
+    /* start from first index of current position in num string, try all possible length of nums*/
+    for(int i = pos; i < num.length; i++) {
+        
+        /* corner case: if current position is 0, we can only use it as a single digit number, should be 0 if it is not a single digit number with leading 0, it should be considered as an invalid number */
+        if(num[pos] == '0' && i != pos) break;
+        curr = 10 * curr + num[i] - '0'; // Parsing each character at position i for current
+        int len = sb.length();
+        
+        /* position 0 should be considered individually, since it does not have any operand character before curr */
+        if(pos == 0) {
+            dfs(res, sb.append(curr), num, i + 1, target, curr, curr); 
+            sb.setLength(len);
+        } else {
+            dfs(res, sb.append("+").append(curr), num, i + 1, target, prev + curr, curr); 
+            sb.setLength(len);
+            dfs(res, sb.append("-").append(curr), num, i + 1, target, prev - curr, -curr); 
+            sb.setLength(len);
+            /* trick part: to calculate multiplication, we should subtract previous number, and then add current multiplication result to the subtraction result */
+            dfs(res, sb.append("*").append(curr), num, i + 1, target, prev - multi + multi * curr, multi * curr); 
+            sb.setLength(len);
+        }
+    }
+}
+}
+
+
+/*
+Time Complexity:
+
+There are n-1 slots for us to add an operator and there are 4 choices (+, -, * and no operator/empty space) (in this case, eg. 12 was treated as one number) so the complexity is 4^(N-1) for this part.
+Also, remember there is a for loop inside every call stack, So, for the call stack of length N,
+Total time complexity should be N * 4^(N - 1)
+
+Space Complexity:
+
+1. For both Python and Java implementations we have a list data structure that we update on the fly and only for valid expressions do we create a new string and add to our answers array. So, the space occupied by the intermediate list would be O(N) since in the worst case the expression would be built out of all the digits as operands.
+2. Additionally, the space used up by the recursion stack would also be O(N) since the size of recursion stack is determined by the value of index and it goes from 0 all the way to N.
+3. We don't consider the space occupied by the answers array since that is a part of the question's requirement and we can't reduce that in any way
+
+*/
+
+
+
+
+
+
+
+
+
+
