@@ -1,0 +1,97 @@
+/* 211: QUESTION
+
+Design a data structure that supports the following two operations:
+
+void addWord(word)
+bool search(word)
+search(word) can search a literal word or a regular expression string containing only letters a-z or .. A . means it can represent any one letter.
+
+Example:
+addWord("bad")
+addWord("dad")
+addWord("mad")
+search("pad") -> false
+search("bad") -> true
+search(".ad") -> true
+search("b..") -> true
+
+Note: You may assume that all words are consist of lowercase letters a-z.
+*/
+
+/* TRIE ALGORITHM:
+This is a vanilla application of Trie. The main difficulty lies in how to deal with the "." character. I use a naive solution in this place: each time when I reach a ".", I simply traverse all the children of the current node and recursively search the remaining substring starting from each of those children.
+
+This solution uses Trie tree and DFS to search '.' case.
+
+1, first build the standard trier tree root.
+2, add the word into the tree.
+3, basic search for normal character 'a'-'z' and DFS for the '.'
+
+*/
+
+public class WordDictionary {
+    // Use a prefix tree to store new words
+    // Use dfs to serach for words
+    
+    public class TrieNode {
+        public TrieNode[] children = new TrieNode[26];
+        public boolean isWord;
+    }
+    
+    private TrieNode root = new TrieNode();
+
+    // Adds a word into the data structure.
+    public void addWord(String word) {
+        TrieNode node = root;
+        for (char c : word.toCharArray()) {
+            if (node.children[c - 'a'] == null) {
+                node.children[c - 'a'] = new TrieNode();
+            }
+            node = node.children[c - 'a'];
+        }
+        node.isWord = true;
+    }
+
+    // Returns if the word is in the data structure. A word could
+    // contain the dot character '.' to represent any one letter.
+    public boolean search(String word) {
+        return match(word.toCharArray(), 0, root);
+    }
+    
+    private boolean match(char[] chs, int k, TrieNode node) {
+        //if the word has all been scanned, return
+        if (k == chs.length) return node.isWord;
+        
+        /* if the character at current position is '.', 
+        recursive check whether the remaing word is in the trie*/
+        if (chs[k] == '.') {
+            for (int i = 0; i < node.children.length; i++) {
+                if (node.children[i] != null 
+                    && match(chs, k + 1, node.children[i])) return true;
+            }
+        } 
+        
+        /* if character at current position matches the node, 
+        recursively search the remaining word*/
+        else return node.children[chs[k] - 'a'] != null 
+                    && match(chs, k + 1, node.children[chs[k] - 'a']);
+        return false;
+    }
+}
+
+/*
+Time Complexity:
+addWord() - O(n), n = length of the new word
+
+search() - Worst case: O(m), m = the total number of characters in the Trie, although O(m) as described above is a tighter bound than O(26^n), because you won't always have 26 children at every trie node, it's just the absolute worste case
+
+Space Complexity:
+addWord() - O(N), where N is length of word
+search() - Takes O(M * N) space, where M is # of words and N is length of word
+*/
+
+
+
+
+
+
