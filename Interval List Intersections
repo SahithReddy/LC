@@ -17,3 +17,54 @@ Note:
 0 <= B.length < 1000
 0 <= A[i].start, A[i].end, B[i].start, B[i].end < 10^9
 */
+
+/* ALGORITHM: 2 Pointer Approach
+If A[0] has the smallest endpoint, it can only intersect B[0]. After, we can discard A[0] since it cannot intersect anything else.
+
+Similarly, if B[0] has the smallest endpoint, it can only intersect A[0], and we can discard B[0] after since it cannot intersect anything else.
+
+We use two pointers, i and j, to virtually manage "discarding" A[0] or B[0] repeatedly.
+------------------------------
+1. Incase of intersection, find the intersection interval;
+-->start = max(startA, startB)
+-->end = min(endA, endB)
+2. If intersection, move the shortest end time interval. Since, the other could overlap once again
+
+*/
+
+class Solution {
+    public int[][] intervalIntersection(int[][] A, int[][] B) {
+        if(A == null || A.length == 0 || B == null || B.length == 0)
+            return new int[][]{};
+        List<int[]> res = new ArrayList<>();
+
+        int i = 0, j = 0;
+        int startMax, endMin;
+        while(i < A.length && j < B.length){
+            // find the overlap... if there is any...
+            // Let's check if A[i] intersects B[j].
+            // startMax- the startpoint of the intersection
+            // endMin - the endpoint of the intersection
+            startMax = Math.max(A[i][0], B[j][0]);
+            endMin = Math.min(A[i][1], B[j][1]);
+
+            if(endMin >= startMax) // Criss-cross lock
+                res.add(new int[]{startMax, endMin});
+            
+            // Discard the interval with the smallest endpoint
+            if(A[i][1] == endMin) i++; // Exhausted this range in A, Point to next range in A
+            if(B[j][1] == endMin) j++; // Exhausted this range in B, Point to next range in B
+            
+        }
+
+        return res.toArray(new int[0][0]);
+    }
+}
+
+// By using toArray(T[0]) instead of toArray(T[size]) we manage to avoid this zeroing phase and as a result save time.
+/* so basically java does a calloc before writing the values(because by doing toArray(T[size]) it "has" to zero the default values of fields but by doing toArray(T[0]) we skip that initialization of default values - making the process faster. */
+
+/*
+Time Complexity: O(M+N), where M,N are the lengths of A and B respectively.
+Space Complexity: O(1)
+*/
