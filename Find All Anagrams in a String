@@ -75,9 +75,40 @@ SLIDING WINDOW:
 3. To check if it is anagram we take help of the 'count' variable. While moving right pointer forward, decrease it if a character of S is found in P and while moving left pointer forward Increase it if character we're moving away from is part of the anagram(if the character is in p).
 
 4. return result.
+------------------------------------
+  Let's see how to find anagrams using an example.
+  
+  Take,  s = cbaebabacd , p = abc , result = [ ]
+  find all substrings of length 3 in s.
+  
+  substrings = [ cba,  bae,  aeb,  eba, bab,  aba, bac, acd ]
+  from these substrings, find anagrams
+  
+  1. cba -> 
+     it is anagram of p it contains every character of p 
+	 and frequency of every character is also same.
+So, add starting position of substring to result.
+So, result is [ 0 ]
+2. bae -> it is not anagram. because e is not in p.
+3. aeb -> it is not anagram. because e is not in p.
+4. eab -> it is not anagram. because e is not in p.
+5. bab :- 
+   it is not anagram. because b's frequency is 2. But,
+   b's frequency in p is 1.
+6. aba:-
+   it is not anagram. because a's frequency is 2. But,
+   a's frequency in p is 1.
+7. bac :-  
+     it is anagram of p it contains every character of p 
+	 and frequency of every character is also same.
+So, add starting position of substring to result.
+So, result is [ 0 , 6 ]
+ 8. acd -> it is not anagram. because d is not in p.
+
+So, result is [ 0 , 6 ]
+
+return result.
 */
-
-
 
 public class Solution {
     public List<Integer> findAnagrams(String s, String p) {
