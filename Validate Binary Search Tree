@@ -1,0 +1,135 @@
+/* QUESTION:
+Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+The left subtree of a node contains only nodes with keys less than the node's key.
+The right subtree of a node contains only nodes with keys greater than the node's key.
+Both the left and right subtrees must also be binary search trees.
+ 
+
+Example 1:
+
+    2
+   / \
+  1   3
+
+Input: [2,1,3]
+Output: true
+Example 2:
+
+    5
+   / \
+  1   4
+     / \
+    3   6
+
+Input: [5,1,4,null,null,3,6]
+Output: false
+Explanation: The root node's value is 5 but its right child's value is 4.
+
+*/
+--------------------------------
+/*
+I agree with the rest of the comments that neither is slow nor fast. It depends on the depth of the first node that does not satisfy the BST property. For such nodes that are not too deep
+(close to root) BFS works better.
+*/
+-------------------------------
+/* ITERATVE ALGORITHM - Inorder Solution
+The best solution for iterative. With this we can solve 3 more questions. Understand
+
+Left -> Node -> Right order of inorder traversal means for BST that each element should be smaller than the next one.
+
+1. Compute inorder traversal list inorder.
+
+2. Check if each element in inorder is smaller than the next one.
+
+Do we need to keep the whole inorder traversal list?
+Actually, no. The last added inorder element is enough to ensure at each step that the tree is BST (or not). Hence one could merge both steps into one and reduce the used space.
+*/
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root==null) return true;
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode pre = null;
+        while(root!=null || !stack.isEmpty()){
+            if(root!=null){
+                stack.push(root);
+                root=root.left;
+            } else{
+            root=stack.pop();
+             // If next element in inorder traversal is smaller than the previous one that's not BST.
+            if(pre!=null && root.val<=pre.val) return false;
+            pre=root;
+            root=root.right;
+            }
+        } return true;
+    }
+}
+
+/*
+Time complexity : O(N) since we visit each node exactly once.
+Space complexity : O(N) to keep stack.
+
+*/
+
+/*
+https://leetcode.com/problems/validate-binary-search-tree/discuss/32112/Learn-one-iterative-inorder-traversal-apply-it-to-multiple-tree-questions-(Java-Solution)
+
+I add another case to above: https://leetcode.com/problems/sum-of-left-leaves/
+
+All orders related trick to solve theroitically(freefall & cutting off leaves): https://www.youtube.com/watch?v=eL8NZ-21lqI 
+
+https://www.youtube.com/watch?v=nzmtCFNae9k TUshar Roy Inorder Traversal explanation with diagrams
+
+Explanation: https://www.youtube.com/watch?v=WZwNoTm_9d8 Nick White Inorder Traversal
+*/
+-------------------------------------------------------------------------------------------------------------------
+
+/* RECURSIVE
+THE BEST AND EASY ONE
+Basically what I am doing is recursively iterating over the tree while defining interval <min, max> for each node which value must fit in.
+*/
+
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        return isBST(root, Long.MIN_VALUE, Long.MAX_VALUE);
+    }
+        
+        public boolean isBST(TreeNode n, long min, long max){
+            if(n==null) return true;
+            if(n.val<=min || n.val>=max) return false;
+            return isBST(n.left, min, n.val) && isBST(n.right, n.val, max);
+        }
+    
+}
+
+/*
+Time complexity : O(N) since we visit each node exactly once.
+Space complexity : O(N) since we keep up to the entire tree in stack.
+Usually recursive tree solutions list the space as O(height), with the understanding that if the tree is balanced it'll be O(log n) and if it's not it can be O(n) in the worst case.
+
+*/
+
+/*
+https://leetcode.com/problems/validate-binary-search-tree/discuss/32109/My-simple-Java-solution-in-3-lines
+
+https://www.youtube.com/watch?v=MILxfAbIhrE NICE EXPLANATION
+*/
+-------------------------------------------------------------------------------------------------------------------
+
+/*
+We can use Object Integer and null pointer to avoid the corner cases (when node has value Integer.MIN_VALUE or 
+Integer.MAX_VALUE ).
+*/
+
+private boolean help(TreeNode p, Integer low, Integer high) {
+    if (p == null) return true;
+    return (low == null || p.val > low) && (high == null || p.val < high) && help(p.left, low, p.val) && help(p.right, p.val, high);
+}
+
+public boolean isValidBST(TreeNode root) {
+    return help(root, null, null);
+}                                          
+-------------------------------------------------------------------------------------------------------------------
