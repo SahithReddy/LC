@@ -1,0 +1,202 @@
+/* 438 QUESTION
+Given a string s and a non-empty string p, find all the start indices of p's anagrams in s.
+
+Strings consists of lowercase English letters only and the length of both strings s and p will not be larger than 20,100.
+
+The order of output does not matter.
+
+Example 1:
+Input:
+s: "cbaebabacd" p: "abc"
+
+Output:
+[0, 6]
+
+Explanation:
+The substring with start index = 0 is "cba", which is an anagram of "abc".
+The substring with start index = 6 is "bac", which is an anagram of "abc".
+
+Example 2:
+Input:
+s: "abab" p: "ab"
+
+Output:
+[0, 1, 2]
+
+Explanation:
+The substring with start index = 0 is "ab", which is an anagram of "ab".
+The substring with start index = 1 is "ba", which is an anagram of "ab".
+The substring with start index = 2 is "ab", which is an anagram of "ab".
+*/
+
+/*
+SLIDING WINDOW: 
+
+1. Find frequency of each character in p.
+
+2. Now, we need to find all substrings of length p in s.
+    This process can be efficiently done by using sliding window technique.
+	Sliding Window Technique:-
+	s = abcad, p = abc
+	Take two pointers i and j. 
+	Intially i and j point to starting position of string s. 
+	s = a  b  c  a  d
+        ^
+	   i, j
+	->  move j until j - i == len(p)
+	s = a  b  c  a  d
+        ^        ^
+        i        j
+	Now, the substring formed here is  abc, 
+	it is anagram so, add i to result. and increment i.
+	s = a  b  c  a  d
+           ^     ^
+           i     j
+   Now, j at 3rd index, i at 1st index.
+   3 - 1 < 3
+   so, move j until j - i == len(p)
+   s = a  b  c  a  d
+          ^        ^
+          i        j
+    Now, substring formed here is bca.
+	It is anagram. so, add i to result. and move i.
+	Now, i is at 2nd index and j is at 4th index.
+	4 - 2 < len(p) (3), so move j.
+	 s = a  b  c  a  d
+               ^        ^
+               i        j
+	Now, the substring formed here is cad.
+	This is not anagram. Don't do anything.
+	Now, we reached end. So, stop here.
+	This is how we find substring using sliding window technique.
+ 	and check whether it is anagram or not.
+	if it is anagram, then add starting index to result
+
+3. To check if it is anagram we take help of the 'count' variable. While moving right pointer forward, decrease it if a character of S is found in P and while moving left pointer forward Increase it if character we're moving away from is part of the anagram(if the character is in p).
+
+4. return result.
+*/
+
+
+
+public class Solution {
+    public List<Integer> findAnagrams(String s, String p) {
+        List<Integer> list = new ArrayList<>();
+    if (s == null || s.length() == 0 || p == null || p.length() == 0) return list;
+    
+    int[] hash = new int[256]; //character hash
+    
+    //record each character in p to hash
+    for (char c : p.toCharArray()) {
+        hash[c]++;
+    }
+    //two points, initialize count to p's length
+    int left = 0, right = 0, count = p.length();
+    
+    while (right < s.length()) {
+        //move right everytime, if the character exists in p's hash, decrease the count
+        //current hash value >= 1 means the character is existing in p
+        if (hash[s.charAt(right)] >= 1) {
+            count--;
+        }
+        hash[s.charAt(right)]--;
+        right++; // move pointer ahead
+        
+        //when the count is down to 0, means we found the right anagram
+        //then add window's left to result list
+        if (count == 0) {
+            list.add(left);
+        }
+        
+        //if we find the window's size equals to p, then we have to move left (narrow the window) to find the new match window
+        if (right - left == p.length() ) {
+            // >= 0 indicate it was original in the hash, cuz it won't go below 0
+            if (hash[s.charAt(left)] >= 0) {
+                // the character we're moving away from is part of the anagram(if the character is in p) therefore we need to increase the count
+                count++;
+            }
+            hash[s.charAt(left)]++; //++ to reset the hash because we kicked out the left
+            left++; // move pointer ahead
+        
+        }
+
+        
+    }
+        return list;
+    }
+}
+
+/*
+Time Complexity will be O(S) S= Large String and p is small, because the "start" and "end" points will only move from left to right once.
+Space complexity: O(1), because pCount and sCount contain 26 elements each.
+*/
+-----------------------------------------
+/* Algorithm: 
+
+Hashmap is quite complex structure, with known performance issues in Java. Let's implement approach 1 using 26-elements array instead of hashmap:
+
+Element number 0 contains count of letter a.
+
+Element number 1 contains count of letter b.
+
+... so on
+
+Element number 26 contains count of letter z.
+
+
+1. Build reference array pCount for string p.
+
+2. Move sliding window along the string s:
+
+-->Recompute sliding window array sCount at each step by adding one letter on the right and removing one letter on the left.
+
+-->If sCount == pCount, update the output list.
+
+3. Return output list.
+*/
+
+class Solution {
+  public List<Integer> findAnagrams(String s, String p) {
+    if (s.length() < p.length()) return new ArrayList();
+
+    int [] pCount = new int[26];
+    int [] sCount = new int[26];
+    // build reference array using string p
+    for (char ch : p.toCharArray()) {
+      pCount[ch - 'a']++;
+    }
+
+    List<Integer> output = new ArrayList();
+    // sliding window on the string s
+    for (int i = 0; i < s.length(); i++) {
+      // add one more letter on the right side of the window
+      sCount[s.charAt(i) - 'a']++;
+      // remove one letter from the left side of the window
+      if (i >= p.length()) {
+        sCount[s.charAt(i - p.length()) - 'a']--;
+      }
+      // compare array in the sliding window
+      // with the reference array
+      if (Arrays.equals(pCount, sCount)) {
+        output.add(i - p.length() + 1);
+      }
+    }
+    return output;
+  }
+}
+
+/*
+Time Complexity will be O(S) S= Large String, because the iterator will only move from left to right once.
+
+It's probably worth noting: we can compare p_count and s_count in constant time because they are both at most size 26 (as they only contain the 26 lowercase characters). This makes comparing an O(26) operation i.e. O(1).
+
+Space complexity: O(1), because pCount and sCount contain 26 elements each.
+*/
+
+
+
+
+
+
+
+
