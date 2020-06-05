@@ -44,6 +44,88 @@ For example, for word="ddiinnso", its groups of same continuous characters are [
 
 */
 
+/* ALGORITHM - 2 POINTER APPROACH. -- TC: O(N) and SC: O(1)
+
+We have two pointers, use i to scan S, and use j to scan each word in words.
+Firstly, for S and word, we can calculate the length of the susbtrings which contains the repeated letters of the letter currently pointed by the two pointers, and get len1 and len2.
+
+The two letters currently pointed by the two pointers must be equal, otherwise the word is not stretchy, we return false. 
+
+1. Then, if we find that len1 is smaller than 3, it means the letter cannot be extended, so len1 must equals to len2, otherwise this word is not stretchy.
+ 
+2. In the other case, if len1 greater than of equals to 3, we must have len1 greater than of equals to len2, otherwise there are not enough letters in S to match the letters in word.
+
+If we do not qualify both of the above conditions then we return false.
+
+Finally, if the word is stretchy, we need to guarantee that both of the two pointers has scanned the whole string.
+
+
+*/
+
+class Solution {
+    public int expressiveWords(String S, String[] words) {
+        if (S == null || words == null) {
+            return 0;
+        }
+        int count = 0;
+        for (String word : words) {
+            // call function below to see if this word qualifies to be stretchy and increase count
+            if (stretchy(S, word)) {
+                count++;
+            }
+        }
+        return count; 
+    }
+    
+    // This is the CRUX -- checking of the word is stretchy to be S
+    public boolean stretchy(String S, String word) {
+        //edge case
+        if (word == null) {
+            return false;
+        }
+        // Two pointers i for String 'S' and j for the current word
+        int i = 0;
+        int j = 0;
+        
+        while (i < S.length() && j < word.length()) {
+            if (S.charAt(i) == word.charAt(j)) { // once matched 
+                int len1 = getRepeatedLength(S, i); // go get the length from below
+                int len2 = getRepeatedLength(word, j); // go get the length from below
+                
+                /* See pont 1 & 2 above*/
+                if (len1 < 3 && len1 != len2 || len1 >= 3 && len1 < len2) {
+                    return false;
+                }
+                i += len1; /* increment i to position where we find a different letter after repeated letters in String S */
+                j += len2; /* increment i to position where we find a different letter after repeated letters in current word*/
+            } else {
+                return false; // false if not matched in the first place
+            }
+        }
+        return i == S.length() && j == word.length();
+    }
+    
+    /*Calculating the length of repetitive letters from the moment a letter match at a particular pointer in both given master string and current word in word list*/
+    public int getRepeatedLength(String str, int i) {
+        int j = i;
+        // iterate until letter next to it is different or until it is end
+        while (j < str.length() && str.charAt(j) == str.charAt(i)) {
+            j++; 
+        }
+        return j - i; // return length
+    }
+}
+
+/*
+TC: O(N), N is the length of super string 'S'
+
+SC: O(1)
+
+*/
+
+
+
+
 
 
 
