@@ -1,0 +1,110 @@
+/* 727. Minimum Window Subsequence
+Given strings S and T, find the minimum (contiguous) substring W of S, so that T is a subsequence of W.
+
+If there is no such window in S that covers all characters in T, return the empty string "". If there are multiple such minimum-length windows, return the one with the left-most starting index.
+
+Example 1:
+Input: 
+S = "abcdebdde", T = "bde"
+Output: "bcde"
+Explanation: 
+"bcde" is the answer because it occurs before "bdde" which has the same length.
+"deb" is not a smaller window because the elements of T in the window must occur in order.
+ 
+
+NOTE:
+All the strings in the input will only contain lowercase letters.
+The length of S will be in the range [1, 20000].
+The length of T will be in the range [1, 100].
+*/
+
+
+/*
+ * we can conduct two steps by using two pointers for this probelm:
+ * 1. check feasibility from left to right
+ * 2. check optimization from right to left
+ * we can traverse from left to right, find a possible candidate until reach the first ending character of T
+
+  e.g.
+  S = a b a c b c d f e g . T = bcde
+  i = 0 1 2 3 4 5 6 7 8 9
+  
+  find subsequence - bacbcdfe, end = 8
+  improve subsequence- bcdfe, start = 4
+  length = 5
+
+  Repeat next subsequence search at index 5 (start+1). we have to move right pointer to the next position of left pointer, NOT the next position of right pointer
+
+ * eg: for the string s = abcdebdde and t = bde, we should traverse s string until we find first e,
+ * i.e. abcde, then traverse back from current "e" to find if we have other combination of bde with smaller
+ * length.
+ 
+ * @param right: fast pointer that always points the last character of T in S
+ * @param left: slow pointer that used to traverse back when right pointer find the last character of T in S
+ * @param tIndex: third pointer used to scan string T
+ * @param minLen: current minimum length of subsequence
+*/
+
+
+class Solution {
+    public String minWindow(String S, String T) {
+    if (S.length() == 0 || T.length() == 0) {
+        return "";
+    }
+        
+    int right = 0;
+    int minLen = Integer.MAX_VALUE;
+    String result = "";
+
+    while (right < S.length()) {
+        int tIndex = 0;
+        // use fast pointer to find the last character of T in S
+        while (right < S.length()) {
+            if (S.charAt(right) == T.charAt(tIndex)) {
+                tIndex++;
+            }
+            if (tIndex == T.length()) {
+                break;
+            }
+            right++;
+        }
+
+        // if right pointer is over than boundary
+        if (right == S.length()) {
+            break;
+        }
+
+        // use another slow pointer to traverse from right to left until find first character of T in S. Improve or get best start-point of subsequence
+        int left = right;
+        tIndex = T.length() - 1;
+        while (left >= 0) {
+            if (S.charAt(left) == T.charAt(tIndex)) {
+                tIndex--;
+            }
+            if (tIndex < 0) {
+                break;
+            }
+            left--;
+        }
+        // if we found another subsequence with smaller length, update result
+        if (right - left + 1 < minLen) {
+            minLen = right - left + 1;
+            result = S.substring(left, right + 1);
+        }
+        // WARNING: we have to move right pointer to the next position of left pointer, NOT the next position
+        // of right pointer. Start next subsequence search
+        right = left + 1;
+    }
+    return result;
+}
+}
+
+
+/*
+TIME COMPLEXITY:
+For each subsequence of T in S, it will traverse it. So if somehow worst case scenario, S had |S| subsequences of T, then we're doing |S| times of |T|. Thus, O(|S| * |T|) or O(nm) if n = |S| and m = |T|."
+
+Space: O(1)
+*/
+
+
