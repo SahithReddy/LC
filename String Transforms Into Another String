@@ -1,10 +1,17 @@
-/* 1153. String Transforms Into Another String
+/* 1153. String Transforms Into Another String -- EXAMPLES ARE KEY IN THIS PROBLEM WITH EDGE CASES EXPLANATION
 
 Given two strings str1 and str2 of the same length, determine whether you can transform str1 into str2 by doing zero or more conversions.
 
 In one conversion you can convert all occurrences of one character in str1 to any other lowercase English character.
 
 Return true if and only if you can transform str1 into str2.
+---------- GOOGLE VERBATIUM-----------------
+Given 2 strings s and t, determine if you can convert s into t. The rules are:
+
+You can change 1 letter at a time.
+Once you changed a letter you have to change all occurrences of that letter.
+
+Both strings contain only lowercase English letters.
 
 Example 1:
 Input: str1 = "aabcc", str2 = "ccdee"
@@ -16,20 +23,172 @@ Input: str1 = "leetcode", str2 = "codeleet"
 Output: false
 Explanation: There is no way to transform str1 to str2.
  
+Example 1:
+Input: s = "abca", t = "dced"
+Output: true
+Explanation: abca ('a' to 'd') -> dbcd ('c' to 'e') -> dbed ('b' to 'c') -> dced
+
+Example 2:
+Input: s = "ab", t = "ba"
+Output: true
+Explanation: ab -> ac -> bc -> ba
+
+Example 3:
+Input: s:abcd t: bcdb
+Output: true
+Explanation: Here char a wants to convert to b and d also wants to convert to b.
+             so conversions order would be to start with d
+             abcd
+             abca (d->a)
+
+             Now both a map to b.
+             abda
+             acda
+             bcdb (this is equal to final string)
+
+Example 3: IMPORTANT EXAMPLE
+Input: s = "abcdefghijklmnopqrstuvwxyz", t = "bcdefghijklmnopqrstuvwxyza"
+Output: false
+Explanation: |s1| = 26 and |s1| = |s2|, This is not transformable because any transformations will create a cycle(unbreakable).
+Since both s and t have used all 26 letters available, there are no letters remaining to act as a temporary swap variable.
+Explanation2: All nodes' in-degree and out-degree is one, so it makes a circle. You cannot break the circle without a temp, but you have already mapped all the available characters. You can try to solve abc -> bca and make a little bit more effort to work out your case.
+
+Example 4:
+Input: s = "aa", t = "cd"
+Output: false
+Explanation: |s1| = 1, size of set of characters in s1; |s2| = 2, size of set of characters in s2
+For s1 to be transformable to s2, the condition |s1| >= |s2| needs to hold true because |s1| < |s2| means there is at least one character in s1 which maps to multiple characters (because lengths of s1 and s2 are equal) and this makes s1 non-transformable to s2.
+
+Example 5: 
+Input: s = "ab", t = "aa"
+Output: true
+Explanation: |s1| = 2,size of set of characters in s1; |s2| = 1,size of set of characters in s2
+For s1 to be transformable to s2, the condition |s1| >= |s2| needs to hold true
+
+Example 6: IMPORTANT EXAMPLE
+Input: s = "abcdefghijklmnopqrstuvwxyz", t = "bbcdefghijklmnopqrstuvwxyz"
+Output: true
+Explanation: |s1| = 26 and |s1| > |s2| ; |s1| = 26,size of set of characters in s1; |s2| = 25,size of set of characters in s2
+Since, |s1| > |s2| this suggests there is at least two characters in s1 map to a same character in s2. Let's say those character are 'x' and 'y'.
+The transformation 'x' -> 'y' can be made without changing any cyclical characteristic of original transformation because 'x' and 'y' map to same character .
+After 'x' -> 'y', say s1 -> s1'. |s1'| < 26 because 'x' does not belong to s1' and this is same as case 1
+Case 1: |s1| < 26
+This case is always transformable because any cycle or linked list can be broken by using the character which does not belong to s1.
+
 NOTE:
 1 <= str1.length == str2.length <= 10^4
 Both str1 and str2 contain only lowercase English letters.
 */
+---------------------------------
+/* ALGORITHM EXPLANATION FOR INTERVIEW:
+If we put two words in two columns vertically, something like this,
 
-/* ALGORITHM:
+s1="ace", s2="cea", draw arrows between each transformation
+key  -> value
+a    ->    c
+c    ->    e
+e    ->    a
 
+If a value shows up later as a key, then it makes a linkedlist structure,
+and if a value has already been a key, then there is a cycle (in this case, the last "a" is the key in the first row).
+
+For linkedlist without cycle we can just backward substitute the key with the value, there exists a way of converting s1 to s2 for sure.
+For linkedlist with a cycle, such as "a -> c -> e -> a", we need to break the loop and use a temporary variable to cache the point of break,
+in this case, it becomes the transformation with two steps: "a -> tmp" and "tmp -> c -> e -> a".
+Now the bottleneck is if we can find a temporary variable to carry the conversion, if there is one, then the conversion is viable.
+---------------------------------
+
+|s1| = size of set of characters in s1
+|s2| = size of set of characters in s2
+
+For s1 to be transformable to s2, the condition |s1| >= |s2| needs to hold true because |s1| < |s2| means there is at least one character in s1 which maps to multiple characters (because lengths of s1 and s2 are equal) and this makes s1 non-transformable to s2.
+
+For example, "aa" -> "bc" is not possible.
+
+Now let's examine the condition |s1| >= |s2| in 3 separate cases with various size of |s1|:
+
+1.
+|s1| < 26
+This case is always transformable because any cycle or linked list can be broken by using the character which does not belong to s1. (Refer above for cycles/linkedlists. Nice Explanations)
+
+2.
+|s1| = 26 and |s1| = |s2|
+
+This is not transformable because any transformations will create a cycle and is not breakable.
+
+3.
+|s1| = 26 and |s1| > |s2|
+
+Since, |s1| > |s2| this suggests there is at least two characters in s1 map to a same character in s2. Let's say those character are 'x' and 'y'.
+The transformation 'x' -> 'y' can be made without changing any cyclical characteristic of original transformation because 'x' and 'y' map to same character.
+After 'x' -> 'y', say s1 -> s1'. |s1'| < 26 because 'x' does not belong to s1' and this is same as case 1.
+
+So combining all 3 cases below condition needs to hold true for s1 to be transformable s2:
+
+====> s1 = s2 OR (No character is s1 map to 2 characters in s2 AND |s2| < 26)
+*/
+----------------------------------------------
+/* TO SUMMARIZE BEFORE WRITING CODE:
+
+The correspondence of this question has the following relations:
+1. One-to-one, each char can be converted corresponding to each other a->b
+2. Many-to-one, aabcc, ccdee, a->c, c->e, in fact, as long as there is a char that has not appeared in the target      string, then you can use it
+As a temp char bridge, such as a->g->c so that the conversion will not affect the conversion of c->e at the same time
+3. One-to-many, a->f, a->g is absolutely impossible, because char will be affected at the same time
+        
+Another special case is that when the number of unique chars of source and target is the same, if it is 26 at this time
+It means that it cannot be converted at all, because there is no extra temp char as a bridge for conversion
+
+
+Scan s1 and s2 at the same time,
+record the transform mapping into a map/array.
+The same char should transform to the same char.
+Otherwise we can directly return false.
+
+To realise the transformation:
+
+1. transformation of link link ,like a -> b -> c:
+we do the transformation from end to begin, that is b->c then a->b
+
+2. transformation of cycle, like a -> b -> c -> a:
+in this case we need a tmp
+c->tmp, b->c a->b and tmp->a
+Same as the process of swap two variable.
+
+In both case, there should at least one character that is unused,
+to use it as the tmp for transformation.
+So we need to return if the size of set of unused characters < 26.
 
 */
 
-
+class Solution {
+    public boolean canConvert(String str1, String str2) {
+        if (str1.length() != str2.length())
+            return false;
+        
+        if (str1.equals(str2)) {
+            return true;
+        }
+        Map<Character, Character> map = new HashMap<>();
+        for (int i = 0; i < str1.length(); i++) {
+            char c1 = str1.charAt(i);
+            char c2 = str2.charAt(i);
+           if (map.containsKey(c1) && map.get(c1) != c2) {
+                return false;
+            }
+            map.put(c1, c2);
+        }
+        
+        // we need to return if the size of set of unused characters < 26.
+        return new HashSet<Character>(map.values()).size() < 26;
+    }
+}
 
 /*
 
+Time O(N) for scanning input
+Space O(26) to record the mapping
+running time can be improved if count available character during the scan.
 
 */
 
