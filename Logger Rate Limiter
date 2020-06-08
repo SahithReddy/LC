@@ -1,0 +1,153 @@
+/* 359. Logger Rate Limiter
+
+Design a logger system that receive stream of messages along with its timestamps, each message should be printed if and only if it is not printed in the last 10 seconds.
+
+Given a message and a timestamp (in seconds granularity), return true if the message should be printed in the given timestamp, otherwise returns false.
+
+It is possible that several messages arrive roughly at the same time.
+
+Example:
+Logger logger = new Logger();
+
+// logging string "foo" at timestamp 1
+logger.shouldPrintMessage(1, "foo"); returns true; 
+
+// logging string "bar" at timestamp 2
+logger.shouldPrintMessage(2,"bar"); returns true;
+
+// logging string "foo" at timestamp 3
+logger.shouldPrintMessage(3,"foo"); returns false;
+
+// logging string "bar" at timestamp 8
+logger.shouldPrintMessage(8,"bar"); returns false;
+
+// logging string "foo" at timestamp 10
+logger.shouldPrintMessage(10,"foo"); returns false;
+
+// logging string "foo" at timestamp 11
+logger.shouldPrintMessage(11,"foo"); returns true;
+
+*/
+
+/* NOOB/ NAIVE ALGORITHM: HASHMAP
+
+The idea is that we keep a hashtable/dictionary with the message as key, and its timestamp as the value. The hashtable keeps all the unique messages along with the latest timestamp that the message was printed.
+
+1. We initialize a hashtable/dictionary to keep the messages along with the timestamp.
+
+2. At the arrival of a new message, the message is eligible to be printed with either of the two conditions as follows:
+
+case 1). we have never seen the message before.
+
+case 2). we have seen the message before, and it was printed more than 10 seconds ago.
+
+3. In both of the above cases, we would then update the entry that is associated with the message in the hashtable, with the latest timestamp.
+
+The disadvantage to this solution is that the memory usage never stops growing.
+*/
+
+class Logger {
+    private HashMap<String, Integer> msgDict;
+
+    /** Initialize your data structure here. */
+    public Logger() {
+        msgDict = new HashMap<String, Integer>();
+    }
+    
+    /** Returns true if the message should be printed in the given timestamp, otherwise returns false.
+        If this method returns false, the message will not be printed.
+        The timestamp is in seconds granularity. */
+    public boolean shouldPrintMessage(int timestamp, String message) {
+      if (!this.msgDict.containsKey(message)) {
+      this.msgDict.put(message, timestamp);
+      return true;
+    }
+
+    Integer oldTimestamp = this.msgDict.get(message);
+    if (timestamp - oldTimestamp >= 10) {
+      this.msgDict.put(message, timestamp);
+      return true;
+    } else
+      return false;
+    }
+}
+
+/*
+Time Complexity: O(1). The lookup and update of the hashtable takes a constant time.
+
+Space Complexity: O(M) where M is the size of all incoming messages. Over the time, the hashtable would have an entry for each unique message that has appeared. The disadvantage to this solution is that the memory usage never stops growing.
+*/
+-------------------------------------
+/* ALGORITHM: Use a Queue and Set -- Space efficient Solution
+
+1- Use a Queue that contains Object(timestamp, message)
+2- When new message comes in, remove from Queue any message where timestamp + 10 < new message's timestamp. If any Queue element is deleted, remove that message from the Set (because the last occured of this message is now too old)
+3- If new message is still in Set, return false (because the Queue still contains it, so it is not too old yet)
+4- Add the message to the Set
+
+The (simple) HashMap solutions are O(m) space (where m is the number of unique messages) for best, average, and worst cases. This solution however is O(x) space, where x is the maximum number of unique messages that can be received in a 10 second window. (because we never keep messages more than 10 seconds old in the Queue or Set).
+
+Assuming the we receive messages for more than 10 seconds, this solution will always outperform HashMap implementations in terms of space usage.
+
+One downside to this solution is that if many unique messages are received in the 10 second window, the queue can become very large. When it comes time to cleanup the Queue, the method will spean a lot time polling all messages off the Queue before returning.
+
+For example, imagine we receive 1 million unique messages in ten seconds - the Queue will grow to contain 1 million entries. If the next message comes 20 seconds later, the solution will need to traverse 1 million entries in the Queue before returning.
+
+*/
+
+class Logger {
+    
+    private final Queue<Log> queue;
+    private final Set<String> messages;
+    
+    /** Initialize your data structure here. */
+    public Logger() {
+        this.messages = new HashSet<>();
+        //the queue is sorted as we are guaranteed to be called shouldPrintMessage by increasing time value
+        //the idea is to toss any log pass the window of 10 when a new log is requested
+        //e.g. if the head of queue is pointing to log at 1 sec, and we are requested at 11, the 1 sec log would be tossed
+        //as it is no longer relevant
+        this.queue = new LinkedList<>();
+    }
+    
+    public boolean shouldPrintMessage(int timestamp, String message) {
+        while (!queue.isEmpty() && (timestamp - queue.peek().timestamp >= 10)) {
+            //toss away all irrelvant logs
+            //also remove the message from seen message
+            messages.remove(queue.poll().message);
+        }
+        if (messages.contains(message)) return false;
+        queue.offer(new Log(timestamp, message));
+        messages.add(message);
+        return true;
+    }
+    
+    private static final class Log {
+        private final int timestamp;
+        private final String message;
+        
+        public Log(int t, String s) {
+            this.timestamp = t;
+            this.message = s;
+        }
+    }
+}
+
+/*
+Time complexity: O(1), Same as above
+
+Space complexity: O(m) where m is the maximum number of unique message that will be received in a 10 second period.
+*/
+---------------------------------------
+/*
+https://leetcode.com/problems/logger-rate-limiter/discuss/391558/Review-of-four-different-solutions%3A-HashMap-Two-Sets-Queue-with-Set-Radix-buckets-(Java-centric)
+*/
+
+
+
+
+
+
+
+
+
