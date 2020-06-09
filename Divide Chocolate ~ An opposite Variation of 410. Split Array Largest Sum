@@ -1,3 +1,8 @@
+/*
+In "Divide Chocolate" we want to find: Maximum of minimum total sweetness(sum)
+In "Split Array Largest sum" we want to find: Minimum of maximum largest sum
+*/
+
 /* 1231. Divide Chocolate
 
 You have one chocolate bar that consists of some chunks. Each chunk has its own sweetness given by the array sweetness.
@@ -31,6 +36,10 @@ Constraints:
 1 <= sweetness[i] <= 10^5
 */
 
+/* ALGORITHM: 
+
+
+*/
 
 
 
@@ -40,6 +49,9 @@ Constraints:
 
 
 
+/* COMPLEXITY:
+
+*/
 
 
 
