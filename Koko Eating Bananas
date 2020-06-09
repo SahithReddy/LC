@@ -1,0 +1,98 @@
+/* 875. Koko Eating Bananas
+
+Koko loves to eat bananas.  There are N piles of bananas, the i-th pile has piles[i] bananas.  The guards have gone and will come back in H hours.
+
+Koko can decide her bananas-per-hour eating speed of K.  Each hour, she chooses some pile of bananas, and eats K bananas from that pile.  If the pile has less than K bananas, she eats all of them instead, and won't eat any more bananas during this hour.
+
+Koko likes to eat slowly, but still wants to finish eating all the bananas before the guards come back.
+
+Return the minimum integer K such that she can eat all the bananas within H hours.
+
+
+Example 1:
+Input: piles = [3,6,7,11], H = 8
+Output: 4
+
+Example 2:
+Input: piles = [30,11,23,4,20], H = 5
+Output: 30
+
+Example 3:
+Input: piles = [30,11,23,4,20], H = 6
+Output: 23
+ 
+
+Note:
+1 <= piles.length <= 10^4
+piles.length <= H <= 10^9
+1 <= piles[i] <= 10^9
+*/
+
+/* ALGORITHM:
+lo is the minimum possible answer.
+hi is the lowest value that we are sure that koko is able to finish all.
+
+Since koko have to rest for the entire K even if he finish that pile already. 
+1. The H(Hours) cannot be lower than length of piles[].
+2. So we are sure that koko is able to finish all the piles in speed(K) that less than or equal to a number maximum of piles[]
+
+There is a limited range of K's to enable her to eat all the bananas within H hours.
+We ought to reduce the searching space and to return the minimum valid K.
+Binary Search is born for that.
+Initially, we know that K belongs to [1, the largest element in piles[]]. And we follow the pattern of lower-bound Binary Search except that if (K == target) is replaced with if (canEatAll(piles, K, H)).
+
+Now, we need to make logical guess between l and h by binary search:
+1. If K = lo + ((hi - lo)/2) is able to finish all the piles in H, we lower the h to m.
+2. If K is not able to finish, we raise the lo to K+1.
+We keep on adjust lo and hi until lo is equal to hi.
+*/
+
+
+class Solution {
+    public int minEatingSpeed(int[] piles, int H) {
+        int lo = 1, hi = getMaxPile(piles);
+        
+        // Binary search to find the smallest valid K.
+        while (lo <= hi) {
+            int K = lo + ((hi - lo)/2);
+            if (canEatAll(piles, K, H)) {
+                hi = K - 1;
+            } else {
+                lo = K + 1;
+            }
+        }
+        
+        return lo;
+    }
+    
+    private boolean canEatAll(int[] piles, int K, int H) {
+        int countHour = 0; // Hours take to eat all bananas at speed K.
+        
+        for (int pile : piles) {
+            countHour += pile / K;
+            if (pile % K != 0)
+                countHour++;
+        }
+        return countHour <= H;
+    }
+    
+    // O(N) search to find the maximum value(upper boundary) in the given piles array
+    private int getMaxPile(int[] piles) {
+        int maxPile = Integer.MIN_VALUE;
+        for (int pile : piles) {
+            maxPile = Math.max(pile, maxPile);
+        }
+        return maxPile;
+    }
+}
+
+/*
+Time Complexity: O(NlogW), where N is the number of piles, and W is the maximum size of a pile.
+
+Space Complexity: O(1).
+*/
+
+
+
+
+
