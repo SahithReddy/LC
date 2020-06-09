@@ -1,6 +1,13 @@
 /*
 In "Divide Chocolate" we want to find: Maximum of minimum total sweetness(sum)
 In "Split Array Largest sum" we want to find: Minimum of maximum largest sum
+
+In both places we do binary search on target answer, the difference is subtle but the key:
+
+In 'Divide Chocolate' when we overshoot the target, we will include that number in previous sum, as that is how we will maintain the target as the minimum number and binary search will find this optimal minimum
+In "Split Array Largest sum" when we overshoot the target, we will include the number in the next sum, so we can ensure all numbers are less than target - binary search does the rest of the magic
+
+Regarding people's questions on why the binary search target is guaranteed to be the answer is because if there is a better optimal answer binary search will keep heading to it, can prove by contradiction
 */
 
 /* 410. Split Array Largest Sum
@@ -107,8 +114,10 @@ public class Solution {
             // it doesn't matter, the number of subarrays is still 2, which is equal to a+b>t, and c+d > t
             total += num;
             if (total > target) {
-                // find a way to form subarray, as said before, it doesn't matter how to form the subarray
-                // the number matters, which will not change according to the ways to form a subarray.
+                /* when we overshoot the target, we will include the number in the next sum, so we can ensure all numbers are less than target - binary search does the rest of the magic
+                */
+                /* when total > target we need separate the new element in another subarray so we set total = num.
+                */
                 total = num;
                 count++;
                 if (count > m) { // if count == m, we still have a chance to make mid smaller
@@ -124,7 +133,7 @@ public class Solution {
 /* COMPLEXITY:
 Time complexity : O(n * log(sum of array)). The binary search costs O(log(sum of array)), where sum of array is the sum of elements in nums. For each computation of F(x), the time complexity is O(n) since we only need to go through the whole array.
 
-Space complexity : O(n). Same as the Brute Force approach. We only need the space to store the array.
+Space complexity : O(1). 
 
 */
 
