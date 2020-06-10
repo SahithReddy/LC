@@ -1,0 +1,202 @@
+/* 752. Open the Lock
+
+You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'. The wheels can rotate freely and wrap around: for example we can turn '9' to be '0', or '0' to be '9'. Each move consists of turning one wheel one slot.
+
+The lock initially starts at '0000', a string representing the state of the 4 wheels.
+
+You are given a list of deadends dead ends, meaning if the lock displays any of these codes, the wheels of the lock will stop turning and you will be unable to open it.
+
+Given a target representing the value of the wheels that will unlock the lock, return the minimum total number of turns required to open the lock, or -1 if it is impossible.
+
+Example 1:
+Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+Output: 6
+Explanation:
+A sequence of valid moves would be "0000" -> "1000" -> "1100" -> "1200" -> "1201" -> "1202" -> "0202".
+Note that a sequence like "0000" -> "0001" -> "0002" -> "0102" -> "0202" would be invalid,
+because the wheels of the lock become stuck after the display becomes the dead end "0102".
+
+Example 2:
+Input: deadends = ["8888"], target = "0009"
+Output: 1
+Explanation:
+We can turn the last wheel in reverse to move from "0000" -> "0009".
+
+Example 3:
+Input: deadends = ["8887","8889","8878","8898","8788","8988","7888","9888"], target = "8888"
+Output: -1
+Explanation:
+We can't reach the target without getting stuck.
+
+Example 4:
+Input: deadends = ["0000"], target = "8888"
+Output: -1
+
+Note:
+The length of deadends will be in the range [1, 500].
+target will not be in the list deadends.
+Every string in deadends and the string target will be a string of 4 digits from the 10,000 possibilities '0000' to '9999'.
+
+*/
+--------------------------------------------
+/* ALGORITHM: BREADTH FIRST SEARCH(BFS):
+
+The simple solution is just to do breadth-first search (BFS).
+
+We can think of this problem as a shortest path problem on a graph with the start node being "0000" and the end node being target: there are 10000 nodes (strings '0000' to '9999'), and there is an edge between two nodes if they differ in one digit, that digit differs by 1 (wrapping around, so '0' and '9' differ by 1), and if both nodes are not in deadends.
+
+To solve a shortest path problem, we use a breadth-first search. The basic structure uses a Queue queue plus a Set seen that records if a node has ever been enqueued. 
+
+The code after while queue: is template code, except for if node in dead: continue.
+
+For each position in the lock i = 0, 1, 2, 3, for each of the turns d = -1, 1, we determine the value of the lock after the i-th wheel has been turned in the direction d.
+
+Each "abcd" combination (node in the graph) has exactly 8 neighbors:
+
+[a+1]bcd
+[a+1]bcd
+a[b+1]cd
+a[b-1]cd
+ab[c+1]d
+ab[c-1]d
+abc[d+1]
+abc[d-1]
+If a combination is in the deadend list, don't visit it (do this by adding it to the list of already visited nodes).
+
+Using that information traverse the graph until you find a solution.
+
+*/
+
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        Queue<String> q = new LinkedList<>();
+        Set<String> deads = new HashSet<>(Arrays.asList(deadends));
+        Set<String> visited = new HashSet<>();
+        // Add initial state
+        q.offer("0000");
+        visited.add("0000");
+        int level = 0;
+        while(!q.isEmpty()) {
+            int size = q.size();
+            /* You are modifying the size of the queue in the inner loop. So the size is fixed before iteration so as to iterate through the original state. The outer loop takes care to effectively run until the queue is empty, ie goes to the next state.
+            */
+            while(size > 0) {
+                String s = q.poll();
+                if(deads.contains(s)) {
+                    size --;
+                    continue;
+                }
+                if(s.equals(target)) return level;
+                StringBuilder sb = new StringBuilder(s);
+                for(int i = 0; i < 4; i ++) {
+                    char c = sb.charAt(i);
+                    // Because you can either rotate right or left in a single attempt.
+                    String s1 = sb.substring(0, i) + (c == '9' ? 0 : c - '0' + 1) + sb.substring(i + 1);
+                    String s2 = sb.substring(0, i) + (c == '0' ? 9 : c - '0' - 1) + sb.substring(i + 1);
+                    if(!visited.contains(s1) && !deads.contains(s1)) {
+                        q.offer(s1);
+                        visited.add(s1);
+                    }
+                    if(!visited.contains(s2) && !deads.contains(s2)) {
+                        q.offer(s2);
+                        visited.add(s2);
+                    }
+                } // End of for loop
+                size --;
+            } // End of second while loop(q.size())
+            level ++;
+        } // End of main while loop
+        return -1;
+    }
+}
+
+
+/* COMPLEXITY:
+Yeah, where N is the length of lock (4 in our case):
+
+O(N) for enumerating neighbors,
+O(digits^N) (10^4 in this case neighbors for each node)
+O(D) for initializing deadends set
+
+So time complexity is O(N*digits^N + D)
+
+Space Complexity: O(A^N + D), where A is the number of digits in our input, N is the number of digits in the lock, D is the size of deadends
+
+*/
+
+---------------------------------------------
+/* BFS - BI- DIRECTIONAL: HEAVY IMPROVEMENT FROM NORMAL BFS
+
+It means not only does "0000" moves towards target; target also moves towards "0000". Eventually they meet mid-way.
+Reason why it is faster is - in each move, we create ourselves 8 branches. As"0000" moves along, the tmp set grows exponentially (8^level). Whereas if we have 2 ends moving, the exponent can be reduced to half. Therefore reducing our search time.
+
+
+I don't think you really need any reference to learn about 2 - end BFS. It's basically a slight transform of the regular BFS. If you know exactly the start position and the end position(In this problem, the start position is "0000" and the end position is target), you can do BFS from both side instead of doing BFS only from the starting position.You find the intersection, you get the result. Otherwise, if you do not know what the end point is, you can't use 2 - end BFS (eg. maze problem, as you wouldn't be able to know the exit postion).
+
+====> Q. And could you please explain what is the purpose of those codes below?
+
+temp = begin;
+begin = end;
+end = temp;
+
+====> ANSWER
+The purpose of doing this is to exchange 'begin' and 'end'. After running the code, we will be processing BFS for the elements from 'end' set in the next loop. The whole process is like:
+1. Running BFS in 'begin' set 
+2. Create a new set 'temp' to store the value
+3. begin = temp
+4. 'begin'(is 'temp' now) and 'end' exchange value
+5. (next loop) Running BFS in 'end'(is now 'begin')
+
+*/
+
+class Solution {
+    public int openLock(String[] deadends, String target) {
+        Set<String> begin = new HashSet<>();
+        Set<String> end = new HashSet<>();
+        Set<String> deads = new HashSet<>(Arrays.asList(deadends));
+        begin.add("0000");
+        end.add(target);
+        int level = 0;
+        Set<String> temp;
+        while(!begin.isEmpty() && !end.isEmpty()) {
+            if (begin.size() > end.size()) {
+                temp = begin;
+                begin = end;
+                end = temp;
+            }
+            temp = new HashSet<>();
+            for(String s : begin) {
+                if(end.contains(s)) return level;
+                if(deads.contains(s)) continue;
+                deads.add(s); // It's to prevent the search from needlessly visiting the same node over and over again.
+                StringBuilder sb = new StringBuilder(s);
+                for(int i = 0; i < 4; i ++) {
+                    char c = sb.charAt(i);
+                    // Because you can either rotate right or left in a single attempt.
+                    String s1 = sb.substring(0, i) + (c == '9' ? 0 : c - '0' + 1) + sb.substring(i + 1);
+                    String s2 = sb.substring(0, i) + (c == '0' ? 9 : c - '0' - 1) + sb.substring(i + 1);
+                    //Check if the answer has been found
+
+                    if(end.contains(s1) || end.contains(s2))
+                        return level+1;
+                    
+                    if(!deads.contains(s1))
+                        temp.add(s1);
+                    if(!deads.contains(s2))
+                        temp.add(s2);
+                }
+            }
+            level ++;
+            begin = temp;
+        }
+        return -1;
+    }
+}
+
+
+/* COMPLEXITY:
+SAME AS ABOVE BUT HERE N becomes N/2
+
+Suppose if branching factor of tree is b and distance of goal vertex from source is d, then the normal BFS/DFS searching complexity would be O(b^d). On the other hand, if we execute two search operation then the complexity would be O(b^{d/2}) for each search and total complexity would be O(b^{d/2}+b^{d/2}) which is far less than O(b^d).
+
+*/
