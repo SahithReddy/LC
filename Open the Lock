@@ -200,3 +200,5 @@ SAME AS ABOVE BUT HERE N becomes N/2
 Suppose if branching factor of tree is b and distance of goal vertex from source is d, then the normal BFS/DFS searching complexity would be O(b^d). On the other hand, if we execute two search operation then the complexity would be O(b^{d/2}) for each search and total complexity would be O(b^{d/2}+b^{d/2}) which is far less than O(b^d).
 
 */
+
+// https://www.geeksforgeeks.org/bidirectional-search/
