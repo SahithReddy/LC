@@ -1,6 +1,6 @@
 // https://leetcode.com/problems/moving-average-from-data-stream/discuss/81491/Java-O(1)-time-solution.  - First Comment
 
-/* QUESTION: 
+/* 346. Moving Average from Data Stream
 Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
 
 Example:
@@ -10,6 +10,11 @@ m.next(1) = 1
 m.next(10) = (1 + 10) / 2
 m.next(3) = (1 + 10 + 3) / 3
 m.next(5) = (10 + 3 + 5) / 3
+*/
+
+/* ALGO:
+The idea is to keep the sum so far and update the sum just by replacing the oldest number with the new entry.
+
 */
 
 class MovingAverage {
@@ -33,7 +38,7 @@ class MovingAverage {
     }
 }
 
-/*
+/* COMPLEXITY:
 Time Complexity: O(1), as we can see that there is no loop in the next(val) function.
 Space Complexity: O(M), where M is the length of the queue which would grow at each invocation 
 of the next(val) function.
