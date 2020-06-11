@@ -24,9 +24,20 @@ What if the number of rows is much larger than the number of columns?
 */
 
 /* ALGORITHM:
-Tried something similar to Kadane's algorithm. The only difference is that here we have upper bound restriction K. Here's the easily understanding video link for the problem "find the max sum rectangle in 2D array"
 
-Once you are clear how to solve the above problem, the next step is to find the max sum no more than K in an array. This can be done within O(nlogn), and you can refer to this article: max subarray sum no more than k.
+First of all,  let us consider the situation matrix to be 1D
+    we can save every sum of 0~i(0<=i<len) and binary search previous sum to find 
+    possible result for every index, time complexity is O(NlogN).
+So Now, in this problem, here we have a 2D matrix, we can sum up all values from row i to row j and create a 1D array 
+    to use 1D array solution.
+    If col number is less than row number, we can sum up all values from col i to col j 
+    then use 1D array solution.
+
+For each row, calculate the prefix sum. For each pair of columns, calculate the sum of rows.
+Now this problem is changed to a 1D problem: max subarray sum no more than k.
+------------------------------------------
+
+The idea of this solution is to convert the problem into "find the maximum sum of sub-array no larger than K".
 
 For the solution below, I assume that the number of rows is larger than the number of columns. Thus in general time complexity is O[min(m,n)^2 * max(m,n) * log(max(m,n))], space O(max(m, n)).
 
