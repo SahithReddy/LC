@@ -1,6 +1,18 @@
-// Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+/* 85. Maximal Rectangle
 
-/*
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+Input:
+[
+  ["1","0","1","0","0"],
+  ["1","0","c1","1","1"],
+  ["1","1","1","1","1c"],
+  ["1","0","0","1","0"]
+]
+Output: 6
+*/
+
+/* USING A STACK
 A O(n^2) solution based on Largest Rectangle in Histogram
 
 This question is similar as [Largest Rectangle in Histogram]:
@@ -11,8 +23,6 @@ For each row, if matrix[row][i] == '1'. H[i] +=1, or reset the H[i] to zero.
 and accroding the algorithm of [Largest Rectangle in Histogram], to update the maximum area.
 
 */
-
-// CODE: 
 
 class Solution {
     public int maximalRectangle(char[][] matrix) {
