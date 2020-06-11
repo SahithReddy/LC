@@ -1,0 +1,153 @@
+/* 562. Longest Line of Consecutive One in Matrix
+Given a 01 matrix M, find the longest line of consecutive one in the matrix. The line could be horizontal, vertical, diagonal or anti-diagonal.
+
+Example:
+Input:
+[[0,1,1,0],
+ [0,1,1,0],
+ [0,0,0,1]]
+Output: 3
+
+Note: The number of elements in the given matrix will not exceed 10,000.
+
+*/
+
+/* ALGORITHM : BRUTE FORCE: -- ANOTHER BEST APPROACH IS DOWN(SMALL AND SIMPLE TO WRITE AND UNDERSTAND TOO)
+The brute force approach is really simple. We directly traverse along every valid line in the given matrix: i.e. Horizontal, Vertical, Diagonal aline above and below the middle diagonal, Anti-diagonal line above and below the middle anti-diagonal. Each time during the traversal, we keep on incrementing the countcount if we encounter continuous 1's. We reset the countcount for any discontinuity encountered. While doing this, we also keep a track of the maximum countcount found so far.
+
+*/
+
+class Solution {
+  public int longestLine(int[][] M) {
+    if (M.length == 0) return 0;
+    int ones = 0;
+    // horizontal
+    for (int i = 0; i < M.length; i++) {
+      int count = 0;
+      for (int j = 0; j < M[0].length; j++) {
+        if (M[i][j] == 1) {
+          count++;
+          ones = Math.max(ones, count);
+        } else count = 0;
+      }
+    }
+    // vertical
+    for (int i = 0; i < M[0].length; i++) {
+      int count = 0;
+      for (int j = 0; j < M.length; j++) {
+        if (M[j][i] == 1) {
+          count++;
+          ones = Math.max(ones, count);
+        } else count = 0;
+      }
+    }
+    // upper diagonal
+    for (int i = 0; i < M[0].length || i < M.length; i++) {
+      int count = 0;
+      for (int x = 0, y = i; x < M.length && y < M[0].length; x++, y++) {
+        if (M[x][y] == 1) {
+          count++;
+          ones = Math.max(ones, count);
+        } else count = 0;
+      }
+    }
+    // lower diagonal
+    for (int i = 0; i < M[0].length || i < M.length; i++) {
+      int count = 0;
+      for (int x = i, y = 0; x < M.length && y < M[0].length; x++, y++) {
+        if (M[x][y] == 1) {
+          count++;
+          ones = Math.max(ones, count);
+        } else count = 0;
+      }
+    }
+    // upper anti-diagonal
+    for (int i = 0; i < M[0].length || i < M.length; i++) {
+      int count = 0;
+      for (int x = 0, y = M[0].length - i - 1; x < M.length && y >= 0; x++, y--) {
+        if (M[x][y] == 1) {
+          count++;
+          ones = Math.max(ones, count);
+        } else count = 0;
+      }
+    }
+    // lower anti-diagonal
+    for (int i = 0; i < M[0].length || i < M.length; i++) {
+      int count = 0;
+      for (int x = i, y = M[0].length - 1; x < M.length && y >= 0; x++, y--) {
+        // System.out.println(x+" "+y);
+        if (M[x][y] == 1) {
+          count++;
+          ones = Math.max(ones, count);
+        } else count = 0;
+      }
+    }
+    return ones;
+  }
+}
+
+/*
+Time complexity : O(n^2). We traverse along the entire matrix 4 times.
+Space complexity : O(1). Constant space is used.
+
+*/
+------------------------------------------------
+/* JUST READ - Left to right, Top to bottom Iteration
+We can separate the problem into two subproblems. The first subproblem is, given a 1 dimensional list of 0's and 1's, what is the longest chain of consecutive 1s? The second subproblem is to generate every line (row, column, diagonal, and anti-diagonal).
+
+The first problem is common. We keep track of the number of 1's we've seen before. If we see a 1, we add to our count and update our answer. If we see a 0, we reset.
+
+The second part is more complex. We can try to manipulate indices of the grid, but there is a trick. Each element in the grid belongs to exactly 4 lines: the r-th row, c-th column, (r+c)-th diagonal, and (r-c)-th anti-diagonal. We scan from left to right, top to bottom, adding each element's value to it's respective 4 groups. As we visited in reading order.
+*/
+
+class Solution {
+        public int longestLine(int[][] M) {
+        if (M.length == 0 || M[0].length == 0) {
+            return 0;
+        }
+        int max = 0;
+        int[] col = new int[M[0].length];
+        int[] diag = new int[M.length + M[0].length - 1];
+        int[] antiD = new int[M.length + M[0].length - 1];
+        for (int i = 0; i < M.length; i++) {
+            int row = 0;
+            for (int j = 0; j < M[0].length; j++) {
+                if (M[i][j] == 1) {
+                    row++;
+                    col[j]++;
+                    antiD[j + i]++;
+                    diag[M.length - 1 - (i - j)]++;
+                    max = Math.max(max, row);
+                    max = Math.max(max, col[j]);
+                    /*
+                    Points are on the same line when they have same value of x + y.
+
+                    When p1(x1, y1) and P2(x2, y2) are on the same anti-diagonal, 
+                    we have x1 + y1 == x2 + y2, 
+            
+                    When they are on the same diagonal, 
+                    we have y1 - x1 == y2 - x2.
+                    use an array to record which diagonal you are on.
+                    */
+                    max = Math.max(max, antiD[i + j]);
+                    max = Math.max(max, diag[M.length - 1 - (i - j)]);
+                } else {
+                    row = 0;
+                    col[j] = 0;
+                    antiD[j + i] = 0;
+                    diag[M.length - 1 - i + j] = 0;
+                }
+            }
+        }
+        return max;
+    }
+}
+
+/*
+TC: 2 for loops: O(MN), M rows and N columns
+SC: O(M+N)
+
+*/
+
+
+
