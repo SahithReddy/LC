@@ -1,0 +1,58 @@
+/* 1296. Divide Array in Sets of K Consecutive Numbers
+Given an array of integers nums and a positive integer k, find whether it's possible to divide this array into sets of k consecutive numbers
+Return True if its possible otherwise return False.
+
+
+Example 1:
+
+Input: nums = [1,2,3,3,4,4,5,6], k = 4
+Output: true
+Explanation: Array can be divided into [1,2,3,4] and [3,4,5,6].
+Example 2:
+
+Input: nums = [3,2,1,2,3,4,3,4,5,9,10,11], k = 3
+Output: true
+Explanation: Array can be divided into [1,2,3] , [2,3,4] , [3,4,5] and [9,10,11].
+Example 3:
+
+Input: nums = [3,3,2,2,1,1], k = 3
+Output: true
+Example 4:
+
+Input: nums = [1,2,3,4], k = 3
+Output: false
+Explanation: Each array should be divided in subarrays of size 3.
+
+
+*/
+
+/* GREEDY APPROACH - TREEMAP TO STORE NUMBERS AND ITS FREQUENCIES IN ORDER - REFER HAND OF STRAIGHTS FOR MORE EXPLANATION
+
+We can use a greedy approach and start with the smallest number and see if the numbers from that number + k exist and then keep removing them from the numbers we have, if there is a case where it's not possible then we return false.
+
+*/
+
+class Solution {
+    public boolean isPossibleDivide(int[] nums, int k) {
+        int len = nums.length;
+         if(len % k != 0) return false; // Should be divisible
+        Map<Integer, Integer> map = new TreeMap<>();
+        for(int i : nums) map.put(i, map.getOrDefault(i, 0)+1); // count frequencies
+        
+        for(int i : map.keySet()) { // Iterate through keys(numbers in input)
+            int count = map.get(i); // get their frequency
+            if(count == 0) continue; // if 0, this number cannot be a first number in the group
+            for(int j=i; j<i+k; j++) { // search W consecutive numbers starting from first number in the particular group
+               Integer c = map.get(j); // get the count of those numbers
+                if(c == null || c < count) return false; // grouping cannot be possible if there is no consecutive number or even if consecutive number frequency is less than frequency of starting number
+                map.put(j, c-count); // now, decrease its counts
+            }
+        }
+        return true; // we successfully created nums.length/k consecutive sequences of length k using integers in nums
+    }
+}
+
+
+/* COMPLEXITY: 
+O(nlogn + n*k) time, O(d) space where d is the number of distinct integers in nums
+*/
