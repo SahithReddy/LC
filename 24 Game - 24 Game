@@ -1,0 +1,114 @@
+/* 679. 24 Game
+You have 4 cards each containing a number from 1 to 9. You need to judge whether they could operated through *, /, +, -, (, ) to get the value of 24.
+
+Example 1:
+Input: [4, 1, 8, 7]
+Output: True
+Explanation: (8-4) * (7-1) = 24
+
+Example 2:
+Input: [1, 2, 1, 2]
+Output: False
+
+Note:
+The division operator / represents real division, not integer division. For example, 4 / (1 - 2/3) = 12.
+Every operation done is between two numbers. In particular, we cannot use - as a unary operator. For example, with [1, 1, 1, 1] as input, the expression -1 - 1 - 1 - 1 is not allowed.
+You cannot concatenate numbers together. For example, if the input is [1, 2, 1, 2], we cannot write this as 12 + 12.
+*/
+
+/* ALGORITHM: DFS
+
+The difficulty in implementation is mainly to traverse all the combinations without hesitation, which we can implement based on depth-first traversal.
+
+Input: [4, 1, 8, 7]
+Output: True
+Explanation: (8-4) * (7-1) = 24
+
+Round 1
+8 - 4 = 4 --->4, 7, 1
+Round 2
+7 - 1 = 6 --->4, 6
+Round 3
+4 * 6 = 24 ---> 24
+
+From the above example we can get the inspiration: every time we do an operation, when the number of digits in the collection is greater than or equal to 2, we take two of them to perform an operation and put the result of the operation into the collection, the two operations The number is discarded, and then the updated set is checked. When there is only one number left in the last set, we only need to compare whether it is equal to 24, if it is equal to 24, it returns success and no need to traverse; If 24 is not equal, you need to continue to traverse the remaining possibilities until you find a successful example, or if you have not found a return failure after the traversal.
+-----------------------------------
+Let's say, we pick any two numbers, a and b, and apply any operator +, -, *, /, assuming that the expression is surrounded with parenthesis, e.g. (a + b). Then, the result of (a + b) instead of a and b would participate in the following calculations.
+Take nums = [4, 3, 2, 1] for example, assuming that we pick4, 3 and apply +, nums would become [7, 2, 1].
+
+We keep enumerating until there is only one element left in nums, and return true only if the last element equals to 24.
+----------------------------------
+Try [3,3,8,8], what you supposed to get is "true" (why? Tricky like this: 8 / (3 - (8 / 3)) = 24), but this solution will yield "false". I think this may have to do with double data type (lost some significant number during the computation?) . I modified your solution by changing return a[0] == 24 to if (Math.abs(a[0] - 24) < 0.0001) return true
+
+The reason we get the result with recurring decimal:
+input array is {3,3,8,8}
+-> 8/3=2.6666...
+-> 3 - 8/3 = 0.333...
+-> 8/0.333=23.999...
+for base case in recursion, if we just compare the result with 24.0, then this case would be false.
+*/
+
+class Solution {
+    public boolean judgePoint24(int[] nums) {
+        List<Double> list = new ArrayList<>();
+        for (int i : nums) {
+            list.add((double) i);
+        }
+        return dfs(list);
+    }
+
+    // Each time dfs chooses two cards
+    private boolean dfs(List<Double> list) {
+        int size = list.size();
+        if (size == 1) {
+            // If there is only one card left in the list at this time
+            /*
+            Since you're dividing some variables, your result might be dominated by round of errors. 0.001 and 0.0001 are both okay as long as they are small enough. 23.999 close to 24, 23.99 also close to 24, and each of them will be seemed as correct result. You can also use 0.0000002 if that makes you happy.
+            */
+            if (Math.abs(list.get(0)- 24.0) < 0.001) {
+                return true;
+            }
+            return false;
+        }
+        
+        // Pick two cards
+        for(int i = 0; i < size; i++) {
+            for(int j = i + 1; j < size; j++) {
+                // For every next possible combination
+                for (double c : compute(list.get(i), list.get(j))) {
+                    List<Double> nextRound = new ArrayList<>();
+                    // Add them to the next list loop
+                    nextRound.add(c);
+                    for(int k = 0; k < size; k++) {
+                        if(k == j || k == i) continue;
+                        nextRound.add(list.get(k));
+                    }
+                    if(dfs(nextRound)) return true;
+                }
+            }
+        }
+        return false;
+
+    }
+    // Calculate the next possible combination
+    private List<Double> compute(double a, double b) {
+        List<Double> res = new ArrayList<>();
+        res.add(a + b);
+        res.add(a - b);
+        res.add(b - a);
+        res.add(a * b);
+        res.add(a / b);
+        res.add(b / a);
+        return res;
+    }
+}
+
+/*
+Time Complexity: O(1). There is a hard limit of 12 * 6 * 2 * 4 * 4 * 4 = 921612∗6∗2∗4∗4∗4=9216 possibilities, and we do O(1) work for each of them.
+
+Space Complexity: O(1). Our intermediate arrays are at most 4 elements, and the number made is bounded by an 0(1) factor.
+*/
+
+/* REFERENCES
+https://leetcode.com/problems/24-game/discuss/107673/JAVA-Easy-to-understand.-Backtracking. - Comment by PIP_Guy
+*/
