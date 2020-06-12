@@ -51,16 +51,67 @@ Constraints:
 
 */
 
-/* ALGORITHM:
+/* ALGORITHM: Array - Greedy. -- USE TREEMAP(TO STORE IN CONSECUTIVE ORDER)
 
+Given test case like hand = [1,1,1,2,2,2,3,3,3], W = 3, what do you think?
+
+My thought is: If I know the first number in one of the group, I know the whole group.
+
+e.g. If i know the first number in a group is 1 and W == 3, then the group must be [1, 2, 3].
+
+That is to say, I just need to find all starting numbers of each group, then go check if all the other numbers in the group can be found in the given hand.
+
+       1. First suppose we know the starting number of each group. The question is: How do you know if the other numbers of             the group exist in hand?
+
+Like if we know 2 must be the starting number in a group of length 3, then we immediately know that the group consists of [2,3,4].
+
+To check if 3 and 4 exist in hand, we can just use a hash table to find this out.
+
+       2. Still, there might be groups with the same starting number, like if group_1 and group_2 both have starting number 2,           how do you know if there are two 3s and 4s?
+
+This can be easily solved by storing each number's time of appearence in the hash table, like a HashMap/TreeMap(maintains order)
+
+Each time we used a number, we decrease its counts, once its counts is 0, we know the number is no longer available.
+
+       3. Final question is: How do you find the starting number of each group?
+We can get some intuition by observing an example:
+
+hand = [1, 2, 3, 3, 4, 5] and W = 3
+We know that there are 2 groups and their corresponding starting numbers are 1 and 3. How do we find this out?
+
+We can easily find the starting number of the first group, namely 1. It's just the minimum of the given hand. Then we automatically constructed the group [1,2,3]. After that, the minimum of remaining numbers in hand is 3, of course it's the starting number of the other group!
+================> 
+1. Use a TreeMap/Counter to sort and count the elements in nums-- Key->Number Value->Its Count
+2. Iterate, start from the smallest key to key + W consecutive to verify existence of a group, decrease the count of each number as appears by (count of first number of group) each; If any key is absent(count is null or less than count of first number of group), return false;
+If never encounter any of the conditions above return true.
 
 */
 
-
+class Solution {
+     public boolean isNStraightHand(int[] hand, int W) {
+         int len = hand.length;
+         if(len % W != 0) return false; // Should be divisible
+        Map<Integer, Integer> map = new TreeMap<>();
+        for(int i : hand) map.put(i, map.getOrDefault(i, 0)+1); // count frequencies
+        
+        for(int i : map.keySet()) { // Iterate through keys(numbers in input)
+            int count = map.get(i); // get their frequency
+            if(count == 0) continue; // if 0, this number cannot be a first number in the group
+            for(int j=i; j<i+W; j++) { // search W consecutive numbers starting from first number in the particular group
+               Integer c = map.get(j); // get the count of those numbers
+                if(c == null || c < count) return false; // grouping cannot be possible if there is no consecutive number or even if consecutive number frequency is less than frequency of starting number
+                map.put(j, c-count); // now, decrease its counts
+            }
+        }
+        return true;   
+    }
+}
 
 
 /* COMPLEXITY:
+Time O(MlogM + MW), where M is the number of different cards.
 
+Space Complexity: O(N), N is no of distinct numbers in input. Store all input numbers in TreeMap
 */
 
 
