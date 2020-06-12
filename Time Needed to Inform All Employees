@@ -1,0 +1,100 @@
+/* 1376. Time Needed to Inform All Employees
+
+A company has n employees with a unique ID for each employee from 0 to n - 1. The head of the company has is the one with headID.
+
+Each employee has one direct manager given in the manager array where manager[i] is the direct manager of the i-th employee, manager[headID] = -1. Also it's guaranteed that the subordination relationships have a tree structure.
+
+The head of the company wants to inform all the employees of the company of an urgent piece of news. He will inform his direct subordinates and they will inform their subordinates and so on until all employees know about the urgent news.
+
+The i-th employee needs informTime[i] minutes to inform all of his direct subordinates (i.e After informTime[i] minutes, all his direct subordinates can start spreading the news).
+
+Return the number of minutes needed to inform all the employees about the urgent news.
+
+Example 1:
+Input: n = 1, headID = 0, manager = [-1], informTime = [0]
+Output: 0
+Explanation: The head of the company is the only employee in the company.
+
+Example 2:
+Input: n = 6, headID = 2, manager = [2,2,-1,2,2,2], informTime = [0,0,1,0,0,0]
+Output: 1
+Explanation: The head of the company with id = 2 is the direct manager of all the employees in the company and needs 1 minute to inform them all.
+The tree structure of the employees in the company is shown.
+
+
+Example 3:
+Input: n = 7, headID = 6, manager = [1,2,3,4,5,6,-1], informTime = [0,6,5,4,3,2,1]
+Output: 21
+Explanation: The head has id = 6. He will inform employee with id = 5 in 1 minute.
+The employee with id = 5 will inform the employee with id = 4 in 2 minutes.
+The employee with id = 4 will inform the employee with id = 3 in 3 minutes.
+The employee with id = 3 will inform the employee with id = 2 in 4 minutes.
+The employee with id = 2 will inform the employee with id = 1 in 5 minutes.
+The employee with id = 1 will inform the employee with id = 0 in 6 minutes.
+Needed time = 1 + 2 + 3 + 4 + 5 + 6 = 21.
+
+
+Example 4:
+Input: n = 15, headID = 0, manager = [-1,0,0,1,1,2,2,3,3,4,4,5,5,6,6], informTime = [1,1,1,1,1,1,1,0,0,0,0,0,0,0,0]
+Output: 3
+Explanation: The first minute the head will inform employees 1 and 2.
+The second minute they will inform employees 3, 4, 5 and 6.
+The third minute they will inform the rest of employees.
+
+
+Example 5:
+Input: n = 4, headID = 2, manager = [3,3,-1,2], informTime = [0,0,162,914]
+Output: 1076
+*/
+
+/* ALGORITHM: DFS
+INTUITON/FIRST THOUGHTS:
+
+""number of minutes needed to inform all the employees" (as required in the question) is nothing but "max time required for the information to reach the last children"."
+
+We can reorder the input as an adjacency list to simulate the process of information/news travelling down to the children using DFS.
+We get the max time required for the information to reach the last children and this is our result.
+
+Common edge cases
+
+if (n == 0 || headID < 0) return -1;
+if (manager == null || manager.length == 0) return -1;
+if (informTime == null || informTime.length == 0) return -1; 
+*/
+
+class Solution {
+     public int numOfMinutes(final int n, final int headID, final int[] manager, final int[] informTime) {
+        final Map<Integer, List<Integer>> graph = new HashMap<>();
+        int total = 0;
+        for (int i = 0; i < manager.length; i++) { //Create Adjacency list
+            int j = manager[i];
+            if (!graph.containsKey(j))
+                graph.put(j, new ArrayList<>());
+            graph.get(j).add(i);
+        }
+        return dfs(graph, informTime, headID);
+    }
+
+    private int dfs(final Map<Integer, List<Integer>> graph, final int[] informTime, final int cur) {
+        int max = 0;
+        if (!graph.containsKey(cur))
+            return max;
+        for (int i = 0; i < graph.get(cur).size(); i++)
+            max = Math.max(max, dfs(graph, informTime, graph.get(cur).get(i))); //Get the max time to reach the last child under the current node.
+        return max + informTime[cur]; //Return the time required for this employee to inform + the time for it's children to inform all under them
+    }
+}
+
+
+/* COMPLEXITY:
+The time for a manager = max(manager's employees) + informTime[manager]
+
+Time O(N), where n = manager.length.
+Space O(N), DFS takes space due to its call stack, which can go as deep as the total employee count, i.e. n. Hence, space complexity is O(n).
+
+*/
+
+
+/* REFERENCES
+https://leetcode.com/problems/time-needed-to-inform-all-employees/discuss/532560/JavaC%2B%2BPython-DFS - Code
+*/
