@@ -1,0 +1,95 @@
+/* 85. Maximal Rectangle
+
+Given a 2D binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+
+Input:
+[
+  ["1","0","1","0","0"],
+  ["1","0","c1","1","1"],
+  ["1","1","1","1","1c"],
+  ["1","0","0","1","0"]
+]
+Output: 6
+*/
+
+/* USING A STACK - A O(n^2) solution based on Largest Rectangle in Histogram
+
+
+In the previous approach we discussed breaking the input into a set of histograms - one histogram representing the substructure at each column. To compute the maximum area in our rectangle, we merely have to compute the maximum area of each histogram and find the global maximum (note that the below approach builds a histogram for each row instead of each column, but the idea is still the same).
+
+We can apply the maximum in histogram in each row of the 2D matrix. What we need is to maintain an int array for each row, which represent for the height of the histogram.
+
+Please refer to https://leetcode.com/problems/largest-rectangle-in-histogram/  first.
+
+Suppose there is a 2D matrix like
+
+1 1 0 1 0 1
+
+0 1 0 0 1 1
+
+1 1 1 1 0 1
+
+1 1 1 1 0 1
+
+First initiate the height array as 1 1 0 1 0 1, which is just a copy of the first row. Then we can easily calculate the max area is 2.
+
+Then update the array. We scan the second row, when the matrix[1][i] is 0, set the height[i] to 0; else height[i] += 1, which means the height has increased by 1. So the height array again becomes 0 2 0 0 1 2. The max area now is also 2.
+
+Apply the same method until we scan the whole matrix. the last height arrays is c2 4 2 2c 0 4, so the max area has been found as 2 * 4 = 8.
+
+Then reason we scan the whole matrix is that the maximum value may appear in any row of the height.
+
+You can maintain a row length of Integer array H recorded its height of '1's, and scan and update row by row to find out the largest rectangle of each row.
+
+For each row, if matrix[row][i] == '1'. H[i] +=1, or reset the H[i] to zero.
+and accroding the algorithm of [Largest Rectangle in Histogram], to update the maximum area.
+
+*/
+
+public class Solution {
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix==null||matrix.length==0||matrix[0].length==0)
+            return 0;
+        int cLen = matrix[0].length;    // column length
+        int rLen = matrix.length;       // row length
+        // height array 
+        int[] h = new int[cLen+1];
+        h[cLen]=0;
+        int max = 0;
+        
+        
+        for (int row=0;row<rLen;row++) {
+            Stack<Integer> s = new Stack<Integer>();
+            for (int i=0;i<cLen+1;i++) {
+                if (i<cLen)
+                    if(matrix[row][i]=='1')
+                        h[i]+=1;
+                    else h[i]=0;
+                
+                if (s.isEmpty()||h[s.peek()]<=h[i])
+                    s.push(i);
+                else {
+                    while(!s.isEmpty()&&h[i]<h[s.peek()]){
+                        int top = s.pop();
+                        int area = h[top]*(s.isEmpty()?i:(i-s.peek()-1));
+                        // update maxarea with the maximum area from this row's histogram
+                        max = Math.max(area, max);
+                    }
+                    s.push(i);
+                }
+            }
+        }
+        return max;
+    }
+}
+
+/*
+Time complexity : O(NM). Running max square in histogram on each row takes M (length of each row) time. This is done N times for O(NM).
+
+Space complexity : O(M). We allocate an array the size of the the number of columns to store our widths at each row.
+
+*/
+
+/*
+https://leetcode.com/problems/maximal-rectangle/discuss/29064/A-O(n2)-solution-based-on-Largest-Rectangle-in-Histogram
+*/
