@@ -1,0 +1,116 @@
+/* 1345. Jump Game IV
+Given an array of integers arr, you are initially positioned at the first index of the array.
+
+In one step you can jump from index i to index:
+
+i + 1 where: i + 1 < arr.length.
+i - 1 where: i - 1 >= 0.
+j where: arr[i] == arr[j] and i != j.
+
+Return the minimum number of steps to reach the last index of the array.
+
+Notice that you can not jump outside of the array at any time.
+
+Example 1:
+
+Input: arr = [100,-23,-23,404,100,23,23,23,3,404]
+Output: 3
+Explanation: You need three jumps from index 0 --> 4 --> 3 --> 9. Note that index 9 is the last index of the array.
+
+Example 2:
+Input: arr = [7]
+Output: 0
+Explanation: Start index is the last index. You don't need to jump.
+
+Example 3:
+Input: arr = [7,6,9,6,9,6,9,7]
+Output: 1
+Explanation: You can jump directly from index 0 to index 7 which is last index of the array.
+
+Example 4:
+Input: arr = [6,1,9]
+Output: 2
+
+Example 5:
+Input: arr = [11,22,7,7,7,7,7,7,7,22,13]
+Output: 3
+*/
+
+
+/* BFS Using queue
+BFS is the natural solution here, as for all 'shortest path' problems on unweighted graphs. You want to find the shortest path. With BFS you can stop as soon as you reach the goal. With DFS you might reach the goal (or memoize any result) via a sub-optimal path.
+
+To be sure you get the optimal solution with DFS, you can't use memoization because you might still find a shorter path at any point in the future.
+
+start from the first index and add that to the queue.
+		 For each index i we pick from queue, see if we can visit i+1, i-1
+		 (if we don't go out of bounds and we haven't already visited it yet). We also need to
+		 visit all the indexes for which arr[i] == arr[j] and i != j.
+		 All these values in array are considered to be on the same level or same distance from i.
+		 for next set of indexes increment jump by 1. if at any point we reach arr.length-1 simply return the jumps.
+
+*/
+
+class Solution {
+    public int minJumps(int[] arr) {
+        if(arr == null || arr.length<=2) return 0;
+			Map<Integer, List<Integer>> map = new HashMap<>(); //contains values with their index occurences.
+        for(int i = 0;i<arr.length;i++) {
+            if(!map.containsKey(arr[i])) {
+                map.put(arr[i], new ArrayList<>());
+            }
+            map.get(arr[i]).add(i);
+        }
+        /* start from the first index and add that to the queue.
+		 For each index i we pick from queue, see if we can visit i+1, i-1
+		 (if we don't go out of bounds and we haven't already visited it yet). We also need to
+		 visit all the indexes for which arr[i] == arr[j] and i != j.
+		 All these values in array are considered to be on the same level or same distance from i.
+		 for next set of indexes increment jump by 1. if at any point we reach arr.length-1 simply return the jumps.
+		*/
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(0);
+        Set<Integer> visited = new HashSet<>();
+        int jumps = 0;
+        while(!queue.isEmpty()) {
+            int size = queue.size();
+            
+            for(int i=0;i<size;i++) {
+                int idx = queue.poll();
+                visited.add(idx);
+                if(idx == arr.length-1) {
+                    return jumps;
+                }
+                if(idx+1 <arr.length && !visited.contains(idx+1)) {
+                    queue.add(idx+1);
+                }
+                if(idx-1>=0 && !visited.contains(idx-1)) {
+                    queue.add(idx-1);
+                }
+                if(map.containsKey(arr[idx])) {
+                    for(int position : map.get(arr[idx])) {
+                        if(!visited.contains(position)) {
+                            queue.add(position);
+                        }
+                    }
+                    map.remove(arr[idx]);
+                }
+            }
+            
+            jumps++;
+        }
+        return jumps;
+    }
+}
+
+/*
+Time & Space: O(N)
+Expain Time O(N): In the case where each index has the same value, the algorithm goes to the neighbor (the same value) once then breaks all the edge by using: next.clear()
+So the algorithm will traverse up to N edges for j and 2N edges for (i+1, i-1).
+That's why time complexity is O(3N) ~ O(N)
+*/
+
+
+/* References:
+https://leetcode.com/problems/jump-game-iv/discuss/657917/JAVA-Simple-BFS-Solution
+*/
