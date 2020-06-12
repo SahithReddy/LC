@@ -1,0 +1,192 @@
+/* 1240. Tiling a Rectangle with the Fewest Squares
+Given a rectangle of size n x m, find the minimum number of integer-sided squares that tile the rectangle.
+
+ 
+Example 1:
+Input: n = 2, m = 3
+Output: 3
+Explanation: 3 squares are necessary to cover the rectangle.
+2 (squares of 1x1)
+1 (square of 2x2)
+
+
+Example 2:
+Input: n = 5, m = 8
+Output: 5
+
+Example 3:
+Input: n = 11, m = 13
+Output: 6
+*/
+
+/* DFS Backtracking with Memoization: BELOW PYTHON HAS DETAILED EXPLANATIONS - TRY USING THAT IF POSSIBLE
+
+The basic idea is to fill the entire block from the bottom up, fill in the bottom unfilled squares first, and select a different possible size square to fill it. 
+We maintain a height array (skyline) while dfs.
+ This skyline is the identity of the state.
+ The final result we ask for is the minimum number of squares in the state where the skyline is n m. 
+Of course, pure violence will have a high time complexity, but it can be pruned or optimized by the following three points.
+1. The current cnt (that is, the number of squares) of this skyline has exceeded the value of the current global optimal solution, then return directly.
+2, the current skyline has been traversed, and the previous cnt is smaller than the current cnt, then direct return
+3. When we find the empty square in the lower left corner, the next fill square is selected first from the larger square, which can make the program converge quickly. (This is not a pruning, but it is a very important optimization)
+
+*/
+
+class Solution {
+    Map<Long, Integer> set = new HashMap<>();
+    int res = Integer.MAX_VALUE;
+    public int tilingRectangle(int n, int m) {
+        if (n == m) return 1;
+        if (n > m) {
+            int temp = n;
+            n = m;
+            m = temp;
+        }
+        dfs(n, m, new int[n + 1], 0);
+        return res;
+    }
+    
+    private void dfs(int n, int m, int[] h, int cnt) {
+        if (cnt >= res) return;
+        boolean isFull = true;
+        int pos = -1, minH = Integer.MAX_VALUE;
+        for (int i = 1; i <= n; i++) {
+            if (h[i] < m) isFull = false;
+            if (h[i] < minH) {
+                pos = i;
+                minH = h[i];
+            }
+        }
+        if (isFull) {
+            res = Math.min(cnt, res);
+            return;
+        }
+        
+        int end = pos;
+        /* While loop fot finding the largest square we can pick.
+
+        I understood the fact that you are looking for adjacent locations where the height is same and on the basis of that you are assigning a block.
+The thrid restriction: Any column height in our state array may not be higher than m. In this statement, minH is the current height, while (end + 1 - pos + 1) is the width of the next square we might pick. Thus, (end + 1 - pos + 1 + minH) is the height after we add the next square.
+        
+        */
+        while (end + 1 <= n && h[end + 1] == h[pos] && (end + 1 - pos + 1 + minH) <= m) end++;
+        for (int j = end; j >= pos; j--) {
+            int curH = j - pos + 1;
+            
+            int[] next  = Arrays.copyOf(h, n + 1);
+            for (int k = pos; k <= j; k++) {
+                next[k] += curH;
+            }
+            dfs(n, m, next, cnt + 1);
+        }
+        
+    }
+}
+
+/*
+Time Complexity: O(m^n)
+Space Complexity: O(n)
+*/
+-----------------------------------------------------------
+// PYTHON SOLUTION WITH DETAILED EXPLANATIONS:
+
+    def tilingRectangle(self, width, height):
+		
+		
+        # use area_left as a heuristic function to eliminate unworthy search branches
+        # remove the memo used to cache best usedCount obtained for each skyline state,
+        # it seems that the collision is quite scarse compared to all the states we had to store.
+
+        # The main idea is that, if there exists a solution,
+        # we can always fill in the squares from bottom up.
+        # That means any state during this "filling" process can
+        # be encoded as a skyline (array of heights at each position)
+        # NOTE
+        # y = skyline[x] contributes a line at y, from x to x + 1. This eliminates
+        # ambiguity at the edge, where there may be edges of 2 square at 1 x position.
+        # e.g.
+        # placing a 1x1 square at bottom left of 2x1 rectangle, 
+        # the skyline is [1, 0]
+
+        # heuristic: given area left to be filled,
+        # calculate the least number of squares that can sum up to it.
+        # this will be the absolute lower bound for that area.
+        # store the result for faster access
+        total_area = width * height
+        dp = [-1 for i in range(total_area +1)]
+        dp[0] = 0
+        for i in range(1, total_area + 1):
+            # try each possible k
+            dp[i] = 1 + min(dp[i - k**2] for k in range(1, int(i ** 0.5) + 1))
+        self.res = total_area
+
+
+        def dfs(skyline, usedCount, area_left):
+            # [List Int], Int, Int -> Void
+            # - given state as skyline, 
+            # - the number of squares already used, 
+            # - area left to be filled
+            # try to find the min square tiling
+            # continuing from this point.
+
+            # no need to search further if the best we can do with this path
+            # is no better than the best result so far
+            if usedCount + dp[area_left] >= self.res:
+                return;
+
+            # solution found iff skyline overlaps with the ceiling
+            filled = True
+            # the algorithm places squares at left first, so we consider heights only on right edge
+            # minimum height and the position.
+            min_pos = 0
+            min_height = skyline[0]
+            for pos in range(width):
+                # not filled if any skyline doesn't touch the ceiling
+                if (skyline[pos] < height):
+                    filled = False
+                # update lowest spot
+                if (skyline[pos] < min_height):
+                    min_pos = pos
+                    min_height = skyline[pos]
+
+            # already filled, another solution found.
+            if filled:
+                self.res = min(usedCount, self.res)
+                return
+            
+            # try to fill the leftmost lowest void, find the maximum size of square
+            # we can put there. end represents the x-coordinate of right edge
+            # NOTE x = end is where the right edge of this newly placed square will be
+            end = min_pos + 1;
+            # in order to increment end:
+            # - right edge stays in the rectangle 
+            # - bottom edge must have same height
+            # - top edge stays in the rectangle
+            while (end < width and \
+                   skyline[end] == min_height and \
+                   (end - min_pos + 1 + min_height) <= height):  
+                end += 1
+
+            # try fill with larger square first, to exhaust more void
+            # and potentially yield better search.
+            for right_pos in range(end, min_pos, -1):
+                # calcualte size of the square to be used
+                sqr_height = right_pos - min_pos 
+
+                new_skyline = list(skyline)
+                # increase the skyline at relavent positions
+                for i in range(min_pos, right_pos):
+                    new_skyline[i] += sqr_height
+                # continue dfs from here.
+                dfs(new_skyline, usedCount + 1, area_left - sqr_height * sqr_height)
+        
+        skyline = [0 for i in range(width)]
+        dfs(skyline, 0, total_area)
+
+        return self.res;
+
+----------------------------------------------------------
+/* Reference:
+https://leetcode.com/problems/tiling-a-rectangle-with-the-fewest-squares/discuss/414260/8ms-Memorized-Backtrack-Solution-without-special-case!
+
+*/
