@@ -1,3 +1,6 @@
+// https://leetcode.com/discuss/interview-question/373237/Google-or-Onsite-or-Tiling-a-rectangle-with-the-fewest-squares
+// http://int-e.eu/~bf3/squares/view.html#13,11 - Examples
+
 /* 1240. Tiling a Rectangle with the Fewest Squares
 Given a rectangle of size n x m, find the minimum number of integer-sided squares that tile the rectangle.
 
