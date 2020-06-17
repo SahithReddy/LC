@@ -38,7 +38,7 @@ Space complexity : O(1). Constant space is used.
 */
 ---------------------------------------------------------
 
-/*
+/* ALGORITHM: PreSum + HashMap
 we make use of a hashmap map which is used to store the cumulative sum upto all the indices possible along with the number of times the same sum occurs. 
 We store the data in the form: (sum_i, no. of occurences of sum_i) 
 We traverse over the array nums and keep on finding the cumulative sum. 
@@ -48,12 +48,30 @@ Further, for every sum encountered, we also determine the number of times the su
 We increment the count by the same amount.
 
 After the complete array has been traversed, the count gives the required result.
-
+----------------------------------------
+we know the key to solve this problem is SUM[i, j]. So if we know SUM[0, i - 1] and SUM[0, j], then we can easily get SUM[i, j]. To achieve this, we just need to go through the array, calculate the current sum and save number of all seen PreSum to a HashMap.
 */
 
 public class Solution {
     public int subarraySum(int[] nums, int k) {
+        // Edge cases
+        if(nums.length == 0)    return 0;
         int count = 0, sum = 0;
+        
+         // Sliding window -- No, contains negative number
+        // hashmap + preSum
+        /*
+            1. Hashmap<sum[0,i - 1], frequency>
+            2. sum[i, j] = sum[0, j] - sum[0, i - 1]    --> sum[0, i - 1] = sum[0, j] - sum[i, j]
+                   k           sum      hashmap-key     -->  hashmap-key  =  sum - k
+            3. now, we have k and sum.  
+                  As long as we can find a sum[0, i - 1], we then get a valid subarray
+                 which is as long as we have the hashmap-key,  we then get a valid subarray
+            4. Why don't map.put(sum[0, i - 1], 1) every time ?
+                  if all numbers are positive, this is fine
+                  if there exists negative number, there could be preSum frequency > 1
+        */
+        
         HashMap < Integer, Integer > map = new HashMap < > ();
         map.put(0, 1);
         for (int i = 0; i < nums.length; i++) {
@@ -73,8 +91,43 @@ Time complexity : O(n). The entire nums array is traversed only once.
 
 Space complexity : O(n). Hashmap map can contain upto n distinct entries in the worst case.
 */
+-----------------------------------------------------------------
+/* FOLLOW-UP
+Find the maximum number of non-overlapping subarrays whose sum equals to k.
 
+Example 1:
+Input: nums = [1, 1, 1], k = 2
+Output: 1
 
+Example 2:
+Input: nums = [0, 0, 0, 0, 0], k = 0
+Output: 5
+*/
+
+public static void main(String[] args) {
+	int[] nums1 = { 1, 1, 1 };
+	int k1 = 2;
+	int[] nums2 = { 1, 1, 2, 1, 1, 1 };
+	int k2 = 3;
+	System.out.println(solve(nums1, k1));
+	System.out.println(solve(nums2, k2));
+}
+
+private static int solve(int[] nums, int k) {
+	int[] dp = new int[nums.length + 1];
+	Map<Integer, Integer> map = new HashMap<>();
+	map.put(0, 0);
+	int sum = 0;
+	for(int i=1;i<=nums.length;i++) {
+		dp[i] = dp[i-1];
+		sum += nums[i-1];
+		map.put(sum, i);
+		if(map.containsKey(sum - k)) {
+			dp[i] = Math.max(dp[i], dp[map.get(sum - k) ] + 1);
+		}
+	}
+	return dp[nums.length];
+}
 
 
 
