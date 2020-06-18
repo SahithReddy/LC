@@ -55,6 +55,7 @@ class Solution {
 Time: O(n) n= no of elements
 Space: O(1)
 -------------------------------- FOLLOW UP: NOT 0 BUT A TARGET N------------------------------
+// https://leetcode.com/discuss/interview-question/385860/Google-or-Onsite-or-Move-Target-Elements
 /*
 Given an array nums and an int target, write a function to move all target elements to the beginning of the array while maintaining the relative order of the non-target elements.
 
@@ -64,11 +65,30 @@ Input: nums = [1, 2, 4, 2, 5, 7, 3, 7, 3, 5], target = 5
 Output: [5, 5, 1, 2, 4, 2, 7, 3, 7, 3]
 */
 
+public static void main(String[] args) {
+	int[] nums1 = { 1, 2, 4, 2, 5, 7, 3, 7, 3, 5 };
+	int target1 = 5;
+	System.out.println(Arrays.toString(moveTarget(nums1, target1)));
+	int[] nums2 = { 1, 2, 4, 2, 5, 5, 5, 5, 5, 7, 3, 7, 3, 5 };
+	int target2 = 5;
+	System.out.println(Arrays.toString(moveTarget(nums2, target2)));
+	int[] nums3 = { 5, 5, 5, 5, 5, 5, 5, 5, 5, 5 };
+	int target3 = 5;
+	System.out.println(Arrays.toString(moveTarget(nums3, target3)));
+	int[] nums4 = { 1, 2, 3, 4, 6, 7, 8, 9 };
+	int target4 = 5;
+	System.out.println(Arrays.toString(moveTarget(nums4, target4)));
+}
+
+private static int[] moveTarget(int[] nums, int target) {
 int n = nums.size(); int l = n-1;
     for (int j = n-1;j>=0;j--) {
         if (nums[j]!=target)
             nums[l--] = nums[j];
     }
-    while (l>=0) 
+    while (l>=0) {
         nums[l--] = target;
+    }
+  return nums;
+}
         
