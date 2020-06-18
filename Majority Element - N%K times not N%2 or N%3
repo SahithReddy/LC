@@ -1,0 +1,119 @@
+// https://leetcode.com/discuss/interview-question/344289/Google-or-Onsite-or-Majority-Element
+/*
+Given an array nums of length n and an int k. All the elements are non-negative integers and the same elements are adjacent in the array. Find the majority element. The majority element is any element that appears more than|n/k| times. If there's no majority element return -1.
+
+Example 1:
+
+Input: nums = [1, 1, 1, 1, 3, 4, 0, 0, 0, 0, 0, 9], k = 3
+Output: 0
+Explanation: n = 12 -> n / k = 12 / 3 = 4. Only 0 appears more than 4 times so return 0.
+Example 2:
+
+Input: nums = [1, 1, 1, 1, 3, 4, 0, 0, 0, 0, 9, 9], k = 3
+Output: -1
+Explanation: There's no element that appears more than 4 times so return -1.
+*/
+
+-----------------------------------------------
+/* BATYERS MOORE ALGORITHM:
+
+https://leetcode.com/problems/majority-element-ii/discuss/63537/My-understanding-of-Boyer-Moore-Majority-Vote
+
+https://leetcode.com/problems/majority-element-ii/discuss/63502/6-lines-general-case-O(N)-time-and-O(k)-space
+
+*/
+------------------------------------------------
+/*
+https://leetcode.com/problems/majority-element-ii/discuss/63500/JAVA-Easy-Version-To-Understand!!!!!!!!!!!! - Reply of Damao Services to Reborn comment
+*/
+
+public class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        int n = nums.length, k = 3;  //in this question, k=3 specifically
+        List<Integer> result = new ArrayList<Integer>();
+        if (n==0 || k<2) return result;
+        int[] candidates = new int[k-1];
+        int[] counts = new int[k-1];
+        for (int num: nums) {
+            boolean settled = false;
+            for (int i=0; i<k-1; i++) {
+                if (candidates[i]==num) {
+                    counts[i]++;
+                    settled = true;
+                    break;
+                } 
+            }
+            if (settled) continue;
+            for (int i=0; i<k-1; i++) {
+                if (counts[i]==0) {
+                    counts[i] = 1;
+                    candidates[i] = num;
+                    settled = true;
+                    break;
+                } 
+            }
+            if (settled) continue;
+            for (int i=0; i<k-1; i++) counts[i] = (counts[i] > 0) ? (counts[i]-1) : 0;
+        }
+        Arrays.fill(counts, 0);
+        for (int num: nums) {
+            for (int i=0;i<k-1; i++) {
+                if (candidates[i]==num) {
+                    counts[i]++;
+                    break;
+                }
+            }
+        }
+        for (int i=0; i<k-1; i++) if (counts[i]>n/k) result.add(candidates[i]);
+        return result;
+    }
+}
+
+----------------OR OR OR OR--------------------------
+/*
+https://leetcode.com/problems/majority-element-ii/discuss/63522/Boyer-Moore-Majority-Vote-algorithm-generalization -- Comment by duouduou
+
+*/
+
+
+public class Solution {
+public List<Integer> majorityElement(int[] nums) {
+ //there should be at most 2 different elements in nums more than n/3
+ //so we can find at most 2 elements based on Boyer-Moore Majority Vote algo
+ List<Integer> res = new ArrayList<Integer>();
+ if(nums.length==0) return res;
+ int count1=0,count2=0,m1=0,m2=0;
+ for(int n : nums){
+     if(m1==n) count1++;
+     else if(m2==n) count2++;
+     else if(count1==0) {
+         m1=n;
+         count1=1;
+     }
+     else if(count2==0) {
+         m2=n;
+         count2=1;
+     }
+     else{
+         count1--;
+         count2--;
+     }
+ }
+ count1=0;
+ count2=0;
+ //count the number for the 2 elements
+ for(int n:nums){
+     if(n==m1) count1++;
+     else if(n==m2) count2++;
+ }
+ //if those appear more than n/3
+ if(count1>nums.length/3) res.add(m1);
+ if(count2>nums.length/3) res.add(m2);
+ return res;
+
+   }
+}
+-------------------------------------------------
+/*
+still O(N) time but O(k) space
+*/
