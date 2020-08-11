@@ -1,6 +1,22 @@
+/* QUESTION: 352. Data Stream as Disjoint Intervals
 
-/*
-example to understand the input and output
+Given a data stream input of non-negative integers a1, a2, ..., an, ..., summarize the numbers seen so far as a list of disjoint intervals.
+
+For example, suppose the integers from the data stream are 1, 3, 7, 2, 6, ..., then the summary will be:
+[1, 1]
+[1, 1], [3, 3]
+[1, 1], [3, 3], [7, 7]
+[1, 3], [7, 7]
+[1, 3], [6, 7]
+
+Follow up:
+What if there are lots of merges and the number of disjoint intervals are small compared to the data stream's size?
+*/
+-----------------------------------------------------------
+/* EXAMPLE to understand the input and output
+You need to combine the numbers if they are in range. eg: 1, 3 - they cannot be combined as there is num missing to form a range So we need to output it as separate ranges [1,1] and [3,3] . Inorder to have range [1,3] u need 2. only if u hv 2 can u combine it in one range saying [1, 3] (1,2,3)
+
+
 empty + 1 = [1,1]
 [1,1] , [4,4] + 6 = [1,1], [4,4] , [6,6]
 [1,1] , [3,3] + 2 = [1,3]
@@ -8,43 +24,114 @@ empty + 1 = [1,1]
 [1,1] , [4,4] + 3 = [1,1] , [3,4]
 [1,2,3] + [5,6,7] + 4 = [1,2,3,4,5,6,7]
 */
-
-// EXPLANATION: 
+----------------------------------------------------------------
+// ALGORITHM EXPLANATION: TREEMAP
 /*
-Use TreeMap to easily find the lower and higher keys, the key is the start of the interval.
-Merge the lower and higher intervals when necessary. The time complexity for adding is O(logN) 
+The idea is map all map all val to its left bond of containing interval for fast lookup.
+Store intervals in TreeMap as it seems to require output intervals in ascending order.(if ascending order is not required, I would use a hashmap for maximum performance)
+
+5 cases:
+0: isolated val
+
+1: val already in existing interval
+e.g [1,6] 3, do nothing
+
+val is connected to interval on its left
+e.g [1,2] 3
+
+val is connected to interval on its right
+e.g. [4, 7] 3
+
+val is connected on both side
+e.g [1,2] [4, 7] 3.
+
+The algorithm actually finds the possible left or right intervals to val, (or both). remove the old intervals,
+insert the new interval in the TreeMap. Update valueToBond hashmap to ensure the right bound val can find its correct left bound. Note that some val in the middle of the interval won't find correct left bound. But that is OK as we will not access to the middle values in the future! The left bound, right bound values must find their correct left bound.
+
+The time complexity for adding is O(logN) 
 since lowerKey(), higherKey(), put() and remove() are all O(logN). It would be O(N) if you use an 
 ArrayList and remove an interval from it.
 */
 
 // CODE: 
-public class SummaryRanges {
-    TreeMap<Integer, Interval> tree;
-
-    public SummaryRanges() {
-        tree = new TreeMap<>();
-    }
-
-    public void addNum(int val) {
-        if(tree.containsKey(val)) return;
-        Integer l = tree.lowerKey(val);
-        Integer h = tree.higherKey(val);
-        if(l != null && h != null && tree.get(l).end + 1 == val && h == val + 1) {
-            tree.get(l).end = tree.get(h).end;
-            tree.remove(h);
-        } else if(l != null && tree.get(l).end + 1 >= val) {
-            tree.get(l).end = Math.max(tree.get(l).end, val);
-        } else if(h != null && h == val + 1) {
-            tree.put(val, new Interval(val, tree.get(h).end));
-            tree.remove(h);
-        } else {
-            tree.put(val, new Interval(val, val));
+ public class SummaryRanges {
+        private Map<Integer, Integer> valueToBond;//map val to containing interval left bound
+        private Map<Integer, Interval> bondToInterval; // store intervals in TreeMap <left bound, interval>
+        
+        public SummaryRanges() {
+            valueToBond = new HashMap<>();
+            bondToInterval = new TreeMap<>();
+        }
+        
+        public void addNum(int val) {
+            //contained in an existing interval
+            if (valueToBond.containsKey(val)) {
+                return;
+            }
+            //isolated number, no connection to its left or right
+            if (!valueToBond.containsKey(val - 1) && !valueToBond.containsKey(val + 1)) {
+                valueToBond.put(val, val);
+                bondToInterval.put(val, new Interval(val, val));
+                return;
+            }
+            //may connect to left, right or both
+            int left = valueToBond.containsKey(val - 1) ? valueToBond.get(val - 1) : val;
+            int right = valueToBond.containsKey(val + 1) ? bondToInterval.get(valueToBond.get(val + 1)).end : val;
+            valueToBond.put(val, left);
+            valueToBond.put(right, left);
+            bondToInterval.remove(val + 1);
+            bondToInterval.put(left, new Interval(left, right));
+        }
+        
+        public List<Interval> getIntervals() {
+            return new ArrayList<>(bondToInterval.values());
         }
     }
-
-    public List<Interval> getIntervals() {
-        return new ArrayList<>(tree.values());
-    }
-}
-
+    
 // add() would be O(1) and getIntervals() would be O(NlogN)
+----------------------------------------------------------------------
+/* ALGORITHM: USING HASHMAP
+Here, We don't try to find closest lower or higher entry, conversely only find val+/-1 and union consecutive range.
+In this way, the time complexity of add() would be O(1) and getIntervals() would be O(NlogN), am I correct?
+
+ps: I assume the N in O(NlogN) should be very small since I only keep two ends of interval.
+*/
+
+// CODE:
+
+// Key - left or right boundary value of range, Value - size of range
+    private Map<Integer, Integer> ranges = new HashMap<>();
+    
+    // Since middle val is removed, an extra set is required to de-duplicate
+    private Set<Integer> dup = new HashSet<>();
+    
+    public void addNum(int val) {
+        if (!dup.add(val)) return;
+        int left = ranges.containsKey(val - 1) ? ranges.remove(val - 1) : 0;
+        int right = ranges.containsKey(val + 1) ? ranges.remove(val + 1) : 0;
+        int sum = left + right + 1;
+        
+        if (left > 0) ranges.put(val - left, sum);
+        if (right > 0) ranges.put(val + right, sum);
+        if (left == 0 || right == 0) ranges.put(val, sum); // remove middle val to speed up getInt()
+    }
+    
+    public List<Interval> getIntervals() {
+        List<Interval> ret = new ArrayList<>();
+        List<Integer> keys = new ArrayList<>(ranges.keySet());
+        Collections.sort(keys);
+        
+        int last = Integer.MIN_VALUE;
+        for (int left : keys) {
+            int size = ranges.get(left);
+            if (last < left) {
+                ret.add(new Interval(left, left + size - 1));
+                last = left + size - 1;
+            }
+        }
+        return ret;
+    }
+-----------------------------------------------------------------------------------
+// https://leetcode.com/problems/data-stream-as-disjoint-intervals/discuss/82660/Java-fast-simple-code-using-TreeMap-with-detailed-explanation
+
+
