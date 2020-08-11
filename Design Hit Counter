@@ -34,8 +34,35 @@ Follow up:
 What if the number of hits per second could be very large? Does your design scale?
 
 */
+------------------------------------------------------------------
+/* ALGORITHM: QUEUE -- NOT THE BEST - JUST GIVE THIS APPROACH FOR FIRST TIME
+In this problem, I use a queue to record the information of all the hits. Each time we call the function getHits( ), we have to delete the elements which hits beyond 5 mins (300). The result would be the length of the queue : )
+*/
 
-/* ALGORITHM:
+public class HitCounter {
+        Queue<Integer> q = null;
+        /** Initialize your data structure here. */
+        public HitCounter() {
+            q = new LinkedList<Integer>();
+        }
+        
+        /** Record a hit.
+            @param timestamp - The current timestamp (in seconds granularity). */
+        public void hit(int timestamp) {
+            q.offer(timestamp);
+        }
+        
+        /** Return the number of hits in the past 5 minutes.
+            @param timestamp - The current timestamp (in seconds granularity). */
+        public int getHits(int timestamp) {
+            while(!q.isEmpty() && timestamp - q.peek() >= 300) {
+                q.poll();
+            }
+            return q.size();
+        }
+    }
+-------------------------------------------------------------------
+/* ALGORITHM: Array Buckets
 Super easy design O(1) hit() method and O(s) getHits() method
 
 O(s) s is total seconds in given time interval, in this case 300.
@@ -82,9 +109,9 @@ class HitCounter {
     }
 }
 
---------------------------------------------------
+-----------------------------------------------------------------------
 /*
-Follow up:
+FOLLOW-UP:
 What if the number of hits per second could be very large? Does your design scale?
 
  I think AtomicIntegerArray won't solve the issue as other points out, here is a ReentrantReadWriteLock solution.
