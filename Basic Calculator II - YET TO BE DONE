@@ -1,4 +1,4 @@
-/*
+/* QUESTION: 227. Basic Calculator II
 Implement a basic calculator to evaluate a simple expression string.
 
 The expression string contains only non-negative integers, +, -, *, / operators and empty spaces . 
@@ -17,82 +17,121 @@ Example 3:
 Input: " 3+5 / 2 "
 Output: 5
 */
+----------------------------------
+/* ALGORITHM: STACK
+If all the operators have the same priority, we can calculate all the numbers and operators one by one and save just the latest result. However, we need to handle the priorities of operators, i.e. '*' and '/' have higher priority than '+' and '-'. So we use a stack to track the numbers who have been met.
 
-// Solution using Stack
+A straightforward algorithm is:
 
-public class Solution {
-public int calculate(String s) {
-    int len;
-    if(s==null || (len = s.length())==0) return 0;
-    Stack<Integer> stack = new Stack<Integer>();
-    int num = 0;
-    char sign = '+';
-    for(int i=0;i<len;i++){
-        if(Character.isDigit(s.charAt(i))){
-            num = num*10+s.charAt(i)-'0';
+Use a global var opr to remember the latest operator we have met, a global var num for the number we are dealing with, and a stack to accommodate the numbers.
+
+Go through the string by characters, and the rule is:
+
+If current character is blank, continue to next step.
+If current character is digit, multiply num with 10 and add current value to num: */
+                num = num * 10 + (chr - '0');
+/* Otherwise, current character should be a operator, which means we have finished a new number (or hit the end of the string). At the time, we process the number with the latest operator opr by the rule:
+If opr is '+' or '-', we are not sure about the operating because there might be a operator with higher priority in the future. So add num or -num to the stack:*/
+                    case '+':
+                        stack.push(num);
+                        break;
+                    case '-':
+                        stack.push(-num);
+                        break;
+/* If opr is '*' or '/', we can perform the operating immediately. So get the latest number of the stack, perform the operating and push the result back to the stack:*/
+                    case '*':
+                        stack.push(stack.pop() * num);
+                        break;
+                    case '/':
+                        stack.push(stack.pop() / num);
+                        break;
+/*At last, we have a stack containing a couple of numbers and all of them have the same operator '+'. Just sum them up and return the result:*/
+            while(!stack.isEmpty())res += stack.pop();
+/*Note that we need to initialize opr to '+' to handle the first number:*/
+            char opr = '+';
+/*and add an extra '+' to the end of the string to make sure the latest number to be hanlded:*/
+            for(char chr : (s + "+").toCharArray())
+------------------------------------------------------
+class Solution {
+    public int calculate(String s) {
+        int res = 0, num = 0;
+        char opr = '+';
+        Stack<Integer> stack = new Stack<Integer>();
+        for(char chr : (s + "+").toCharArray()) {
+            if(chr == ' ')continue;
+            if(Character.isDigit(chr)) {
+                num = num * 10 + (chr - '0');
+            } else {                
+                switch(opr) {
+                    case '+':
+                        stack.push(num);
+                        break;
+                    case '-':
+                        stack.push(-num);
+                        break;
+                    case '*':
+                        stack.push(stack.pop() * num);
+                        break;
+                    case '/':
+                        stack.push(stack.pop() / num);
+                        break;
+                    default:
+                        return -1;
+                }
+                num = 0;
+                opr = chr;
+            }
         }
-        if((!Character.isDigit(s.charAt(i)) &&' '!=s.charAt(i)) || i==len-1){
-            if(sign=='-'){
-                stack.push(-num);
-            }
-            if(sign=='+'){
-                stack.push(num);
-            }
-            if(sign=='*'){
-                stack.push(stack.pop()*num);
-            }
-            if(sign=='/'){
-                stack.push(stack.pop()/num);
-            }
-            sign = s.charAt(i);
-            num = 0;
-        }
+        while(!stack.isEmpty())res += stack.pop();
+        
+        return res;
     }
-
-    int re = 0;
-    for(int i:stack){
-        re += i;
-    }
-    return re;
-}
 }
 
 // Time: O(N), Space: O(N) - Stack
 ------------------------------------------------------------------------
-// Solution without using stack
+// WITHOUT Using Stack
+/*
+In previous algorithm, all the operating of '*' and '/' are performed immediately, so all the numbers in the stack are just to be sumed up. A further conclusion is, we can always sum up all the number of the stack except the latest one, without impacting the result. So we just need two vars instead of the stack:
 
-public class Solution {
+tmp-> for the sum of all the number except the latest one;
+num-> for the latest number we are handling.
+*/
+
+class Solution {
     public int calculate(String s) {
-        int sum = 0;
-        int tempSum = 0;
-        int num = 0;
-        char lastSign = '+';
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (Character.isDigit(c)) num = num * 10 + c - '0';
-            if (i == s.length() - 1 || !Character.isDigit(c) && c!=' ') {
-                switch(lastSign) {
+        int res = 0, num = 0, tmp = 0;
+        char opr = '+';
+        for(char chr : (s + "+").toCharArray()) {
+            if(chr == ' ')continue;
+            if(Character.isDigit(chr)) {
+                num = num * 10 + (chr - '0');
+            } else {        
+                switch(opr) {
                     case '+':
-                        sum+=tempSum;
-                        tempSum = num;
+                        res += tmp;
+                        tmp = num;
                         break;
                     case '-':
-                        sum+=tempSum;
-                        tempSum = -num;
+                        res += tmp;
+                        tmp = -num;
                         break;
                     case '*':
-                        tempSum *= num;
+                        tmp *= num;
                         break;
                     case '/':
-                        tempSum /= num;
+                        tmp /= num;
                         break;
+                    default:
+                        return -1;
                 }
-                lastSign = c;
-                num=0;
+                num = 0;
+                opr = chr;
             }
         }
-        sum+=tempSum;
-        return sum;
+        res += tmp;
+        
+        return res;
     }
 }
 
