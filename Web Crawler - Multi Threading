@@ -72,12 +72,15 @@ class Solution {
         set.add(startUrl);
         
         /* bfs: pop a link from the queue. get all the child links and iterate over all the child link.
-        if the child link is not been visited and in the same domain, we will add that child link to the queue. Also this           child link is one of our result link
+        if the child link is not been visited and in the same domain, we will add that child link to the queue. Also this child link is one of our result link
         we will keep doing until queue is empty.*/
         
         while (!queue.isEmpty()) {
             String currentUrl = queue.poll();
+            // Check all the neighoubors 
             for (String url : htmlParser.getUrls(currentUrl)) {
+                // Get Host which match 
+                //explore only the links that are under the same hostname as startUrl.
                 if (url.contains(hostname) && !set.contains(url)) {
                     queue.offer(url);
                     set.add(url);
@@ -93,7 +96,6 @@ class Solution {
         return ss[2];
     }
 }
-
 // Space: O(N), RTC: O(N)
 --------------------------------------------------------------
 /* MULTI THREADING ALGORITHM: Using 
