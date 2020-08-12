@@ -1,4 +1,4 @@
-/* QUESTION: 
+/* QUESTION: 1242. Web Crawler Multithreaded
 Given a url startUrl and an interface HtmlParser, implement a web crawler to crawl all links that are under the same hostname as startUrl. 
 
 Return all urls obtained by your web crawler in any order.
@@ -46,15 +46,14 @@ urls = [
 startUrl = "http://news.google.com"
 Output: ["http://news.google.com"]
 Explanation: The startUrl links to all other pages that do not share the same hostname.
-
 */
-
-/* QUESTION AND SOLUTION EXPLANATION:
+------------------------------------------------------------------
+/* QUESTION AND SOLUTION EXPLANATION: BFS APPROACH - First Explain this - BUT THIS GIVES TLE as it is Mono-Thread version (TLE)
 The question is a little confusing to understand, so I will try to explain it first. We will be given a "startURL"(for ex, https://www.google.com ) and a class htmlParser which would give the children of given url(for ex, htmlParser.geturl("https://www.google.com")) should return a list of children url's. Now we are asked to find all url's visitable from a starting url such that no url is visited twice and we visit websites of the same name, which is simillar to a graph traversal problem. We can use either DFS or BFS to solve this. A solution which uses DFS is given below:
 
 Classical breadth-first seach that starts with startUrl node explores all neighbors returned by htmlParser.getUrls that have the same hostname as the startUrl and have not yet been explored yet.
 */
-
+---------------------------------------------------------
 
 /**
  * // This is the HtmlParser's API interface.
@@ -72,9 +71,9 @@ class Solution {
         queue.offer(startUrl);
         set.add(startUrl);
         
-        # bfs: pop a link from the queue. get all the child links and iterate over all the child link.
-        # if the child link is not been visited and in the same domain, we will add that child link to the queue. Also this           child link is one of our result link
-        # we will keep doing until queue is empty.
+        /* bfs: pop a link from the queue. get all the child links and iterate over all the child link.
+        if the child link is not been visited and in the same domain, we will add that child link to the queue. Also this           child link is one of our result link
+        we will keep doing until queue is empty.*/
         
         while (!queue.isEmpty()) {
             String currentUrl = queue.poll();
@@ -96,3 +95,133 @@ class Solution {
 }
 
 // Space: O(N), RTC: O(N)
+--------------------------------------------------------------
+/* MULTI THREADING ALGORITHM: Using 
+Java Streams + ConcurrentHashMap  - Read about both of these Java 8 Streams and Concurrent HashMap
+*/
+
+class Solution {
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+        String hostname = getHostname(startUrl);
+        
+        // We don't want to re-crawl pages, so we're going to use a Set that can be modified concurrently
+        // The following link describes how it is implemented, if you're interested
+        // https://github.com/frohoff/jdk8u-jdk/blob/master/src/share/classes/java/util/concurrent/ConcurrentHashMap.java#L271
+        Set<String> visited = ConcurrentHashMap.newKeySet();
+        visited.add(startUrl);
+        
+        // This is similar to map-reduce, but instead of reducing to a single value we collect the values
+        return crawl(startUrl, htmlParser, hostname, visited)
+            .collect(Collectors.toList());
+    }
+    
+    private Stream<String> crawl(String startUrl, HtmlParser htmlParser, String hostname, Set<String> visited) {
+        // htmlParser#getUrls returns a List<String>
+        Stream<String> stream = htmlParser.getUrls(startUrl)
+            // We process each url in parallel. The number of threads (parallelism) is decided by the JDK. Under the hood it uses fork join pool
+            /*
+            Q:From the API of parallelStream(): Returns a possibly parallel Stream with this collection as its source. It is allowable for this method to return a sequential stream. So theoretically, you can't be 100% sure that you always get a parallel stream?
+            A: Yes, that's correct. But I interpret that in a different way: the implementation is allowed to optimize the parallelism of the stream as it seems fit and it's the caller's job to ensure that if optimized to a single thread, the stream execution, doesn't result in a dead lock.
+            */
+            .parallelStream()
+            // We filter out external urls, meaning we don't continue processing them and they're not a part of the result
+            // This method (isSameHostname) is thread-safe
+            .filter(url -> isSameHostname(url, hostname))
+            // visited is the concurrent set. The add method returns false if the url is already in the set. In that case we ignore the url
+            // A Set is normally not thread-safe but the one we're using is.
+            .filter(url -> visited.add(url))
+            // If the url passed both filters above, we call crawl on it (recursivelly). A url generates a Stream<String>
+            // If we were to use .map we would get something like a List<Stream<String>>
+            // but we need to return a single Stream so we can chain the calls. flatMap concats themultiple streams into a single one
+            .flatMap(url -> crawl(url, htmlParser, hostname, visited));
+        
+        // We want to return the original crawled url as well as the url's we found by crawling it
+        // Since startUrl is not part of the stream, we need to add it
+        //
+        // Think about what happens to the original url in the flatMap phase: it gets replaced by the Stream<String> of the crawl method
+        // To keep the startUrl we concat it to the stream.
+        return Stream.concat(Stream.of(startUrl), stream); //it concats all the visited url and return a stream for collector to collect
+    }
+    
+    /** Returns the url without the path. (method name wasn't the best) */
+    private String getHostname(String url) {
+        // Start the search after the protocol (http:// is always in the url)
+        int idx = url.indexOf('/', 7);
+        // Return the url without the path
+        return (idx != -1) ? url.substring(0, idx) : url;
+    }
+    
+    /*
+    Why do you need a separate method isSameHostname? I just replaced .filter(url -> isSameHostname(url, hostname)) with .filter(url -> url.startsWith(hostname)) and it also seems to be working??
+An example might help: Let's say we're crawling https://google.com, if we're only checking startsWith, then a page from https://google.com.malicious-domain.com would be crawled as belonging to google.com.
+    */
+    private boolean isSameHostname(String url, String hostname) {
+        if (!url.startsWith(hostname)) {
+            return false;
+        }
+        return url.length() == hostname.length() || url.charAt(hostname.length()) == '/';
+    }
+}
+--------------------------------------------------------------
+/* MULTI THREADING ALGORITHM: Using 
+Threads  + ConcurrentHashMap - Read about all of these
+*/
+
+class Solution {
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+
+        // find hostname
+        int index = startUrl.indexOf('/', 7);
+        String hostname = (index != -1) ? startUrl.substring(0, index) : startUrl;
+
+        // multi-thread
+        Crawler crawler = new Crawler(startUrl, hostname, htmlParser);
+        crawler.map = new ConcurrentHashMap<>(); // reset result as static property belongs to class, it will go through all of the test cases
+        crawler.result = crawler.map.newKeySet();
+        Thread thread = new Thread(crawler);
+        thread.start();
+
+        crawler.joinThread(thread); // wait for thread to complete
+        return new ArrayList<>(crawler.result);
+    }
+}
+
+class Crawler implements Runnable {
+    String startUrl;
+    String hostname;
+    HtmlParser htmlParser;
+    public static ConcurrentHashMap<String, String> map = new ConcurrentHashMap<>();
+    public static Set<String> result = map.newKeySet();
+
+    public Crawler(String startUrl, String hostname, HtmlParser htmlParser) {
+        this.startUrl = startUrl;
+        this.hostname = hostname;
+        this.htmlParser = htmlParser;
+    }
+
+    @Override
+    public void run() {
+        if (this.startUrl.startsWith(hostname) && !this.result.contains(this.startUrl)) {
+            this.result.add(this.startUrl);
+            List<Thread> threads = new ArrayList<>();
+            for (String s : htmlParser.getUrls(startUrl)) {
+			    if(result.contains(s)) continue;
+                Crawler crawler = new Crawler(s, hostname, htmlParser);
+                Thread thread = new Thread(crawler);
+                thread.start();
+                threads.add(thread);
+            }
+            for (Thread t : threads) {
+                joinThread(t); // wait for all threads to complete
+            }
+        }
+    }
+
+    public static void joinThread(Thread thread) {
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
