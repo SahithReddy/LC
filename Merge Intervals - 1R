@@ -1,4 +1,4 @@
-/* QUESTION:
+/* QUESTION: 56. Merge Intervals
 Given a collection of intervals, merge all overlapping intervals.
 
 Example 1:
@@ -14,7 +14,7 @@ Explanation: Intervals [1,4] and [4,5] are considered overlapping.
 */
 
 
-// Sorting in reverse order,that is based on end times
+// Sorting the intervals based on start times i.e index 0
 
 class Solution {
     public int[][] merge(int[][] intervals) {
