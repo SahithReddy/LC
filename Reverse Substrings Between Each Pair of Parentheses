@@ -24,6 +24,12 @@ Example 4:
 Input: s = "a(bcdefghijkl(mno)p)q"
 Output: "apmnolkjihgfedcbq"
 */
+
+----------------------------------------------------
+/*
+There is a mind blowing O(N) solution in discuss. Most upvoted solution by Lee. Below are regular O(N^2) solution
+https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/discuss/383670/JavaC%2B%2BPython-Why-not-O(N)
+*/
 ----------------------------------------------------
 // Use a StringBuilder to save substring in a pair of matched brackets and a Deque to save StringBuilders.
 //Using Dequeue - Double Ended Queue
@@ -85,3 +91,10 @@ class Solution {
         return s;
     }
 }
+------------------------------------------------------
+/* For All: 
+Time: O(n ^ 2), space: O(n), where n = s.length().
+*/
+
+// https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/discuss/382358/Simple-Java-Sol(Recursion)
+//https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/discuss/382421/JavaPython-3-Iterative-short-O(n-2)-codes-w-comment-and-analysis.
