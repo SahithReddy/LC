@@ -1,0 +1,87 @@
+/* 1190. Reverse Substrings Between Each Pair of Parentheses
+You are given a string s that consists of lower case English letters and brackets. 
+
+Reverse the strings in each pair of matching parentheses, starting from the innermost one.
+
+Your result should not contain any brackets.
+
+
+Example 1:
+Input: s = "(abcd)"
+Output: "dcba"
+
+Example 2:
+Input: s = "(u(love)i)"
+Output: "iloveu"
+Explanation: The substring "love" is reversed first, then the whole string is reversed.
+
+Example 3:
+Input: s = "(ed(et(oc))el)"
+Output: "leetcode"
+Explanation: First, we reverse the substring "oc", then "etco", and finally, the whole string.
+
+Example 4:
+Input: s = "a(bcdefghijkl(mno)p)q"
+Output: "apmnolkjihgfedcbq"
+*/
+----------------------------------------------------
+// Use a StringBuilder to save substring in a pair of matched brackets and a Deque to save StringBuilders.
+//Using Dequeue - Double Ended Queue
+class Solution {
+    public String reverseParentheses(String s) {
+        Deque<StringBuilder> dq = new ArrayDeque<>();
+        dq.push(new StringBuilder()); // In case the first char is NOT '(', need an empty StringBuilder.
+        for (char c : s.toCharArray()) {
+            if (c == '(') { // need a new StringBuilder to save substring in brackets pair
+                dq.offer(new StringBuilder());
+            }else if (c == ')') { // found a matched brackets pair and reverse the substring between them.
+                StringBuilder end = dq.pollLast();
+                dq.peekLast().append(end.reverse());
+            }else { // append the char to the last StringBuilder.
+                dq.peekLast().append(c);
+            } 
+        }
+        return dq.pollLast().toString();
+    }
+}
+----------------------------------------------------
+// Using Stack
+class Solution {
+        public String reverseParentheses(String s) {
+        StringBuilder sb = new StringBuilder();
+        Stack<StringBuilder> stack = new Stack<>();
+        stack.push(new StringBuilder()); // In case the first char is NOT '(', need an empty StringBuilder.
+        for(char c : s.toCharArray()){
+            if(c == '('){ // need a new StringBuilder to save substring in brackets pair
+              stack.push(new StringBuilder());
+            }
+            else if( c == ')'){ // found a matched brackets pair and reverse the substring between them.
+                StringBuilder last = stack.pop();
+                stack.peek().append(last.reverse());
+            }
+            else{ // append the char to the last StringBuilder.
+                stack.peek().append(c);
+                   
+            }
+        }
+        return stack.pop().toString();
+    }
+}
+----------------------------------------------------
+// Using Recursion
+class Solution {
+    public String reverseParentheses(String s) {
+        if(s.length() == 0) return "";
+        
+        int begin = 0, end = 0;
+        for(int i = 0; i < s.length(); i++){
+            if(s.charAt(i) == '(') begin = i;
+            if(s.charAt(i) == ')') {
+                end = i;
+                StringBuilder sb = new StringBuilder(s.substring(begin+1, end));
+                return reverseParentheses(s.substring(0, begin) + sb.reverse().toString() + s.substring(end+1));
+            }
+        }
+        return s;
+    }
+}
