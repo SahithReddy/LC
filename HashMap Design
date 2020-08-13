@@ -1,4 +1,24 @@
+/* QUESTION: 706. Design HashMap
+Design a HashMap without using any built-in hash table libraries.
 
+To be specific, your design should include these functions:
+
+put(key, value) : Insert a (key, value) pair into the HashMap. If the value already exists in the HashMap, update the value.
+get(key): Returns the value to which the specified key is mapped, or -1 if this map contains no mapping for the key.
+remove(key) : Remove the mapping for the value key if this map contains the mapping for the key.
+
+Example:
+MyHashMap hashMap = new MyHashMap();
+hashMap.put(1, 1);          
+hashMap.put(2, 2);         
+hashMap.get(1);            // returns 1
+hashMap.get(3);            // returns -1 (not found)
+hashMap.put(2, 1);          // update the existing value
+hashMap.get(2);            // returns 1 
+hashMap.remove(2);          // remove the mapping for 2
+hashMap.get(2);            // returns -1 (not found) 
+*/
+----------------------------------------------
 // https://leetcode.com/problems/design-hashmap/discuss/227081/Java-Solutions . -- See this solution directly
 // Explanation: https://leetcode.com/problems/design-hashmap/solution/
 
@@ -15,9 +35,8 @@ Some of the questions which can be asked to the interviewer before implementing 
 *Do we have to worry about load factors? (If Yes, refer solution 2nd solution)
 Can we assume inputs are valid or do we have to validate them?
 Can we assume this fits memory?
-
 */
-
+----------------------------------------------
 /* THEORY:
 The most distinguish characteristic about hashmap is that it provides a fast access to a value that is associated with a given key.
 
@@ -33,7 +52,7 @@ we call 'collision'. Since the collision is inevitable, it is important that we 
 
 Depending on how we deal with each of the above two issues, we could have various implementation of hashmap data structure.
 */
-
+----------------------------------------------
 /* ALGORITHM:
 For each of the methods in hashmap data structure, namely get(), put() and remove(), 
 it all boils down to the method to locate the value that is stored in hashmap, given the key.
@@ -43,7 +62,7 @@ This localization process can be done in two steps:
 For a given key value, first we apply the hash function to generate a hash key, which corresponds to the address in our main storage. With this hash key, we would find the bucket where the value should be stored.
 Now that we found the bucket, we simply iterate through the bucket to check if the desired <key, value> pair does exist.
 */
-
+----------------------------------------------
 /* IMPLEMENTATION:  
 Below is Hash-Table Implementation - Using Array of LinkedList
 1. The general implementation of HashMap uses bucket which is basically a chain of linked lists and each node containing <key, value> pair.
@@ -54,7 +73,7 @@ the old value with the new value for a given key 10, since in both cases, 10 is 
 4. Collision happens when multiple keys hash to the same bucket. In that case, we need to make sure that we can 
 distinguish between those keys. Chaining collision resolution is one of those techniques which is used for this.
 */
-
+----------------------------------------------
 // CODE:
 class MyHashMap
 {
@@ -126,9 +145,8 @@ class MyHashMap
 /*Time complexity: O(1) average and O(n) worst case - for all get(),put() and remove() methods.
 Space complexity: O(n) - where n is the number of entries in HashMap
 */
-
-
-/*
+--------------------------------------------
+/* IMPROVEMENT:
 Although upper bound of unique keys is given (10,000) so we can initialize nodes array with length 10000, adding rehashing can still be useful in case of followup question like:
 
 What if most keys are redundant?
@@ -168,7 +186,7 @@ If it’s greater than its pre-defined value (or default value of 0.75 if not gi
 For Rehash, make a new array of double the previous size and make it the new bucketarray.
 Then traverse to each element in the old bucketArray and call the insert() for each so as to insert it into the new larger bucket array.
 */
-
+----------------------------------------------
 class MyHashMap {
     private static final double LOAD_FACTOR = 0.75;
     private Node[] nodes;
