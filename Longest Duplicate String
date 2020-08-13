@@ -16,7 +16,7 @@ Note:
 2 <= S.length <= 10^5
 S consists of lowercase English letters.
 */
-
+-------------------------------------------------
 /* ALGORITHM: Binary Search + Rabin Karp
 
 Split into two subtasks
@@ -28,7 +28,7 @@ Here we have "two in one" problem :
 2. Check if there is a duplicate substring of a given length L.
 
 
-BINARY SEARCH ALGORITHM:
+-->BINARY SEARCH ALGORITHM:
 
 THEORY:
 A naive solution would be to check all possible string length one by one starting from N - 1: if there is a duplicate substring of length N - 1, then of length N - 2, etc. Note that if there is a duplicate substring of length k, that means that there is a duplicate substring of length k - 1. Hence one could use a binary search by string length here, and have the first problem solved in O(logN) time.
@@ -44,7 +44,7 @@ PSEUDO CODE:
 
 2. Return duplicate string of length left - 1, or an empty string if there is no such a string.
 
-RABIN KARP ALGORITHM:
+-->RABIN KARP ALGORITHM:
 
 THEORY:
 Subtask two, to check if there is duplicate substring of a given length, is a multiple pattern search. Let's use Rabin-Karp algorithm to solve it in a linear time.
@@ -76,7 +76,35 @@ search(L) :
 3. Return -1, that means there is no duplicate string of length L.
 
 */
+------------------------------------------------------
+-->Why use binary search
 
+Since the length of the answer must between 0 to the length of string minus 1, In the example one "banana", the answer must between 0 to 5, we can guess 3 at the first time. We will check every possible substring with length 3 to see if we can find any duplicate.
+
+- ban
+- ana
+- nan
+- ana
+If we are lucky enough, like this case, 'ana' is what we want. since we want to get the longest one, so we guess 4 (middle of 3 and 5) in the next time, if we found any valid answer, we can update the old one.
+
+-->How to check duplicate substring
+The easiest way would be to use a hashmap or dictionary to store the substring (or the hash value of the substring). If the current string not in the hashmap, we put it in the hashmap, if it already existed, we return the string.
+
+hashmap = {}
+
+ban -> not in the hashmap -> hashmap = {ban}
+ana -> not in the hashmap -> hashmap = {ban, ana}
+nan -> not in the hashmap -> hashmap = {ban, ana, nan}
+ana -> in the hashmap -> return 'ana'
+But we will get Memory Limit Exceeded in leetcode if we did this. So we have to implement our own hash function by calculated a unique number for every substring then compare between them.
+
+banana_val -> [b,a,n,a,n,a] -> [1, 0, 13, 0, 13, 0] (we give every char a number)
+
+ban -> ((1 * 26) * 26) + 13 = 689
+ana -> ban + a - b = (689 * 26) + 0 - 26 * 26 * 26 * b = 338 ( the current b had been multiple by 26 three times)
+...
+Any finally we get 338 again, so we return 'ana'.
+----------------------------------------------------
 
 class Solution {
   /*
@@ -133,6 +161,6 @@ class Solution {
 }
 
 /*
-Time complexity : Overall O(NlogN). O(logN) for the binary search and O(N) for Rabin-Karp algorithm.
+Time complexity : Overall O(NlogN). O(logN) for the binary search and O(N) for Rabin-Karp algorithm. Rolling hash O(N)
 Space complexity : O(N) to keep the hashset.
 */
