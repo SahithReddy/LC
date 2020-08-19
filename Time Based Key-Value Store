@@ -1,0 +1,151 @@
+/* 981. Time Based Key-Value Store
+Create a timebased key-value store class TimeMap, that supports two operations.
+
+1. set(string key, string value, int timestamp)
+Stores the key and value, along with the given timestamp.
+
+2. get(string key, int timestamp)
+Returns a value such that set(key, value, timestamp_prev) was called previously, with timestamp_prev <= timestamp.
+If there are multiple such values, it returns the one with the largest timestamp_prev.
+If there are no values, it returns the empty string ("").
+ 
+
+Example 1:
+Input: 
+inputs = ["TimeMap","set","get","get","set","get","get"], 
+inputs = [[],["foo","bar",1],["foo",1],["foo",3],["foo","bar2",4],["foo",4],["foo",5]]
+Output: [null,null,"bar","bar",null,"bar2","bar2"]
+Explanation:   
+TimeMap kv;   
+kv.set("foo", "bar", 1); // store the key "foo" and value "bar" along with timestamp = 1   
+kv.get("foo", 1);  // output "bar"   
+kv.get("foo", 3); // output "bar" since there is no value corresponding to foo at timestamp 3 and timestamp 2, then the only value is at timestamp 1 ie "bar"   
+kv.set("foo", "bar2", 4);   
+kv.get("foo", 4); // output "bar2"   
+kv.get("foo", 5); //output "bar2"   
+
+Example 2:
+Input: 
+inputs = ["TimeMap","set","set","get","get","get","get","get"], 
+inputs = [[],["love","high",10],["love","low",20],["love",5],["love",10],["love",15],["love",20],["love",25]]
+Output: [null,null,null,"","high","high","low","low"]
+*/
+
+/* ALGORUTHM: HASHMAP + BINARY SEARCH
+INTUITON:
+1. As we need to find the values corresponding to a key: HashMap would be the choice
+2. We need to find those values whose timestampPrev <= timestamp. i.e. means we need to store all the values of a key of different timestamp. Since we are looking timestampPrev <= timestamp then keeping those values sorted would make sense. Note, we don't need to maintain the sorted order as timestamp is always in increasing order
+Hence, we need HashMap<Key, List<Values>>.
+------------------------------------------------------------
+EXPLANATION:
+For each key we get or set, we only care about the timestamps and values for that key. We can store this information in a HashMap ordered {timestamp, value} pairs 
+
+Now, for each key, we can binary search the sorted list of timestamps to find the relevant value with a timestamp less or equal than the requested one for that key.
+--------------------------------------------------------
+QUESTION ON ORDER:
+Can some one explain how the list is sorted for a key here?
+The timestamps in "set" operation are strictly increasing, it's already sorted.
+Given by the problem itself in "Note: 3. The timestamps for all TimeMap.set operations are strictly increasing.
+*/
+
+class Data {
+    String val;
+    int time;
+    Data(String val, int time) {
+        this.val = val;
+        this.time = time;
+    }
+}
+class TimeMap {
+
+    /** Initialize your data structure here. */
+    Map<String, List<Data>> map;
+    public TimeMap() {
+        map = new HashMap<String, List<Data>>();
+    }
+    
+    // O(1)
+    public void set(String key, String value, int timestamp) {
+        if (!map.containsKey(key)) map.put(key, new ArrayList<Data>());
+        map.get(key).add(new Data(value, timestamp));
+    }
+    
+    //O(log(L)) ; L is the length of values in a key
+    public String get(String key, int timestamp) {
+        if (!map.containsKey(key)) return "";
+        return binarySearch(map.get(key), timestamp);
+    }
+    // Since we need to find timestamp_prev <= timestamp. then whenever we move right, cache the value you have seen as potential solution
+    protected String binarySearch(List<Data> list, int time) {
+        int low = 0, high = list.size() - 1;
+        while (low < high) {
+            int mid = (low + high) >> 1;
+            if (list.get(mid).time == time) return list.get(mid).val;
+            if (list.get(mid).time < time) {
+                if (list.get(mid+1).time > time) return list.get(mid).val;
+                low = mid + 1;
+            }
+            else high = mid -1;
+        }
+        /*
+        Can someone explains to me why we return the low value from binary search?
+        while loop continues if and only if "low < high", which means, such loop ends when "low == high"
+        */
+        return list.get(low).time <= time ? list.get(low).val : "";
+    }
+}
+------------------------------------------------------------
+/*
+Complexity analysis
+Assuming n is the number of set operations, and m is the number of get operations:
+
+Time Complexity:
+Set: O(1) single operation, and total O(n).
+Note: assuing timestamps are only increasing. If not, it's O(n log n).
+Get: O(log n) for a single operation, and total O(m log n).
+
+Space Complexity: 
+O(n) (assuming every { timestamp, value } is unique).
+*/
+// https://leetcode.com/problems/time-based-key-value-store/discuss/244229/Java-beats-100
+-------------------------------------------------------------------------------
+/* ALGO: USING A TREEMAP:
+In Java, we can use TreeMap.floorKey(timestamp) to find the largest timestamp smaller than the given timestamp.
+
+We build our solution in the same way as Approach 1, swapping in this functionality.
+*/
+
+public class TimeMap {
+
+    private Map<String,TreeMap<Integer,String>> map;
+
+    /** Initialize your data structure here. */
+    public TimeMap() {
+        map = new HashMap<>();
+    }
+    // O(1)
+    public void set(String key, String value, int timestamp) {
+        if(!map.containsKey(key)) {
+            map.put(key,new TreeMap<>());
+        }
+        map.get(key).put(timestamp,value);
+    }
+    // O(log(L)) ; L is the length of values in a key
+    public String get(String key, int timestamp) {
+        TreeMap<Integer,String> treeMap = map.get(key);
+        if(treeMap==null) {
+            return "";
+        }
+        Integer floor = treeMap.floorKey(timestamp);
+        if(floor==null) {
+            return "";
+        }
+        return treeMap.get(floor);
+    }
+}
+
+/* SAME AS ABOVE
+Time Complexity: O(1) for each set operation, and O(logN) for each get operation, where NN is the number of entries in the TimeMap.
+
+Space Complexity: O(N).
+*/
