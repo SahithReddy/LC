@@ -29,13 +29,17 @@ Input:
   [9,10,11,12]
 ]
 Output: [1,2,3,4,8,12,11,10,9,5,6,7]
-
-
 */
 
 /* ALGORITHM:
-This is a very simple and easy to understand solution. I traverse right and increment rowBegin, 
-then traverse down and decrement colEnd, then I traverse left and decrement rowEnd, and 
+This is a very simple and easy to understand solution. Take 4 variable pointers as below.
+        int rowBegin = 0;
+        int rowEnd = matrix.length-1;
+        int colBegin = 0;
+        int colEnd = matrix[0].length - 1;
+I traverse right and increment rowBegin, 
+then traverse down and decrement colEnd, 
+then I traverse left and decrement rowEnd, and 
 finally I traverse up and increment colBegin.
 
 The only tricky part is that when I traverse left or up I have to check whether the row or col 
