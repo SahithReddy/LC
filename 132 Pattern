@@ -18,3 +18,68 @@ Input: [-1, 3, 2, 0]
 Output: True
 Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0] and [-1, 2, 0].
 */
+----------------------------------------------
+/* ALGORITHM: USING STACK
+QUESTION: To search for a subsequence (s1,s2,s3) such that s1 < s3 < s2.
+
+INTUITION: Suppose we want to find a 123 sequence with s1 < s2 < s3, we just need to find s3, followed by s2 and s1. Now if we want to find a 132 sequence with s1 < s3 < s2, we need to switch up the order of searching. we want to first find s2, followed by s3, then s1.
+More precisely, we keep track of highest value of s3 for each valid (s2 > s3) pair while searching for a valid s1 candidate to the left. Once we encounter any number on the left that is smaller than the largest s3 we have seen so far, we know we found a valid sequence, since s1 < s3 implies s1 < s2.
+
+ALGORITHM: We can start from either side but I think starting from the right allow us to finish in a single pass. The idea is to start from end and search for valid (s2,s3) pairs, we just need to remember the largest valid s3 value, using a stack will be effective for this purpose. A number becomes a candidate for s3 if there is any number on the left bigger than it.
+
+As we scan from right to left, we can easily keep track of the largest s3 value of all (s2,s3) candidates encountered so far. Hence, each time we compare nums[i] with the largest candidate for s3 within the interval nums[i+1]...nums[n-1] we are effectively asking the question: Is there any 132 sequence with s1 = nums[i]? Therefore, if the function returns false, there must be no 132 sequence.
+
+IMPLEMENTATION:
+Pretty much we are only storing one item in the stack, which is our ideal candidate for s2 (number that needs to be the largest). If we find a number that is bigger than what we thought was our ideal candidate for s2; we pop out our stack and store the value in s3 (mid value number), then we store the new ideal candidate for s2 in the stack. On the next ith iteration, if nums[i] is actually less than s3, then we are done!
+----------OR---------------OR---------------OR----------OR
+1. Have a stack, each time we store a new number, we first pop out all numbers that are smaller than that number. The numbers that are popped out becomes candidate for s3. S3 here is actually the mid value. S2 is the high value.
+2. We keep track of the maximum of such s3 (which is always the most recently popped number from the stack  because if we encounter any entry smaller than the current candidate, the function would already have returned.).
+3. Once we encounter any number smaller than s3, we know we found a valid sequence since s1 < s3 implies s1 < s2.
+4. I think the key points are:
+    A. keep the value of s3 as big as possible
+    B. use a "sorted" stack to maintain the candidates of s2 and s3.
+    C. The numbers inside the stack are s2 and the number that popped out is the maximum s3. So the last thing to do is to maintain the order of the stack.
+
+EXAMPLE:
+i = 6, nums = [ 9, 11, 8, 9, 10, 7, 9 ], S1 candidate = 9, S3 candidate = None, Stack = Empty
+i = 5, nums = [ 9, 11, 8, 9, 10, 7, 9 ], S1 candidate = 7, S3 candidate = None, Stack = [9]
+i = 4, nums = [ 9, 11, 8, 9, 10, 7, 9 ], S1 candidate = 10, S3 candidate = None, Stack = [9,7]
+i = 3, nums = [ 9, 11, 8, 9, 10, 7, 9 ], S1 candidate = 9, S3 candidate = 9, Stack = [10]
+i = 2, nums = [ 9, 11, 8, 9, 10, 7, 9 ], S1 candidate = 8, S3 candidate = 9, Stack = [10,9] We have 8<9, sequence (8,10,9) found!
+*/
+----------------------------------------------------
+class Solution {
+    public boolean find132pattern(int[] nums) {
+        int s3 = Integer.MIN_VALUE;
+        Stack<Integer> stack = new Stack<Integer>();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] < s3) {
+                return true;
+            } else {
+                while (!stack.isEmpty() && 
+                       nums[i] > stack.peek()) {
+                    s3 = stack.pop();
+                }
+                stack.push(nums[i]);
+            }
+        }
+        return false;
+    }
+}
+// RUNTIME: Each item is pushed and popped once at most, the time complexity is therefore O(n). Space: O(N) for stack.
+--------------------------------------------------
+// You also can just leverage the input array to simulate a stack, so no extra space is required:
+
+    public boolean find132pattern(int[] nums) {
+        int two = Integer.MIN_VALUE;
+        int index = nums.length;
+        for (int i=nums.length-1; i>=0; i--) {
+            if (nums[i] < two) return true;
+            while (index < nums.length && nums[i] > nums[index]) {
+                two = nums[index++];
+            }
+            nums[--index] = nums[i];
+        }
+        return false;
+    }
+// RUNTIME: Each item is pushed and popped once at most, the time complexity is therefore O(n). No extra space.
