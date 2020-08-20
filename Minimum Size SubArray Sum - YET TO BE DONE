@@ -5,28 +5,82 @@ Example:
 Input: s = 7, nums = [2,3,1,2,4,3]
 Output: 2
 Explanation: the subarray [4,3] has the minimal length under the problem constraint.
+
+Follow up:
+If you have figured out the O(n) solution, try coding another solution of which the time complexity is O(n log n). 
 */
+--------------------------------------------------
+/* Java O(n) solution - (TWO Pointers) approach for sliding window
+==> Intuition:
 
+We could keep 2 pointer,one for the start and another for the end of the current subarray, and make optimal moves so as to keep the sum greater than s as well as maintain the lowest size possible.
 
+==>Algorithm:
 
-// CODE: Java O(n) solution (two pointers)
-
-public int minSubArrayLen(int s, int[] nums) {
+1. Initialize left pointer to 0 and sum to 0
+2. Iterate over the nums:
+        a. Add nums[i] to sum and increment subArraySize;
+        b. While sum is greater than or equal to s:
+                b1. Update minSize=min(minSize,subArraySize), where subArraySize. is the size of current subarray
+                b2. It means that the first index can safely be incremented, since, the minimum subarray starting with this index with sum≥s has been achieved
+                b3. Subtract nums[j] from sum and increment j pointer
+*/
+----------------------------------------------------
+class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
         if(nums == null) return 0;
-        int ans = Integer.MAX_VALUE;
+        int minSize = Integer.MAX_VALUE;
         int sum = 0;
-        int localAns = 0;
+        int subArraySize = 0;
         for(int i = 0, j = 0;i< nums.length;i++){ //i is the faster pointer, j is the slower pointer
             sum += nums[i];
-            localAns++;
+            subArraySize++;
             while(sum >= s){
-                ans = Math.min(ans,localAns);// update global ans.
-                localAns--;
+                minSize = Math.min(minSize,subArraySize);// update global minSize.
+                // decrease nums[j] from the sum and at the same time subArraySize will be decreased by 1 because slow pointer 'j' is moved forward by 1.
                 sum -= nums[j];
-                j++; // move the slower pointer forward and decrease the related nums[j], at the same time localAns will be decreased by 1.
+                subArraySize--;
+                j++;
             }
         }
-        return (ans == Integer.MAX_VALUE)?0: ans;
+        return (minSize == Integer.MAX_VALUE)?0: minSize;
     }
-    
-    
+}
+
+/*
+Time: O(N);
+There are two pointers but both of them go forward (no backtracking) . Each element can be visited atmost twice, once by the right pointer and (atmost)once by the left pointer.In fact, this is O(2n) which also means O(n).
+
+Two while loops doesn't always mean O(n^2). j is not initialized for every i, it also goes parallel with i, only comes after i. In the worst case it goes n times (totally)
+In the first look, the time complexity seems to be O(n^2) due to two loops. But, please note that the variable j is not initialized for each value of variable i. So, the inner loop runs at most n times.
+
+Space complexity: O(1) extra space. Only constant space required for \text{left}left, \text{sum}sum, \text{ans}ans and ii.
+*/
+---------------------------------------------------------
+// O(NLogN) - search if a window of size k exists that satisfy the condition
+
+public class Solution {
+    public int minSubArrayLen(int s, int[] nums) {
+        int i = 1, j = nums.length, min = 0;
+        while (i <= j) {
+            int mid = (i + j) / 2;
+            if (windowExist(mid, nums, s)) {
+                j = mid - 1;
+                min = mid;
+            } else i = mid + 1;
+        }
+        return min;
+    }
+
+
+    private boolean windowExist(int size, int[] nums, int s) {
+        int sum = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (i >= size) sum -= nums[i - size];
+            sum += nums[i];
+            if (sum >= s) return true;
+        }
+        return false;
+    }
+}
+
