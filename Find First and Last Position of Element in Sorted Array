@@ -1,4 +1,4 @@
-/*
+/* QUESTION: 34. Find First and Last Position of Element in Sorted Array
 Given an array of integers nums sorted in ascending order, find the starting and ending position of a given target value.
 
 Your algorithm's runtime complexity must be in the order of O(log n).
@@ -17,7 +17,10 @@ Output: [-1,-1]
 // https://leetcode.com/problems/find-first-and-last-position-of-element-in-sorted-array/discuss/14734/Easy-java-O(logn)-solution
 
 /*  ALGORITHM:
-There must be two indices in the array. Which means, we can just simply apply to binary search twice to find each index of the target element.
+There must be two indices in the array. Which means, we can just simply apply to binary search twice(FindFirst and FindLast) to find each index of the target element.
+
+==>What is the difference of these two search? I mean, how can you asure that you won't find the target in the same position?
+if(nums[mid] == target) idx = mid; Look at this step after the if_else conditions are done. In FIndFirst, he makes idx move towards the lower index, and in FIndLast he makes it move towards the higher index. The loop doesn't exist even if the target is found, it moves to one end, (left==right) and then exits. It's really smart!
 */
 
 class Solution {
