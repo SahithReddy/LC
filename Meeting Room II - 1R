@@ -1,7 +1,9 @@
+/*
 Crazy Explanation:
 https://leetcode.com/problems/meeting-rooms-ii/solution/
+*/
 
-/*
+/* 253. Meeting Rooms II
 Given an array of meeting time intervals consisting of start and end times [[s1,e1],[s2,e2],...] (si < ei), find the minimum number of conference rooms required.
 
 Example 1:
@@ -15,7 +17,7 @@ Output: 1
 
 */
 
-/* ALGORITHM:
+/* ALGORITHM: Priority Queue
 Sort the given meetings by their start time.
 Initialize a new min-heap and add the first meeting's ending time to the heap. We simply need to keep track of the ending times as that tells us when a meeting room will get free.
 For every meeting room check if the minimum element of the heap i.e. the room at the top of the heap is free or not.
