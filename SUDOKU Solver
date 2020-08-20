@@ -1,5 +1,5 @@
 /*
-QUESTION:
+QUESTION: 37. Sudoku Solver
 Write a program to solve a Sudoku puzzle by filling the empty cells.
 
 A sudoku solution must satisfy all of the following rules:
@@ -19,6 +19,8 @@ The given board size is always 9x9.
 /*
 ALSO SEE OFFICIAL SOLUTION BACKTRACKING EXPLANATION IF POSSIBLE - WE HAVE A PICTURE OVER THERE
 Try 1 through 9 for each cell. The time complexity should be 9 ^ m (m represents the number of blanks to be filled in), since each blank can have 9 choices. Details see comments inside code.
+
+We have to put restrictions after each number placement. One puts a number on the board and that immediately excludes this number from further usage in the current row, column and sub-box. That propagates constraints and helps to reduce the number of combinations to consider.
 
 Let's imagine that one has already managed to put several numbers on the board. But the combination chosen is not the optimal one and there is no way to place the further numbers. What to do? To backtrack. That means to come back, to change the previously placed number and try to proceed again. If that would not work either, backtrack again.
 
