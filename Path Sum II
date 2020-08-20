@@ -21,3 +21,70 @@ Return:
    [5,8,4,5]
 ]
 */
+--------------------------------------------------
+/* ALGO: BACKTRACKING
+
+==>Why do we use this? ret.add(new ArrayList(cur));
+
+When you use add function of List, it just add a copy of reference of the object into the List instead of a new copy of the object. So if you don't create a new copy, all the reference you add to your result refer to the same object.
+ArrayList is called by reference, which means you got the memory address and modify it directly. If you directly add it instead of copying, then you keep working on one same list.
+
+because in back-tracking,the currentResult always changes, the result which refers to the currentResult will change either.
+We do this ret.add(new ArrayList(cur));
+so that the result refers to the newResult which will not change in recursion.
+
+The thing is, you have to new a new list using values from currentResult then add it up to the nested list!!!! You would have nothing if you just add currentResult to the result because you just add a reference by doing this however we remove every last item along exiting the recursion, which means currentResult is always empty in the end.
+
+==>Why do we use this? cur.remove(cur.size()-1);
+
+      5
+     / \
+    4   8
+   /   / \
+  11  13  4
+ /  \    / \
+7    2  5   1
+Let me try to explain by using the above example.
+Say we're at a point where root node is 11, and the path is {5, 4, 11}.
+When using DFS to traverse the left child node 7, the path will be {5, 4, 11, 7}.
+We need to remove 7 from the path before traversing the right child node 2. Otherwise the path of node 2 will be {5, 4, 11, 7, 2} . That's why we need to remove the last element.
+In short, it's a general back-tracking technique.
+*/
+
+class Solution {
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+    List<List<Integer>>ret = new ArrayList<List<Integer>>(); 
+    List<Integer> cur = new ArrayList<Integer>(); 
+    pathSum(root, sum, cur, ret);
+    return ret;
+}
+
+public void pathSum(TreeNode root, int sum, List<Integer>cur, List<List<Integer>>ret){
+    if (root == null){
+        return; 
+    }
+    cur.add(root.val);
+    if (root.left == null && root.right == null && root.val == sum){
+        /*
+        Explanation Above
+        */
+        ret.add(new ArrayList(cur));
+    }else{
+        pathSum(root.left, sum - root.val, cur, ret);
+        pathSum(root.right, sum - root.val, cur, ret);
+    }
+    /*
+    It's part of the backtrack. Once you reach a leaf you backtrack to its parent to find other solutions. You do cur.remove(cur.size() - 1); so that your cur variable will reflect your backtrack state. That's why it's at the very end past the recursive calls.
+    */
+    cur.remove(cur.size()-1);
+}
+}
+/* COMPLEXITY:
+Recursion time compexity should be nlogn, the max list length is logn, and n/2 leafs
+We would have one long branch that consists of all N nodes." - This means there is only one leaf node not N nodes. That is the reason the height is N. if there are N leaf nodes when the total count of nodes is N that means the height of the tree is 1. So in either case the Time complexity will be O(N) not O(N*N). For a complete binary tree, height will be O(logN) and number of leaf nodes will be N/2. So the time complexity should be O(NlogN).. 
+
+Space Complexity:
+Space Complexity: O(N). The space complexity, like many other problems is debatable here. I personally choose not to consider the space occupied by the output in the space complexity. So, all the new lists that we create for the paths are actually a part of the output and hence, don't count towards the final space complexity. The only additional space that we use is the 'curr' list to keep track of nodes along a branch.
+
+We could include the space occupied by the new lists (and hence the output) in the space complexity and in that case the space would be O(N^2). 
+*/
