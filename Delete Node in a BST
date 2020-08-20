@@ -38,8 +38,8 @@ Another valid answer is [5,2,6,null,4,null,7].
 
 
 */
-
-/* BASE APPROACH: JUST TO LAY THE FOUNDATION FOR RECURSION ALGO --- ITERATIVE BELOW HAS O(1) Space.
+----------------------------------------------
+/* BASE APPROACH: JUST TO LAY THE FOUNDATION FOR RECURSION ALGO --- ITERATIVE BELOW HAS O(1) Space. JUST GO THERE TO SKIP THS
 Inorder traversal of BST is an array sorted in the ascending order.
 
 To compute inorder traversal follow the direction Left -> Node -> Right.
@@ -70,6 +70,7 @@ public int predecessor(TreeNode root) {
 } 
 
 */
+---------------------------------------------------
 /* ALGORITHM: RECURSION
 
 There are three possible situations here :
@@ -160,14 +161,14 @@ TC: O(H) time complexity, where H is a tree height, equal to logN in the case of
 SC: O(H) to keep the recursion stack, where H is a tree height. H=logN for the balanced tree.
 */
 ----------------------------------------------------
-/* ITERATIVE APPROACH:
+/* ALGORITHM: ITERATIVE APPROACH:
 
 If the node is found, delete the node.
 We need a function deleteRoot to delete the root from a BST.
 
 1. If root==null, then return null
 2. If root.right==null, then return root.left
-3. If root.right!=null, the the new root of the BST is root.right; And what we should do is to put root.left into this new BST. As all nodes in root.left is smaller than the new tree, we just need to find the left-most node.
+3. If root.right!=null, then the new root of the BST is root.right; And what we should do is to put root.left into this new BST. As all nodes in root.left is smaller than the new tree, we just need to find the left-most node.
 
 */
 
