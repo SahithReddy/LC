@@ -1,5 +1,16 @@
-// Iterative Method . - https://www.youtube.com/watch?v=O0By4Zq0OFc
-/*
+/* QUESTION: 
+Reverse a singly linked list.
+
+Example:
+
+Input: 1->2->3->4->5->NULL
+Output: 5->4->3->2->1->NULL
+Follow up:
+
+A linked list can be reversed either iteratively or recursively. Could you implement both?
+*/
+------------------------------------
+/* Iterative Method . - https://www.youtube.com/watch?v=O0By4Zq0OFc
 
 I use three pointers: prevHead, head, recordNext.
 
@@ -24,7 +35,7 @@ public ListNode reverseList(ListNode head) {
 // Time: O(n) Space: O(1);
 
 ------------------------------------------------------------------------------------------------------------
-// Recursive Method
+// ALGORIITHM: Recursive Method
 
 // Watch it: https://www.youtube.com/watch?v=MRe3UsRadKw&feature=youtu.be
 
