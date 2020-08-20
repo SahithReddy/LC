@@ -1,22 +1,33 @@
-/*
-QUESTION:
-Merge k sorted linked lists and return it as one sorted list. Analyze and describe its complexity.
+/* QUESTION: 23. Merge k Sorted Lists
+Given an array of linked-lists lists, each linked list is sorted in ascending order.
 
-Example:
+Merge all the linked-lists into one sort linked-list and return it.
 
-Input:
+Example 1:
+Input: lists = [[1,4,5],[1,3,4],[2,6]]
+Output: [1,1,2,3,4,4,5,6]
+Explanation: The linked-lists are:
 [
   1->4->5,
   1->3->4,
   2->6
 ]
-Output: 1->1->2->3->4->4->5->6
+merging them into one sorted list:
+1->1->2->3->4->4->5->6
 
+Example 2:
+Input: lists = []
+Output: []
+
+Example 3:
+Input: lists = [[]]
+Output: []
 */
-
+-------------------------------------------
 
 /*
 ALGORITHM: Divide and Conquer. Merge Sort Style. Prefer this. Period.
+Convert merge k lists problem to merge 2 lists (k-1) times. 
 
 https://leetcode.com/problems/merge-k-sorted-lists/discuss/10640/Simple-Java-Merge-Sort/308265 .  - 1st comment
 */
@@ -47,16 +58,17 @@ public class Solution {
         return l2;
     }
 }
+
 /*
 Time complexity : O(Nlogk)
 -->merge takes O(n) where N is total number of nodes in all linked lists or Final linkedlist
 -->partition takes O(logk) time, where k is the number of lists
 Why? How? For divide and conquer, recursion depth is logk. In each level, you need merge n nodes. The time complexity for each level is O(n)
 
-Space: O(1)
+Space: O(1), We can merge two sorted linked lists in O(1)O(1) space.
 */
 
----------------------------------------------------------------------------------------------------
+-----------------------------------------------------
 // Using Priority Queue
 // Watch this video: https://www.youtube.com/watch?v=zLcNwcR6yO4
 
@@ -79,6 +91,7 @@ class Solution {
         return dummy.next;
     }
 }
+-------------------------------------------
 /*
 Time complexity : O(Nlogk) is the number of linked lists.
 
@@ -91,5 +104,3 @@ O(n) Creating a new linked list costs O(n) space.
 And the priority queue (often implemented with heaps) costs O(k)O(k) space (it's far less than N in most situations).
 */
 
-
-.------------------------------------------------------------------------------------------------
