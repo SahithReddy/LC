@@ -1,17 +1,27 @@
-// Not domne yet, just for the record
+/* QUESTION:
+Given two strings s and t, determine if they are isomorphic.
+
+Two strings are isomorphic if the characters in s can be replaced to get t.
+
+All occurrences of a character must be replaced with another character while preserving the order of characters. No two characters may map to the same character but a character may map to itself.
 
 Example 1:
 Input: s = "egg", t = "add"
 Output: true
-Example 2:
 
+Example 2:
 Input: s = "foo", t = "bar"
 Output: false
-Example 3:
 
+Example 3:
 Input: s = "paper", t = "title"
 Output: true
 
+Note:
+You may assume both s and t have the same length.
+*/
+
+/*
 // The idea is that we need to map a char to another one, for example, "egg" and "add", we need to constract the mapping 'e' 
 // -> 'a' and 'g' -> 'd'. Instead of directly mapping 'e' to 'a', another way is to mark them with same value, for example, 'e' 
 // -> 1, 'a'-> 1, and 'g' -> 2, 'd' -> 2, this works same.
@@ -21,19 +31,20 @@ Output: true
 // Traverse the character of both s and t on the same position, if their mapping values in m1 and m2 are different, means 
 // they are not mapping correctly, returen false; else we construct the mapping, 
 
+*/
 class Solution {
-public:
-    bool isIsomorphic(string s, string t) {
-        int len = s.length();
-        int m1[256], m2[256];
-        for (int i = 0; i < 256; i++) {
-            m1[i] = m2[i] = -1;
-        }
-        
-        for (int i = 0; i < len; i++) {
-            if (m1[s[i]] != m2[t[i]]) return false;
-            m1[s[i]] = m2[t[i]] = i;
+public boolean isIsomorphic (String s, String t) {
+        int[] m1 = new int[128];
+        int[] m2 = new int[128];
+        int n = s.length();
+    
+        for (int i = 0; i < n; i++) {
+            if (m1[s.charAt(i)] != m2[t.charAt(i)]) return false;
+            // record the last index of the current char. +1 is to exclude index 0 from initial value.
+            m1[s.charAt(i)] = i+1;
+            m2[t.charAt(i)] = i+1;
         }
         return true;
     }
-};
+}
+// TC: O(1)
