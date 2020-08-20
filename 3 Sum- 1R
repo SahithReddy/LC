@@ -16,15 +16,37 @@ A solution set is:
 ]
 
 */
-
+-------------------------------------
 // Explanation is here https://www.youtube.com/watch?v=qJSPYnS35SE
 
-/*The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
+/* ALGORITHM: TWO POINTER
+The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
 For each possible first element we make a standard bi-directional 2Sum sweep of the remaining part of the array.
 Also we want to skip equal elements to avoid duplicates in the answer without making a set or smth like that.
-*/
 
-// I wrote the below solution
+==> DETAILED:
+The implementation is straightforward - we just need to modify twoSumII to produce triplets and skip repeating values.
+
+-->First part:
+
+1. Sort the input array nums.
+2. Iterate through the array:
+  a. If the current value is greater than zero, break from the loop. Remaining values cannot sum to zero.
+  b. If the current value is the same as the one before, skip it.
+  c. Otherwise, call twoSumII for the current position i.
+
+
+--> Second Part:
+1. Set the low pointer lo to i + 1, and high pointer hi to the last index.
+2. While low pointer is smaller than high:
+    a. If sum of nums[i] + nums[lo] + nums[hi] is less than zero, increment lo.
+    b. If sum is greater than zero, decrement hi.
+    c. Otherwise, we found a triplet:
+        c1. Add it to the result res.
+        c2. Decrement hi and increment lo.
+        c3. Increment lo while the next value is the same as before to avoid duplicates in the result.
+3. Return the result res.
+*/
 
 class Solution {
 public List<List<Integer>> threeSum(int[] num) {
@@ -63,9 +85,8 @@ public List<List<Integer>> threeSum(int[] num) {
 Overall time complexity: O(n^2)
 */
 
-------------------------------------------------------------------------------------------------------------------
-
-// Brilliant and SMall upto yhe point - Took Set to avoid duplicates
+---------------------------------------------------------
+// Brilliant and SMall upto yhe point - Took HashSet to avoid duplicates
 public  List<List<Integer>> threeSum(int[] nums) {
         Set<List<Integer>> res  = new HashSet<>();
         if(nums.length==0) return new ArrayList<>(res);
@@ -94,3 +115,6 @@ As the array is already sorted. j being the left pointer (pointing to lower numb
 we need to select the next highest number hence k--. Same way when the sum is lower we need to select a number just 
 higher than the lowest.
 */
+------------------------------------------------------
+// There is one solutiomn without Sorting the input array. Refer Official solution Approach 3 for that.
+// https://leetcode.com/problems/3sum/solution/
