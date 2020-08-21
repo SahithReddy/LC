@@ -1,28 +1,98 @@
-// for indexOf metod: https://www.geeksforgeeks.org/java-string-indexof/
+/* QUESTION: 14. Longest Common Prefix
+Write a function to find the longest common prefix string amongst an array of strings.
 
-Solution: https://leetcode.com/problems/longest-common-prefix/discuss/6910/Java-code-with-13-lines
+If there is no common prefix, return an empty string "".
 
+Example 1:
+
+Input: ["flower","flow","flight"]
+Output: "fl"
+Example 2:
+
+Input: ["dog","racecar","car"]
+Output: ""
+Explanation: There is no common prefix among the input strings.
+
+For the input ["aca","cba"]
+expected output is ""
+
+Note:
+All given inputs are in lowercase letters a-z.
+
+It seems that it is not to check between pair of strings but on all the strings in the array.
+
+For example:
+
+{"a","a","b"} should give "" as there is nothing common in all the 3 strings.
+
+{"a", "a"} should give "a" as a is longest common prefix in all the strings.
+
+{"abca", "abc"} as abc
+
+{"ac", "ac", "a", "a"} as a.
+*/
+---------------------------------------------
+/* ALGORITHM: HORIZONTAL SCANNING   -- VERTICAL SCANNING IS RELATIVELY BEST IT IS BELOW
+==>LOGIC goes something like this:
+
+1. Pick a character at i=0th location and compare it with the character at that location in every string.
+
+2. If anyone doesn't have that just return ""
+
+3. Else append that character in to the result.
+
+4. Increment i and do steps 1-3 till the length of that string.
+
+5. return result.
+
+Make sure proper checks are maintained to avoid index out of bounds error.
+
+Solution: https://leetcode.com/problems/longest-common-prefix/discuss/6910/Java-code-with-13-lines -- FROM COMEMNTS
+*/
+---------------------------------------------------
 class Solution {
     public String longestCommonPrefix(String[] strs) {
         if(strs ==null || strs.length<1) return "";
         String answer =strs[0];
         for(int i=1; i<strs.length; i++){
-            while(strs[i].indexOf(answer)!=0){
+            while(!strs[i].startsWith(answer)){
                 answer = answer.substring(0, answer.length()-1);
             }
         } return answer;
     }
+}
 
+/*
+Time complexity : O(S) , where S is the sum of all characters in all strings.
 
-Time complexity : O(S)O(S) , where S is the sum of all characters in all strings.
+In the worst case all n strings are the same. The algorithm compares the string S1 with the other strings 
+There are S character comparisons, where S is the sum of all characters in the input array.
 
-In the worst case all nn strings are the same. The algorithm compares the string S1S1 with the other strings 
-[S_2 \ldots S_n][S 
-2
-​	
- …S 
-n
-​	
- ] There are SS character comparisons, where SS is the sum of all characters in the input array.
+Space complexity : O(1). We only used constant extra space.
+*/
+---------------------------------------------
+/* ALGORITHM: VERTICAL SCANNING
 
-Space complexity : O(1)O(1). We only used constant extra space.
+Imagine a very short string is at the end of the array. The above approach will still do SS comparisons. One way to optimize this case is to do vertical scanning. We compare characters from top to bottom on the same column (same character index of the strings) before moving on to the next column.
+
+*/
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if (strs == null || strs.length == 0) return "";
+        for (int i = 0; i < strs[0].length() ; i++){
+            char c = strs[0].charAt(i);
+            for (int j = 1; j < strs.length; j ++) {
+                if (i == strs[j].length() || strs[j].charAt(i) != c)
+                    return strs[0].substring(0, i);             
+            }
+        }
+        return strs[0];
+    }
+}
+
+/*
+Complexity Analysis
+
+Time complexity : O(S) , where S is the sum of all characters in all strings. In the worst case there will be n equal strings with length m and the algorithm performs S = m⋅*n character comparisons. Even though the worst case is still the same as Approach 1, in the best case there are at most n*minLen comparisons where minLen is the length of the shortest string in the array.
+Space complexity : O(1). We only used constant extra space.
+*/
