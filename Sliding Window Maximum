@@ -22,9 +22,7 @@ Window position                Max
 */
 
 /* BRUTE FORCE:
-The straightforward solution is to iterate over all sliding windows and find a maximum for each window. There are N - k + 1 sliding windows and there are k elements in each window, that results in a quite bad time complexity \mathcal{O}(N k)O(Nk).
-
-
+The straightforward solution is to iterate over all sliding windows and find a maximum for each window. There are N - k + 1 sliding windows and there are k elements in each window, that results in a quite bad time complexity O(Nk).
 */
 
 
@@ -43,52 +41,57 @@ public int[] maxSlidingWindow(int[] nums, int k) {
 /*
 Time complexity : O(Nk), where N is number of elements in the array.
 
-Space complexity : O(N−k+1) for an output array.
+Space complexity : O(1) not including the output array. O(N−k+1) for an output array.
 */
 ---------------------------------------------
-/* Using deque :
+/* Using DEQUEUE :
 
-Let's use a deque (double-ended queue), the structure which pops from / pushes to either side with the same \mathcal{O}(1)O(1) performance.
+Let's use a deque (double-ended queue), the structure which pops from / pushes to either side with the same O(1) performance.
 
-The idea is to use deque to hold the index of maximum element and restrict deque size to k. In first while loop, we make sure that we remove the elements which are not longer in the sliding k range. In second loop is we make sure that the elements in the deque is not smaller than the current element. Then we add the element to the deque.
+If we can add and remove elements from both sides of the sliding window, we can solve this problem in linear time. It turns out that we can use Deque to achieve the goal. In the Deque, we add and remove indices.
+    
+Basically, for each element nums[i] in the array that we are about to insert, we first check whether the leftmost index in the sliding window is out of bound. If so, we remove it by pollFirst() in constant time.
 
-The if(i >= k - 1) is just to skip the first few elements that is less than k. For example, if k = 3, then we don't want the first two elements added to the array. Also notice that our array is arr = new int[nums.length - k + 1] , as for the fact that when we have k as the size of sliding windows, then the end result of sliding windows array will be nums.length - k + 1.
+Then we continuously remove the rightmost indices if their corresponding elements are less than nums[i] (the element we are about to insert). The idea is that the elements that are less than the element we'll insert won't have any contributions to the maximum element of the sliding window. So it is safe to remove them.
 
+After removal pollLast() and insertion offerLast(i) (the element nums[i]), we can say that the leftmost element in the window is maximum. Think about it why. Notice that the maximum element could be the one we just insert.
+
+Last but not least, adding the maximum elements to the result array when necessary.
 */
 
 class Solution {
-    public int[] maxSlidingWindow(int[] a, int k) {		
-		if (a == null || k <= 0) {
-			return new int[0];
-		}
-		int n = a.length;
-		int[] r = new int[n-k+1];
-		int ri = 0;
-		// store index
-		Deque<Integer> q = new ArrayDeque<>();
-		for (int i = 0; i < a.length; i++) {
-			// remove numbers out of range k, we only pop out one out of range element in one round at most. (one round we only accept one element, so we pop at most one element out
-			if (!q.isEmpty() && q.peek() < i - k + 1) {
-				q.poll();
-			}
-			// remove smaller numbers in k range as they are useless
-			while (!q.isEmpty() && a[q.peekLast()] < a[i]) {
-				q.pollLast();
-			}
-			// q contains index... r contains content
-			q.offer(i);
-			if (i >= k - 1) {
-				r[ri++] = a[q.peek()];
-			}
-		}
-		return r;
-	}
+    public int[] maxSlidingWindow(int[] nums, int k) {
+      // assume nums is not null
+      int n = nums.length;
+      if (n == 0 || k == 0) {
+        return new int[0];
+      }
+      int[] result = new int[n - k + 1]; // number of windows
+      Deque<Integer> window = new ArrayDeque<>(); // stores indices
+
+      for (int i = 0; i < n; ++i) {
+        // remove indices that are out of bound
+        if (window.size() > 0 && window.peekFirst() <= i - k) {
+          window.pollFirst();
+        }
+        // remove indices whose corresponding values are less than nums[i]
+        while (window.size() > 0 && nums[window.peekLast()] < nums[i]) {
+          window.pollLast();
+        }
+        // add nums[i]
+        window.offerLast(i);
+        // add to result
+        if (i >= k - 1) {
+          result[i - k + 1] = nums[window.peekFirst()];
+        }
+      }
+      return result;
+    }
 }
 
 /*
-Time complexity : O(N), since each element is processed exactly twice - it's index added and then removed from the deque.
-
-Space complexity : O(N), since O(N−k+1) is used for an output array and O(k) for a deque.
+Time: O(N) since each element is processed (add/remove) at most twice.
+Space: O(k)
 
 */
 
