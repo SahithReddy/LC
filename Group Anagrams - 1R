@@ -15,6 +15,15 @@ Note:
 All inputs will be in lowercase.
 The order of your output does not matter.
 */
+---------------------------------------------------------
+/* ALGORITHM: Int [26] + HashMap
+INTUITON:
+Two strings are anagrams if and only if their character counts (respective number of occurrences of each character) are the same.
+
+ALGORITHM:
+
+We can transform each string \text{s}s into a character count, \text{count}count, consisting of 26 non-negative integers representing the number of a's, b's, c's, etc. We use these counts as the basis for our hash map.
+*/
 
 // Optimal Solution
 
