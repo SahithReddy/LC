@@ -1,3 +1,22 @@
+/* QUESTION: 94. Binary Tree Inorder Traversal
+Given a binary tree, return the inorder traversal of its nodes' values.
+
+Example:
+
+Input: [1,null,2,3]
+   1
+    \
+     2
+    /
+   3
+
+Output: [1,3,2]
+Follow up: Recursive solution is trivial, could you do it iteratively?
+*/
+/* ITERATIVE ALGORITHM:
+using stack to simulate the recursion procedure: for each node, travel to its left child until it's left leaf, then pop to left leaf's higher level node A, and switch to A's right branch. Keep the above steps until cur is null and stack is empty. 
+*/
+
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> result = new ArrayList<Integer>();
@@ -5,18 +24,61 @@ class Solution {
         Stack<TreeNode> s = new Stack<TreeNode>();
         TreeNode curr = root;
          while(curr!=null || !s.empty()){
-             while(curr!=null){
+             while(curr!=null){ // Travel to each node's left child, till reach the left leaf
                  s.add(curr);
                  curr=curr.left;
              }
-             curr = s.pop();
-             result.add(curr.val);
-             curr=curr.right;
+             curr = s.pop(); // Backtrack to higher level node A
+		    result.add(curr.val);  // Add the node to the result list
+		    curr=curr.right;   // Switch to A'right branch
          }
         return result;
     }
 }
 
-Time complexity : O(n).
+/*
+Time complexity : Time complexity should be O(n), cause we only add each once into stack and pop it once, so it should be O(2n), thus O(n)
 
-Space complexity : O(n).
+Space complexity : I prefer to define the space complexity of iterative way as O(n), for worst case: all nodes are in the left side which makes it like a single linked list, all nodes will be put into stack, so O(n).
+*/
+--------------------------------------------------
+/* RECURSIVE ALGORITHM:
+left , root, right - straight forward traversal
+*/
+
+class Solution {
+public List<Integer> inorderTraversal(TreeNode root) {
+    List<Integer> res = new ArrayList<>();
+    // method 1: recursion
+
+    helper(root, res);
+    return res;
+
+    //helper function for method 1
+    private void helper(TreeNode root, List<Integer> res) {
+        if (root != null) {
+            if (root.left != null) {
+                helper(root.left, res);
+            }
+            res.add(root.val);
+            if (root.right != null) {
+                helper(root.right, res);
+           }
+       }
+   }
+ }
+
+/*
+Time complexity : O(n). The time complexity is O(n) because the recursive function is T(n)=2⋅T(n/2)+1.
+
+Space Complexity: O(h) is more appropriate to be used to describe the space complexity of recursion method which exactly O(h) due to the recursion stack size.
+The worst case space required is O(n), and in the average case it's O(logn) where n is number of nodes.
+*/
+
+
+
+
+
+
+
+
