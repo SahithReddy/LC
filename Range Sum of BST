@@ -1,0 +1,47 @@
+/* QUESTION: 938. Range Sum of BST
+Given the root node of a binary search tree, return the sum of values of all nodes with value between L and R (inclusive).
+
+The binary search tree is guaranteed to have unique values.
+
+
+Example 1:
+Input: root = [10,5,15,3,7,null,18], L = 7, R = 15
+Output: 32
+[10,5,15,3,7,null,18], L = 7, R = 15
+The question is asking for a sum of values that are in the range of 7 and 15. Meaning all values N >= 7 and N <= 15 in the first problem those values are 7,10,15 which total to 32. Hope this helps. :D
+
+Example 2:
+Input: root = [10,5,15,3,7,13,18,1,null,6], L = 6, R = 10
+Output: 23
+*/
+
+// RECURSION:
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        if (root == null) { return 0; }
+        int sum = 0;
+        if (root.val > L) { sum += rangeSumBST(root.left, L, R); } // left child is a possible candidate.
+        if (root.val < R) { sum += rangeSumBST(root.right, L, R); } // right child is a possible candidate.
+        if (root.val >= L && root.val <= R) { sum += root.val; } // count root in.
+        return sum;
+    }
+
+// ITRERATIVE
+    public int rangeSumBST(TreeNode root, int L, int R) {
+        Stack<TreeNode> stk = new Stack<>();
+        stk.push(root);
+        int sum = 0;
+        while (!stk.isEmpty()) {
+            TreeNode n = stk.pop();
+            if (n == null) { continue; }
+            if (n.val > L) { stk.push(n.left); } // left child is a possible candidate.
+            if (n.val < R) { stk.push(n.right); } // right child is a possible candidate.
+            if (L <= n.val && n.val <= R) { sum += n.val; }
+        }
+        return sum;
+    }
+    
+/*
+DFS traverse all nodes in worst case, and if we count in the recursion trace space cost, the complexities are as follows:
+
+Time: O(n), space: O(h), where n is the number of total nodes, h is the height of the tree.. 
+*/
