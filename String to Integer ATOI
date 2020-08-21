@@ -1,5 +1,4 @@
-/* 8:
-QUESTION:
+/* QUESTION: 8. String to Integer (atoi)
 
 Input: "42"
 Output: 42
@@ -23,7 +22,7 @@ Output: -2147483648
 Explanation: The number "-91283472332" is out of the range of a 32-bit signed integer.
              Thefore INT_MIN (−231) is returned.
 */
-
+---------------------------------------
 // This below code is from "Java Solution with 4 steps explanations" discuss's 1st comment and optimized from comment by baxiyi
 
 /*
