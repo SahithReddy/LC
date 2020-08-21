@@ -28,9 +28,9 @@ The substring with start index = 0 is "ab", which is an anagram of "ab".
 The substring with start index = 1 is "ba", which is an anagram of "ab".
 The substring with start index = 2 is "ab", which is an anagram of "ab".
 */
-
+--------------------------------------------
 /*
-SLIDING WINDOW: 
+SLIDING WINDOW: READ THROUGH THIS FOR UNDERSTANDING THE ALGORITHM AND EXPLAIN TO INTERVIEWER - SECOND CODE BELOW IS BETTER
 
 1. Find frequency of each character in p.
 
@@ -109,7 +109,7 @@ So, result is [ 0 , 6 ]
 
 return result.
 */
-
+------------------------------------
 public class Solution {
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> list = new ArrayList<>();
@@ -162,7 +162,7 @@ Time Complexity will be O(S) S= Large String and p is small, because the "start"
 Space complexity: O(1), because pCount and sCount contain 26 elements each.
 */
 -----------------------------------------
-/* Algorithm: 
+/* ALMOST SIMILAR APPROACH BUT MORE SMALL AND CONCISE
 
 Hashmap is quite complex structure, with known performance issues in Java. Let's implement approach 1 using 26-elements array instead of hashmap:
 
@@ -185,7 +185,7 @@ Element number 26 contains count of letter z.
 
 3. Return output list.
 */
-
+------------------------------------
 class Solution {
   public List<Integer> findAnagrams(String s, String p) {
     if (s.length() < p.length()) return new ArrayList();
@@ -215,7 +215,7 @@ class Solution {
     return output;
   }
 }
-
+------------------------------------
 /*
 Time Complexity will be O(S) S= Large String, because the iterator will only move from left to right once.
 
