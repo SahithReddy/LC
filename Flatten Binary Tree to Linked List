@@ -27,7 +27,7 @@ The flattened tree should look like:
 */
 
 /* ALGORITHM: MORRIS TRAVERSAL - TC: O(N) & SC: O(1) - Below is O(N) space post-order recursive solution
-If possible try to see official solution it is clear and long over there to explain.
+If possible try to see official solution it is clear and long over there to explain in interviews
 
 */
 
@@ -78,6 +78,106 @@ class Solution {
 Time Complexity: O(N) since we process each node of the tree at most twice. If you think about it, we process the nodes once when we actually run our algorithm on them as the currentNode. The second time when we come across the nodes is when we are trying to find our rightmost node. Sure, this algorithm is slower than the previous two approaches but it doesn't use any additional space which is a big win.
 
 Space Complexity: O(1) boom!.
+*/
+------------------------------------------
+/* RECURSION -  this is not post order. this is 'reversed' preorder.
+==> PICTURES:
+draw a picture for understanding iterative process
+    1
+   / \
+  2   5
+ / \   \
+3   4   6
+-----------        
+pre = 5
+cur = 4
+
+    1
+   / \
+  2   \
+ / \  |
+3   4 |
+     \|
+      5
+       \
+        6
+-----------        
+pre = 4
+cur = 3
+
+    1
+   / \
+  2  |
+ /|  | 
+3 |  |
+ \|  |
+  4  |
+   \ |
+    5
+     \
+      6
+-----------        
+cur = 2
+pre = 3
+
+    1
+   / \
+  2   \
+   \   \
+    3   \
+     \  |
+      4 |
+       \|
+        5
+         \
+          6
+-----------        
+cur = 1
+pre = 2
+
+1
+ \
+  2
+   \
+    3
+     \
+      4
+       \
+        5
+         \
+          6
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private TreeNode prev = null;
+
+    public void flatten(TreeNode root) {
+        if (root == null)
+            return;
+        flatten(root.right);
+        flatten(root.left);
+        root.right = prev;
+        root.left = null;
+        prev = root;
+    }
+}
+/*
+TIME AND SPACEE: O(N)
 */
 
 
