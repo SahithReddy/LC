@@ -1,5 +1,5 @@
 // https://www.youtube.com/watch?v=21OuwqIC56E
-/*
+/* QUESTION: 17. Letter Combinations of a Phone Number
 Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent.
 
 A mapping of digit to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
@@ -11,11 +11,9 @@ Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
 Note:
 
 Although the above answer is in lexicographical order, your answer could be in any order you want.
-
 */
-
-/*
-ALGORITHM: BFS using QUEUE
+------------------------------------------------
+/* ALGORITHM: BFS using QUEUE
 This is a iterative solution. 
 
 1. For each digit added, remove and copy every element in the queue.
@@ -62,18 +60,16 @@ public List<String> letterCombinations(String digits) {
 	}
 	
 /*
-
-*/
-
-/*
 For time complexity, adding one more letter, 4 (for number 7) times more operations, so it is O(4^n). For space complexity, final output will take O(4^n) space.
 
 in worst case you have 4 letters for each digits(9) and you have n digits so.. 4x4x4..n times which is 4^n
 */
 ---------------------------------------------------------------------------
-/* DFS RECURSION: https://leetcode.com/problems/letter-combinations-of-a-phone-number/discuss/8118/Easy-understand-Java-Solution
+/* ALGORITHM: DFS RECURSION: 
+https://leetcode.com/problems/letter-combinations-of-a-phone-number/discuss/8118/Easy-understand-Java-Solution
 
-method combine is to add new letters to old list, using 2 for-loop.
+I would take a helper method called combine()
+This helper method below 'combine' is to add new letters to old list, using 2 for-loop.
 
 for example:
 
