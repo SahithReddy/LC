@@ -38,7 +38,9 @@ class Solution {
             
             //Iterate the string and increment corresponding index char - 'a' , so the index will be between 0 and 25
            
-            for (char c : s.toCharArray()) ca[c - 'a']++;
+            for (char c : s.toCharArray()) {
+                ca[c - 'a']++;
+            }
             String keyStr = String.valueOf(ca);
             if (!map.containsKey(keyStr)) map.put(keyStr, new ArrayList<>());
             map.get(keyStr).add(s);
