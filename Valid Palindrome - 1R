@@ -1,4 +1,4 @@
-/* 125:
+/* 125. Valid Palindrome
 Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
 
 Note: For the purpose of this problem, we define empty string as valid palindrome.
@@ -40,6 +40,14 @@ Space complexity : O(1). No extra space required, at all.
 boolean isPalindrome(String s) {
   s = s.toLowerCase().replaceAll("\\W+", "");
   return s.equals(new StringBuilder(s).reverse().toString());
+}
+
+public class Solution {
+    public boolean isPalindrome(String s) {
+        String actual = s.replaceAll("[^A-Za-z0-9]", "").toLowerCase();
+        String rev = new StringBuffer(actual).reverse().toString();
+        return actual.equals(rev);
+    }
 }
 
 
