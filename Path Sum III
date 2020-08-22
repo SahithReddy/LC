@@ -1,0 +1,116 @@
+/* QUESTION: 437. Path Sum III
+You are given a binary tree in which each node contains an integer value.
+
+Find the number of paths that sum to a given value.
+
+The path does not need to start or end at the root or a leaf, but it must go downwards (traveling only from parent nodes to child nodes).
+
+The tree has no more than 1,000 nodes and the values are in the range -1,000,000 to 1,000,000.
+
+Example:
+
+root = [10,5,-3,3,2,null,11,3,-2,null,1], sum = 8
+
+      10
+     /  \
+    5   -3
+   / \    \
+  3   2   11
+ / \   \
+3  -2   1
+
+Return 3. The paths that sum to 8 are:
+
+1.  5 -> 3
+2.  5 -> 2 -> 1
+3. -3 -> 11
+*/
+-------------------------------------------------------
+/* USING HAHSHMAP<prefix sum, frequency> || Offical Solution and First comment in discussion is Excellent
+
+What is a prefix sum?
+- It could be defined for 1D arrays (sum the current value with all the previous integers)
+- for 2D arrays (sum of the current value with the integers above or on the left)
+- for the binary trees (sum the values of the current node and all parent nodes),
+There is just one thing that is particular for the binary tree. There are two ways to go forward - to the left and to the right. To keep parent->child direction, we shouldn't blend prefix sums from the left and right subtrees in one hashmap.
+----------------ALGO---------------------
+Using HashMap to store ( key : the prefix sum, value : its frequency) , and whenever reach a node, we check if (prefix sum - target) exists in hashmap or not, if it does, we need to add those no of ways of (prefix sum - target) into res.
+For instance : in one path we have 1,2,-1,-1,2, then the prefix sum will be: 1, 3, 2, 1, 3, let's say we want to find target sum is 2, then we will have{2}, {1,2,-1}, {2,-1,-1,2} and {2}ways.
+
+-----------IN DETAIL----------------------
+1. The prefix stores the sum from the root to the current node in the recursion
+2. The map stores <prefix sum, frequency> pairs before getting to the current node. We can imagine a path from the root to the current node. The sum from any node in the middle of the path to the current node = the difference between the sum from the root to the current node and the prefix sum of the node in the middle.
+3. We are looking for some consecutive nodes that sum up to the given target value, which means the difference discussed in 2. should equal to the target value. In addition, we need to know how many differences are equal to the target value.
+4. Here comes the map. The map stores the frequency of all possible sum in the path to the current node. If the difference between the current sum and the target value exists in the map, there must exist a node in the middle of the path, such that from this node to the current node, the sum is equal to the target value.
+5. Note that there might be multiple nodes in the middle that satisfy what is discussed in 4. The frequency in the map is used to help with this.
+6. Therefore, in each recursion, the map stores all information we need to calculate the number of ranges that sum up to target. Note that each range starts from a middle node, ended by the current node.
+7. To get the total number of path count, we add up the number of valid paths ended by EACH node in the tree.
+8. Each recursion returns the total count of valid paths in the subtree rooted at the current node. And this sum can be divided into three parts:
+    - the total number of valid paths in the subtree rooted at the current node's left child
+    - the total number of valid paths in the subtree rooted at the current node's right child
+    - the number of valid paths ended by the current node
+9. The interesting part of this solution is that the prefix is counted from the top(root) to the bottom(leaves), and the result of total count is calculated from the bottom to the top :D
+------------------------------------------
+QUE.I was wondering how you can keep track of a sequence of sums in a 1D hash table, when a tree can have multiple branches, how do you keep track of duplicate sums on different branches of the tree?
+ANS: The answer is that this method only keeps track of 1 branch at a time. Because we're doing a depth first search, we will iterate all the way to the end of a single branch before coming back up. However, as we're coming back up, we're removing the nodes at the bottom of the branch from our hash table, using line map.put(sum, map.get(sum) - 1);, before ending the function.
+
+To summarize, the hash table is only keeping track of a portion of a single branch at any given time, from the root node to the current node only.
+*/
+
+class Solution {
+    public int pathSum(TreeNode root, int sum) {
+        if (root == null) return 0;
+        Map<Integer, Integer> map = new HashMap<>();
+        // to make sure root is also counted. Otherwise all the paths containing root will not be counted.
+        map.put(0, 1);
+        return findPathSum(root, 0, sum, map);  
+    }
+    
+    /* this function actually returns the number of paths given the target (target sum) 
+    and currSum (sum of root to parent of 'curr')*/
+    private int findPathSum(TreeNode curr, int currSum, int target, Map<Integer, Integer> map) {
+        if (curr == null) return 0;
+        
+        // update the prefix sum by adding the current val
+        currSum += curr.val;
+        
+        /*
+        So map.getOrDefault(currSum-target, 0) will find out the number of paths that equals to 
+        currSum-target, which means sum of root to some middle node. 
+        every path of (root -> middle node == currSum-target) will construct a path from (middle node -> current node).
+
+        In short, it is like root node -> some middle node -> current node, 
+        every root -> some middle == currSum-target will make sure that some middle node -> current node == target 
+        since root -> current node == currSum.
+        */
+        int numOfPathsToCurr = map.getOrDefault(currSum-target, 0);
+        
+        // update the map with the current sum, so the map is good to be passed to the next recursion
+        map.put(currSum, map.getOrDefault(currSum, 0) + 1);
+        
+        // add the 3 parts discussed in 8. together
+        int res = numOfPathsToCurr + findPathSum(curr.left, currSum, target, map)
+                                               + findPathSum(curr.right, currSum, target, map);
+        
+        // restore the map, as the recursion goes from the bottom to the top
+        /*
+        if left subtree has been scanned, preSum has to remove this path, because this path is not the 
+        prefix path of the right subtree. Same as the left subtree, when right subtree is scanned, 
+        the path should be removed too.
+        */
+        map.put(currSum, map.get(currSum) - 1);
+        
+        return res;
+    }
+}
+--------------------------------------------
+/*
+Complexity Analysis
+
+Time complexity: O(N), where N is a number of nodes. During preorder traversal, each node is visited once.
+
+Space complexity: up to O(N) to keep the hashmap of prefix sums, where N is a number of nodes.
+
+*/
+
+
