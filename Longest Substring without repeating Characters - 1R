@@ -1,6 +1,5 @@
 // https://www.youtube.com/watch?v=3IETreEybaA&t=40s
 
-
 /*
 QUESTION: 
 Given a string, find the length of the longest substring without repeating characters.
@@ -46,9 +45,10 @@ class Solution {
     }
 }
 
-// Time complexity : Directly O(n). Index j will iterate n times.
+/* Time complexity : Directly O(n). Index j will iterate n times.
 
-// Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the Set
+Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the Set
+*/
 
 ---------------------------------------------------------------------------------------------------
 /* FIXED SIZE ARRAY ALGORITHM
@@ -77,6 +77,7 @@ public class Solution {
     }
 }
 
-// Time complexity : Directly O(n). Index j will iterate n times.
+/* Time complexity : Directly O(n). Index j will iterate n times.
 
-// Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the charSet
+Space complexity (HashMap) : We need O(k) space for checking a substring has no duplicate characters, where k is the size of the charSet
+*/
