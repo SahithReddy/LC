@@ -1,5 +1,27 @@
 // https://leetcode.com/discuss/interview-question/505517/Oracle-OCI-or-Phone-or-Reverse-level-order-traversal-N-ary-tree
 
+/* ALGORITHM:
+Basically it is a level order traversal using the Queue data structure. while polling out an element from the queue, add to the front of the list & add all its children to the queue.
+Q - A
+list -
+
+Q - B C
+list - A
+
+Q - D E F G
+list - C B A
+
+Q- H
+list - G F E D C B A
+
+Q - I
+list - H G F E D C B A
+
+finally
+Q - empty
+list - I H G F E D C B A
+*/
+
 public void print(TreeNode root) {
  
         LinkedList<Character> list = new LinkedList<>();
