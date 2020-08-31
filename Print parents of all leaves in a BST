@@ -1,0 +1,60 @@
+/*
+Given a binary search tree with Integer values for the nodes, print all the parents of every leaf node in the tree. Pretty simple question description.
+
+TreeNode Definition :
+
+class TreeNode { 
+    int val; 
+    TreeNode left;
+    TreeNode right;
+}
+Note : Previous definition I gave had parent pointer incorrectly. There was no parent pointer provided.
+Example -
+
+Input : TreeNode Root which is root of the entire BST.
+          500
+	      /  \
+       300    600
+        / \
+     100  350
+         /   \
+	  320    360
+
+Answer : 500,300,350
+Reason : 500 is parent of leaf 600. 300 is parent of leaf 100. 350 is parent of leaves 320 and 360.
+*/
+
+/*
+I thought the solution was simple enough where you just visit every node and check whether it's children are leaves. If any one of the children are leaves then print the current node (parent) and continue. This solution would be O(n) time where n is the number of nodes and O(n) space complexity for the recursion stack according to me. You can make a small optimization where you check if the child is a leaf and not recurse into it if it is and then I think the space complexity becomes O(h) where h is the height of the BST.
+*/
+
+// Code in C++
+queue<TreeNode * root> q;
+vector<int> ans;
+q.push(root);
+while(!q.empty()){
+    TreeNode * temp = q.front();
+    q.pop();
+    if(temp->left){
+        q.push(temp->left);
+        if(temp->left->left == NULL && temp->left->right == NULL){
+           ans.push_back(temp->left);
+        }
+   }
+   if(temp->right){
+        q.push(temp->right);
+        if(temp->right->left == NULL && temp->right->right == NULL){
+           ans.push_back(temp->left);
+        }
+   }
+}
+return ans;
+
+/*
+I think your first answer was valid for the case when the node number were limited. Based on your description, I assume the interviewer mainly tried to ask you another way to travel the tree which wouldn't crash due to large number of nodes. Again, I don't have many information so this is something we need to clarify with the interviewer.
+
+If I were you, since he seemed to challenge the large amount of nodes. IMO, I would try provide level-traversal solution. Because:
+DFS: this tree could be skewed tree, and you would need to load millions node till hit the bottom.
+BSF: the worst case is complete tree (each level has full amount of nodes), each level from top to down could only have 1, 2, 4, 8, ... 2^h (h is the tree height). 2^h should be smaller than N in this case.
+BSF should save your space.
+*/
