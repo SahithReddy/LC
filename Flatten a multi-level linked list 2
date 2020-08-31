@@ -1,5 +1,5 @@
-/*
-
+/* EXTESION OF Flatten a multi-level linked list 
+How to flatten a linked list when we always need to process down pointer before next at every node.
 Input:  
 1 - 2 - 3 - 4
     |
@@ -132,3 +132,5 @@ class Node
         down=null; 
     } 
 } 
+
+// Output: 1 2 7 9 14 15 23 24 8 16 17 18 19 20 21 10 11 12 3 4  
