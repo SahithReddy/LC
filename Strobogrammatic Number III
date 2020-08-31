@@ -1,0 +1,65 @@
+/* QUESTIOn: 248. Strobogrammatic Number III
+A strobogrammatic number is a number that looks the same when rotated 180 degrees (looked at upside down).
+
+Write a function to count the total strobogrammatic numbers that exist in the range of low <= num <= high.
+
+Example:
+
+Input: low = "50", high = "100"
+Output: 3 
+Explanation: 69, 88, and 96 are three strobogrammatic numbers.
+Note:
+Because the range might be a large number, the low and high numbers are represented as string.
+*/
+/* ALGORITHM:  DFS : A LOT BASED ON SN I & II
+Construct char arrays from low.length() to high.length()
+
+Add stro pairs from outside
+
+When left > right, add eligible count
+
+OR
+
+The basic idea is to find generate a list of strobogrammatic number with the length between the length of lower bound and the length of upper bound. Then we pass the list and ignore the numbers with the same length of lower bound or upper bound but not in the range.
+
+*/
+
+public class Solution {
+    private static final char[][] PAIRS = new char[][] {
+        {'0', '0'}, {'1', '1'}, {'6', '9'}, {'8', '8'}, {'9', '6'}};
+    public int strobogrammaticInRange(String low, String high) {
+        if (low == null || high == null || low.length() > high.length()
+            || (low.length() == high.length() && low.compareTo(high) > 0)) {
+            return 0;
+        }
+        int count = 0;
+        for (int len = low.length(); len <= high.length(); len++) {
+            count += dfs(low, high, new char[len], 0, len - 1);
+        }
+        return count;
+    }
+    private int dfs(String low, String high, char[] ch, int left, int right) {
+        if (left > right) {
+            String s = new String(ch);
+            if ((ch.length == low.length() && s.compareTo(low) < 0)
+                || (ch.length == high.length() && s.compareTo(high) > 0)) {
+                return 0;
+            } else {
+                return 1;
+            }
+        }
+        int count = 0;
+        for (char[] p : PAIRS) {
+            ch[left] = p[0];
+            ch[right] = p[1];
+            if (ch.length != 1 && ch[0] == '0') {
+                continue; //don't start with 0
+            }
+            if (left == right && (p[0] == '6' || p[0] == '9')) {
+                continue; //don't put 6/9 at the middle of string.
+            }
+            count += dfs(low, high, ch, left + 1, right - 1);
+        }
+        return count;
+    }
+}
