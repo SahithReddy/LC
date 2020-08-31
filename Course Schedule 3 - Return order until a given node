@@ -1,4 +1,4 @@
-/* QUESTION:
+/* QUESTION: FOUND THIS IN DISCUSSION SO NO PROPER ALGO EXPLANATION
 To design algorithm to find dependencies of a specific node. Say for exampe there is an input stream 2d array in which nodes are given as [[7,11], [5,11], [3,8], [11,2], [11,9], [8,9],[3,10]] . Now for a given node say 2, the output should be [7,5,11,2] or [5,7,11,2]. Instead of numbers I was given characters.
 
 */
@@ -38,7 +38,7 @@ private static void bfs(Map<Integer, Set<Integer>> map, List<Integer> res, Set<I
 	}
 }
 --------------------------------------------------
-// OPs solution with comments
+// OPs solution with comments - But the above one is much better
 
 /*
 a -> d, b -> d, f -> a , h -> d , d -> i
