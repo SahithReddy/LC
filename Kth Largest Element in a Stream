@@ -1,0 +1,73 @@
+/* QUESTON: Kth Largest Element in a Stream
+Design a class to find the kth largest element in a stream. Note that it is the kth largest element in the sorted order, not the kth distinct element.
+
+Your KthLargest class will have a constructor which accepts an integer k and an integer array nums, which contains initial elements from the stream. For each call to the method KthLargest.add, return the element representing the kth largest element in the stream.
+
+Example:
+
+int k = 3;
+int[] arr = [4,5,8,2];
+KthLargest kthLargest = new KthLargest(3, arr);
+kthLargest.add(3);   // returns 4
+kthLargest.add(5);   // returns 5
+kthLargest.add(10);  // returns 5
+kthLargest.add(9);   // returns 8
+kthLargest.add(4);   // returns 8
+Note:
+You may assume that nums' length ≥ k-1 and k ≥ 1.
+*/
+/* UNDERSTAND QUESTON:
+The class accepts an integer k while initializing. Every time you add an element into this class, it will returns the kth largest element. Using the Example in the problem description:
+At beginning, we use k = 3 with an array [4, 5, 8, 2].
+After kthLargest.add(3);, all the elements inside this instance is [4, 5, 8, 2, 3], and it return the kth (which is 3rd) largest element, so it returns 4.
+After kthLargest.add(5);, all the elements inside this instance is [4, 5, 8, 2, 3, 5], and it return the kth (which is 3rd) largest element, so it returns 5.
+After kthLargest.add(10);, all the elements inside this instance is [4, 5, 8, 2, 3, 5, 10], and it return the kth (which is 3rd) largest element, so it returns 5.
+After kthLargest.add(9);, all the elements inside this instance is [4, 5, 8, 2, 3, 5, 10, 9], and it return the kth (which is 3rd) largest element, so it returns 8.
+After kthLargest.add(4);, all the elements inside this instance is [4, 5, 8, 2, 3, 5, 10, 9, 4], and it return the kth (which is 3rd) largest element, so it returns 8.
+*/
+-----------------------------------------
+/* MIN HEAP ALGORITHM:
+
+We can build a MinHeap that contains only k largest elements.
+
+On add:
+compare a new element x with min to decide if we should pop min and insert x
+take into account a case when heap_size is less than k
+Construction is simply calling the add function N times.
+
+Time complexity:
+
+Construction: O(N * logK)
+Adding: O(logK)
+Additional memory:
+
+O(K) (can be reduced to O(1) by reusing memory of the existing array)
+*/
+/* MORE DETAILED ALGORITHM: SEE THIS
+One way to solve this problem is to sort the array. However, you would need to sort the array everytime. Another way is to use a BST that is efficient. However, the most common and popular way is to use a heap (priority queue). Some folks may think about using a max priority queue for this problem since it asks for the kth max. However, that is a wrong choice since the max heap keeps the max value at the top and the kth max may be somewhere at the bottom of the heap. If you keep a min heap of size k then the kth max will stay at the top and very easy to extract. With that in mind, here is the code.
+
+Another benefit of using a min heap is we just need to store k elements out of n given elements from the array. If you are worried about loosing any elements then remember the rejected elements are not in top k so they will never be a candidate since we don't remember any elements.
+*/
+
+class KthLargest {
+
+    private final PriorityQueue<Integer> minHeap = new PriorityQueue<>();
+    private final int k;    
+    public KthLargest(int k, int[] nums) {
+        this.k = k;
+        for (Integer i : nums) {
+            minHeap.add(i);
+            if (minHeap.size() > k) {
+                minHeap.poll();
+            }
+        }
+    }
+    
+    public int add(int val) {
+        minHeap.add(val);
+        if (minHeap.size() > k) {
+            minHeap.poll();
+        }        
+        return minHeap.peek();
+    }
+}
