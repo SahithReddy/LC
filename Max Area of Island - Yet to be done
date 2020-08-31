@@ -1,21 +1,41 @@
 // The idea is to count the area of each island using dfs. During the dfs, we set the value of each point in the island to 0. 
 
+class Solution {
+    // This method approaches the problem as one of depth-first connected components search
+    int max = 0, maxNow = 0;
     public int maxAreaOfIsland(int[][] grid) {
-        int max_area = 0;
-        for(int i = 0; i < grid.length; i++)
-            for(int j = 0; j < grid[0].length; j++)
-                if(grid[i][j] == 1)max_area = Math.max(max_area, AreaOfIsland(grid, i, j));
-        return max_area;
-    }
-    
-    public int AreaOfIsland(int[][] grid, int i, int j){
-        if( i >= 0 && i < grid.length && j >= 0 && j < grid[0].length && grid[i][j] == 1){
-            grid[i][j] = 0;
-            return 1 + AreaOfIsland(grid, i+1, j) + AreaOfIsland(grid, i-1, j) + AreaOfIsland(grid, i, j-1) + AreaOfIsland(grid, i, j+1);
+        // i, the row index of the given grid
+        // j, the column index of the given grid
+        // Iterate over the entire given grid
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1){
+                    maxNow = 0;
+                    dfs(i, j, grid);
+                }
+            }
         }
-        return 0;
+        return max;
     }
     
-// Time Complexity: O(R*C), where RR is the number of rows in the given grid, and CC is the number of columns. We visit every square once.
+    private int dfs(int i, int j, int[][]grid) {
+        // Check for invalid indices and for sites that aren't land
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] != 1) return 0;
+        grid[i][j] = -1; // marking part of island visited not to check it next time
+        maxNow++;
+        
+        // Check all adjacent sites
+        dfs(i - 1, j, grid);
+        dfs(i + 1, j, grid);
+        dfs(i, j + 1, grid);
+        dfs(i, j - 1, grid);
+
+        max = Math.max(max, maxNow);
+        return max;
+    }
+}
+
+    
+// Time Complexity: O(R*C), where R is the number of rows in the given grid, and C is the number of columns. We visit every square once.
 
 // Space complexity: O(R*C), the space used by seen to keep track of visited squares, and the space used by stack.
