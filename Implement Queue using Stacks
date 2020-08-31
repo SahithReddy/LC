@@ -1,0 +1,77 @@
+/* QUESTION: Implement Queue using Stacks
+Implement the following operations of a queue using stacks.
+
+push(x) -- Push element x to the back of queue.
+pop() -- Removes the element from in front of queue.
+peek() -- Get the front element.
+empty() -- Return whether the queue is empty.
+Example:
+
+MyQueue queue = new MyQueue();
+
+queue.push(1);
+queue.push(2);  
+queue.peek();  // returns 1
+queue.pop();   // returns 1
+queue.empty(); // returns false
+Notes:
+
+You must use only standard operations of a stack -- which means only push to top, peek/pop from top, size, and is empty operations are valid.
+Depending on your language, stack may not be supported natively. You may simulate a stack by using a list or deque (double-ended queue), as long as you use only standard operations of a stack.
+You may assume that all operations are valid (for example, no pop or peek operations will be called on an empty queue).
+*/
+--------------------------
+// Used two Stacks
+// From here in 1st comment: https://leetcode.com/problems/implement-queue-using-stacks/discuss/64288/Accepted-clean-Java-solution
+
+// CODE: 
+class MyQueue {
+    Stack<Integer> s1;
+    Stack<Integer> s2;
+    /** Initialize your data structure here. */
+    public MyQueue() {
+        s1 = new Stack<>();
+        s2 = new Stack<>();
+    }
+    
+    // Push element x to the back of queue.
+    public void push(int x) {
+        s1.push(x);
+    }
+    
+    // Removes the element from in front of queue and returns that element. //
+    public int pop() {
+        peek();
+        return s2.pop();
+    }
+    
+    // Get the front element. //
+    public int peek() {
+        if(s2.isEmpty()){
+            while(!s1.isEmpty()){
+                s2.push(s1.pop());
+            }
+        }
+        return s2.peek();
+    }
+    
+    // Returns whether the queue is empty.
+    public boolean empty() {
+        return (s1.isEmpty() && s2.isEmpty());    
+        }
+}
+
+/*
+Push - O(1) per operation, Space O(N) - We need additional memory to store the queue elements
+Pop - O(1) , O(1) 
+Empty - O(1), O(1)
+Peek - O(1) per operation ammotized, worst case - O(N) Space O(1)
+*/
+
+/* WHY THIS IMPLEMENTATION?
+The application for this implementation is to separate read & write of a queue in multi-processing. One of the stack is for read, and another is for write. They only interfere each other when the former one is full or latter is empty.
+
+When there's only one thread doing the read/write operation to the stack, there will always one stack empty. However, in a multi-thread application, if we have only one queue, for thread-safety, either read or write will lock the whole queue. In the two stack implementation, as long as the second stack is not empty, push operation will not lock the stack for pop.
+
+READ THIS: https://stackoverflow.com/questions/2050120/why-use-two-stacks-to-make-a-queue/2050402#2050402
+*/
