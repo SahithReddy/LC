@@ -1,5 +1,8 @@
-// RECURSIVE
+// QUESTON FROM HERE : https://www.geeksforgeeks.org/construct-bst-from-given-preorder-traversa/
 
+/* ALGORITHM: RECURSIVE
+The idea used here is inspired from method 3 of this post. The trick is to set a range {min .. max} for every node. Initialize the range as {INT_MIN .. INT_MAX}. The first node will definitely be in range, so create root node. To construct the left subtree, set the range as {INT_MIN …root->data}. If a values is in the range {INT_MIN .. root->data}, the values is part part of left subtree. To construct the right subtree, set the range as {root->data..max .. INT_MAX}.
+*/
 
 // Java program to construct BST from given preorder traversal 
   
@@ -94,10 +97,11 @@ class BinaryTree {
     } 
 }
 // Time Complexity: O(n)
-------------------------------------------------------------------------------------------------------------------------
-//Iterative
+-----------------------------------------------------------
+// ALGORITHM:  Iterative
 
-/*1. Create an empty stack.
+/*
+1. Create an empty stack.
 
 2. Make the first value as root. Push it to the stack.
 
@@ -105,7 +109,8 @@ class BinaryTree {
 
 4. If the next value is less than the stack’s top value, make this value as the left child of the stack’s top node. Push the new node to the stack.
 
-5. Repeat steps 2 and 3 until there are items remaining in pre[].*/
+5. Repeat steps 2 and 3 until there are items remaining in pre[].
+*/
 
 
 // Java program to construct BST from given preorder traversal 
