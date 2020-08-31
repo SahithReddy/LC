@@ -1,68 +1,113 @@
-// Leetcode
-// Iterative
+/*
+In a binary tree, the root node is at depth 0, and children of each depth k node are at depth k+1.
 
-public boolean isCousins(TreeNode root, int A, int B) {
-    if (root == null) return false;
-	Queue<TreeNode> queue = new LinkedList<>();
-	queue.offer(root);
-	while (!queue.isEmpty()) {
-		int size = queue.size();
-		boolean isAexist = false;		
-		boolean isBexist = false;		
-		for (int i = 0; i < size; i++) {
-			TreeNode cur = queue.poll();
-            if (cur.val == A) isAexist = true;
-            if (cur.val == B) isBexist = true;
-			if (cur.left != null && cur.right != null) { 
-				if (cur.left.val == A && cur.right.val == B) { 
-					return false;
-				}
-				if (cur.left.val == B && cur.right.val == A) { 
-					return false;
-				}
-			}
-			if (cur.left != null) {
-				queue.offer(cur.left);
-			}
-			if (cur.right != null) {
-				queue.offer(cur.right);
-			}
-		}
-		if (isAexist && isBexist)  return true;
-	}
-	return false;
-}
+Two nodes of a binary tree are cousins if they have the same depth, but have different parents.
 
-/*Time O(n) n is no of nodes
-Space O(n) or O(h) h is the height*/
+We are given the root of a binary tree with unique values, and the values x and y of two different nodes in the tree.
 
+Return true if and only if the nodes corresponding to the values x and y are cousins.
+
+Example 1:
+Input: root = [1,2,3,4], x = 4, y = 3
+Output: false
+
+Example 2:
+Input: root = [1,2,3,null,4,null,5], x = 5, y = 4
+Output: true
+
+Example 3:
+Input: root = [1,2,3,null,4], x = 2, y = 3
+Output: false
+ 
+Constraints:
+The number of nodes in the tree will be between 2 and 100.
+Each node has a unique integer value from 1 to 100.
+*/
 ----------------------------------------------------------------
-// Recursive
-//dfs
-class Solution {
-    TreeNode xParent = null;
-    TreeNode yParent = null;
-    int xDepth = -1, yDepth = -1;
+/* Recursive:
+Use DFS to find each node's parent and level, and put them into a HashMap, then check if x and y are cousins.
+*/
+
+public boolean isCousins(TreeNode root, int x, int y) {
+    // Find two nodes
+    // Keep pointers to parent in a map
+
+    if (root == null) return false;
+    if (root.val == x || root.val == y) return false;
+
+    Map<Integer, int[]> map = new HashMap<>();
+
+    find(root, x, 0, root.val, map);
+    find(root, y, 0, root.val, map);
+
+    if (!map.containsKey(x) || !map.containsKey(y)) return false;
     
-    public boolean isCousins(TreeNode root, int x, int y) {
-        getDepthAndParent(root, x, y, 0, null);
-        return xDepth == yDepth && xParent != yParent? true: false;
-    }
-    //get both the depth and parent for x and y
-    public void getDepthAndParent(TreeNode root, int x, int y, int depth, TreeNode parent){
-        if(root == null){
-            return;
-        }
-        if(root.val == x){
-            xParent = parent;
-            xDepth = depth;
-        }else if(root.val == y){
-            yParent = parent;
-            yDepth = depth;
-        }       
-        getDepthAndParent(root.left, x, y, depth + 1, root);
-        getDepthAndParent(root.right, x, y, depth + 1, root);
-    }
+    boolean differentParents = map.get(x)[0] != map.get(y)[0];
+    boolean atSameDepth = map.get(x)[1] == map.get(y)[1];
+    
+    return atSameDepth && differentParents;
 }
 
-// Complexity same as above
+private void find(TreeNode root, int val, int depth, int parent, Map<Integer, int[]> map) {
+    if (root == null) return;
+
+    if (root.val == val) return; // base case.
+
+    map.put(root.val, new int[] {parent, depth}); // put corresponding level and parent into map.
+
+    find(root.left, val, depth + 1, root.val, map); // recurs to left branch.
+    find(root.right, val, depth + 1, root.val, map); // recurs to right branch.
+}
+-----------------------------------------
+/*
+Analysis
+Both methods need to traverse all nodes in worst case. Therefore,
+
+DFS
+Time: O(n), space: O(h)
+BFS
+Time & space: O(N),
+
+where N = total number of nodes, h is the height of the binary tree.
+*/
+--------------------------------------------
+/* BFS: 
+Use BFS to locate the depths of x and y;
+During the BFS iterations, check if x and y share same parent, if yes, return false;
+after iterations, check if x and y are in the same depth.
+*/
+
+    public boolean isCousins(TreeNode root, int x, int y) {
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
+        int xDepth = -1, yDepth = -2; // assign different dummy values to the depths of x & y.
+        for (int depth = 0; !q.isEmpty(); ++depth) { // control BFS depth.
+            for (int sz = q.size(); sz > 0; --sz) { // control BFS breadth.
+                TreeNode n = q.poll();
+                int sameParent = 0;
+                for (TreeNode child : new TreeNode[]{n.left, n.right}) {
+                    if (child != null) {
+                        q.offer(child);
+                        if (child.val == x) { // found x node 
+                            xDepth = depth;
+                            ++sameParent;
+                        }else if (child.val == y) { // found y node 
+                            yDepth = depth;
+                            ++sameParent;
+                        }
+                    }
+                }
+                if (sameParent == 2) { // if x and y share same parent, return false. 
+                    return false;
+                }
+            }
+        }
+        return xDepth == yDepth; // Are x & y in the same depth?
+    }
+
+/*
+Time O(n) n is no of nodes
+Space O(n) or O(h) h is the height
+*/
+
+
