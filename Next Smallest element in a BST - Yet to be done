@@ -1,14 +1,38 @@
 // Smallest number in BST which is greater than or equal to N
-/*Given a Binary Search Tree and a number N, the task is to find the smallest number in 
-the binary search tree that is greater than or equal to N. Print the value of the element if it exists otherwise print -1.*/
+/* QUESTION: 
+Given a Binary Search Tree and a number N, the task is to find the smallest number in 
+the binary search tree that is greater than or equal to N. Print the value of the element if it exists otherwise print -1.
 
-/*Input: N = 20
+Input: N = 5   
+              8
+            /   \
+           7     10
+         /      /   \
+        2      9     13
+
+Output: 7
+As 7 is the smallest number in BST which is greater than N = 5.
+
+Input: N = 10 
+           8
+         /   \
+        5    11
+      /  \
+     2    7
+      \
+       3
+
+Output: 11
+As 11 is the smallest number in BST which is greater than N = 10.
+
+Input: N = 20
 Output: 21
 Explanation: 21 is the smallest element greater than 20.
 
 Input: N = 18
 Output: 19
-Explanation: 19 is the smallest element greater than 18.*/
+Explanation: 19 is the smallest element greater than 18.
+*/
 
 /*Approach:
 The idea is to follow the recursive approach for solving the problem i.e. start searching for the element from the root.
@@ -16,8 +40,9 @@ The idea is to follow the recursive approach for solving the problem i.e. start 
 If there is a leaf node having a value less than N, then element doesn’t exist and return -1.
 Otherwise, if node’s value is greater than or equal to N and left child is NULL or less than N then return the node value.
 Else if node’s value is less than N, then search for the element in the right subtree.
-Else search for the element in the left subtree by calling the function recursively according to the left or right value.*/
-
+Else search for the element in the left subtree by calling the function recursively according to the left or right value.
+*/
+------------------------------------------
 // CODE:
 
 import java.util.*; 
@@ -107,4 +132,129 @@ public static void main(String[] args)
     System.out.println(findMinforN(root, N)); 
 } 
 } 
+// Output: 19
+
+Time complexity: O(N)
+Auxiliary Space: O(h), Recursive so height of tree
+---------------------------------------------------
+/* ALGORITHM: ITERATIVE - MORRIS TRAVERSAL - CONSTANT SPACE O(1)
+Using Morris Traversal the above problem can be solved in constant space. Find the inorder successor of the target. Keep two pointers, one pointing to the current node and one for storing the answer.
+Below is the implementation of the above approach:
+*/
+
+// Java code to find the smallest value greater 
+// than or equal to N 
+class GFG 
+{ 
+	static class Node 
+	{ 
+		int key; 
+		Node left, right; 
+	}; 
+
+	// To create new BST Node 
+	static Node newNode(int item) 
+	{ 
+		Node temp = new Node(); 
+		temp.key = item; 
+		temp.left = temp.right = null; 
+		return temp; 
+	} 
+
+	// To insert a new node in BST 
+	static Node insert(Node node, int key) 
+	{ 
+		// if tree is empty return new node 
+		if (node == null) 
+		{ 
+			return newNode(key); 
+		} 
+
+		// if key is less then or grater then 
+		// node value then recur down the tree 
+		if (key < node.key) 
+		{ 
+			node.left = insert(node.left, key); 
+		} 
+		else if (key > node.key) 
+		{ 
+			node.right = insert(node.right, key); 
+		} 
+
+		// return the (unchanged) node pointer 
+		return node; 
+	} 
+
+	// Returns smallest value greater than or 
+	// equal to key. 
+	static int findFloor(Node root, int key) 
+	{ 
+		Node curr = root, ans = null; 
+
+		// traverse in the tree 
+		while (curr != null) 
+		{ 
+
+			// if the node is smaller than N, 
+			// move right. 
+			if (curr.key > key) 
+			{ 
+				ans = curr; 
+				curr = curr.left; 
+			} 
+			
+			// if it is equal to N, then it will be 
+			// the answer 
+			else if (curr.key == key) 
+			{ 
+				ans = curr; 
+				break; 
+			} 
+			else // move to the right of the tree 
+			{ 
+				curr = curr.right; 
+			} 
+		} 
+
+		if (ans != null) 
+		{ 
+			return ans.key; 
+		} 
+		return -1; 
+	} 
+
+	// Driver code 
+	public static void main(String[] args) 
+	{ 
+		int N = 13; 
+
+		Node root = new Node(); 
+		insert(root, 19); 
+		insert(root, 2); 
+		insert(root, 1); 
+		insert(root, 3); 
+		insert(root, 12); 
+		insert(root, 9); 
+		insert(root, 21); 
+		insert(root, 25); 
+
+		System.out.printf("%d", findFloor(root, 15)); 
+	} 
+} 
+
+// Output: 19
+
+/*
+Time complexity: O(N)
+Auxiliary Space: O(1)
+*/
+
+
+
+
+
+
+
+
+
 
