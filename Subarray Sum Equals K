@@ -1,4 +1,4 @@
-/* 560:
+/* QUESTION: 560 Subarray Sum Equals K
 Given an array of integers and an integer k, you need to find the total number of continuous subarrays whose sum equals to k.
 
 Example 1:
@@ -38,7 +38,7 @@ Space complexity : O(1). Constant space is used.
 */
 ---------------------------------------------------------
 
-/* ALGORITHM: PreSum + HashMap
+/* ALGORITHM: PreSum + HashMap<PreSum, Frequency>
 we make use of a hashmap map which is used to store the cumulative sum upto all the indices possible along with the number of times the same sum occurs. 
 We store the data in the form: (sum_i, no. of occurences of sum_i) 
 We traverse over the array nums and keep on finding the cumulative sum. 
