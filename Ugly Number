@@ -1,0 +1,72 @@
+/* QUESTION:
+Write a program to check whether a given number is an ugly number.
+
+Ugly numbers are positive numbers whose prime factors only include 2, 3, 5.
+
+Example 1:
+
+Input: 6
+Output: true
+Explanation: 6 = 2 × 3
+Example 2:
+
+Input: 8
+Output: true
+Explanation: 8 = 2 × 2 × 2
+Example 3:
+
+Input: 14
+Output: false 
+Explanation: 14 is not ugly since it includes another prime factor 7.
+Note:
+
+1 is typically treated as an ugly number.
+Input is within the 32-bit signed integer range: [−231,  231 − 1].
+*/
+
+/* ALGORITHM:
+Just divide by 2, 3 and 5 as often as possible and then check whether we arrived at 1
+
+idea:
+
+(1) basic cases: <= 0 and == 1
+(2) other cases: since the number can contain the factors of 2, 3, 5, I just remove those factors. So now, I have a number without any factors of 2, 3, 5.
+(3) after the removing, the number (new number) can contain a) the factor that is prime and meanwhile it is >= 7, or b) the factor that is not the prime and the factor is not comprised of 2, 3 or 5. In both cases, it is false (not ugly number).
+For example, new number can be 11, 23 --> not ugly number (case a)). new number also can be 49, 121 --> not ugly number (case b))
+
+Would be a bit cleaner if I did the zero-test outside, and discarding negative numbers right away can speed things up a little
+As we know there are 2,3,5 are positive numbers, we can't form any negative numbers by these positive numbers.
+so, we must return "false" for every negative numbers.
+*/
+// Straight forward one
+public class Solution {
+public boolean isUgly(int num) {
+    if(num<=0) return false; // eliminate negatie numbers
+	while(num%2==0) num=num/2;
+	while(num%3==0) num=num/3;
+	while(num%5==0) num=num/5;
+    return num==1;
+}
+}
+-------------------------------------------------
+// A bit sophisticated solution
+public class Solution {
+    public static boolean isUgly(int num) {
+        if (num <= 0) {
+            return false;
+        }
+        
+        int[] divisors = {2, 3, 5};
+        
+        for(int d : divisors) {
+            while (num % d == 0) {
+                num /= d;
+            }
+        }
+        return num == 1;
+
+
+/* COMPLEXITY:
+In each division performed in the while loop n is getting reduced by at least half.
+Input will become n n/2 n/4 n/8...1 so the runtime is O(logn)
+*/
