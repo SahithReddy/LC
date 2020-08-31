@@ -1,5 +1,4 @@
-/*
-
+/* QUESTION
 Given a matrix of n x n size, the task is to find saddle point of the matrix. A saddle point is an element of the 
 matrix such that it is the minimum element in its row and maximum in its column.
 
@@ -17,8 +16,6 @@ Input: Mat[3][3] = {{1, 2, 3},
 Output: No saddle point
 
 */
-
-
 
 /*
 I think we can't do it in O(n)
@@ -87,4 +84,5 @@ class Test
 	} 
 } 
 
+// Output :Value of Saddle Point 7
 
