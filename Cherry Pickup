@@ -1,0 +1,146 @@
+/* QUESTION: 741. Cherry Pickup
+In a N x N grid representing a field of cherries, each cell is one of three possible integers.
+
+0 means the cell is empty, so you can pass through;
+1 means the cell contains a cherry, that you can pick up and pass through;
+-1 means the cell contains a thorn that blocks your way.
+
+Your task is to collect maximum number of cherries possible by following the rules below:
+
+Starting at the position (0, 0) and reaching (N-1, N-1) by moving right or down through valid path cells (cells with value 0 or 1);
+After reaching (N-1, N-1), returning to (0, 0) by moving left or up through valid path cells;
+When passing through a path cell containing a cherry, you pick it up and the cell becomes an empty cell (0);
+If there is no valid path between (0, 0) and (N-1, N-1), then no cherries can be collected.
+ 
+ 
+Example 1:
+
+Input: grid =
+[[0, 1, -1],
+ [1, 0, -1],
+ [1, 1,  1]]
+ 
+Output: 5
+
+Explanation: 
+The player started at (0, 0) and went down, down, right right to reach (2, 2).
+4 cherries were picked up during this single trip, and the matrix becomes [[0,1,-1],[0,0,-1],[0,0,0]].
+Then, the player went left, up, up, left to return home, picking up one more cherry.
+The total number of cherries picked up is 5, and this is the maximum possible.
+*/
+-----------------------------------------
+/* SOLUTION AND ALGORITHM : Better Refer Below Link
+https://leetcode.com/problems/cherry-pickup/discuss/329945/Very-easy-to-follow-%3A-step-by-step-recursive-backtracking-with-memoization-N4.
+*/
+
+/*
+
+It is easy to see:
+Instead of having two paths starting from 0,0 and then other path from N,N. 
+We can have two people starting from 0,0 and find two paths that collects maximum cherries.
+First  person finds the path to collect maximum cherries and mark those cherries collected then
+Second person finds another path to collect maximum cherries. 
+
+Though here is the case where local maximum is not global maximum. 
+So having cherry pick up by person1 and then person2 won't give the correct result. 
+This approach fails to find the best answer to this case. 
+
+Reference : https://leetcode.com/problems/cherry-pickup/solution/
+Approach #1: Greedy [Wrong Answer] 
+11100
+00101
+10100
+00100
+00111
+In above example we should be able to pick all cherries. I leave it up to you to figure out two paths that collect all cherries. 
+But, with our approach person1 will collect 9 cherries leaving once that is on the right(1,4) and on the left(2,0). 
+Then person2 won't be able to collect both cherries he can collect only right one or only left one. 
+
+Approach #2: 
+Now, we know that we want collectively maximum cherries.
+So, we have to do the traversal of both paths at the same time and select maximum global answer. 
+The potential problem of this approach is double counting (if we collect same cherry in 2 paths), but this can be easily avoided in code.
+If both are at the same cell we count cherry only once.
+Following code is backtracking brute force so it is TLE.
+I think Time Complexity is : 4^N*N. As we are calling cherryPickup 4 times recursively with problem size N*N.
+*/
+
+class Solution1 {
+  public int cherryPickup(int[][] grid) {
+    return Math.max(0, cherryPickup(grid, grid.length, 0, 0, 0, 0));
+  }
+
+  private int cherryPickup(int[][] grid, int n, int r1, int c1, int r2, int c2) {
+    // since we're only going down and to the right, no need to check for < 0
+    // if we went out of the grid or hit a thorn, discourage this path by returning Integer.MIN_VALUE
+    if(r1 >= n || c1 >= n || r2 >= n || c2 >= n || grid[r1][c1] == -1 || grid[r2][c2] == -1)
+      return Integer.MIN_VALUE;
+
+    // if person 1 reached the bottom right, return what's in there (could be 1 or 0)
+    if(r1 == n - 1 && c1 == n - 1)
+      return grid[r1][c1];
+
+    // if person 2 reached the bottom right, return what's in there (could be 1 or 0)
+    if(r2 == n - 1 && c2 == n - 1)
+      return grid[r2][c2];
+
+    int cherries;
+    // if both persons standing on the same cell, don't double count and return what's in this cell (could be 1 or 0)
+    if(r1 == r2 && c1 == c2)
+      cherries = grid[r1][c1];
+    else
+      // otherwise, number of cherries collected by both of them equals the sum of what's on their cells
+      cherries = grid[r1][c1] + grid[r2][c2];
+
+    // since each person of the 2 person can move only to the bottom or to the right, then the total number of cherries
+    // equals the max of the following possibilities:
+    //    P1     |      P2
+    //   DOWN    |     DOWN
+    //   DOWN    |     RIGHT
+    //   RIGHT   |     DOWN
+    //   RIGHT   |     RIGHT
+    cherries += Math.max(
+        Math.max(cherryPickup(grid, n, r1 + 1, c1, r2 + 1, c2), cherryPickup(grid, n, r1 + 1, c1, r2, c2 + 1)),
+        Math.max(cherryPickup(grid, n, r1, c1 + 1, r2 + 1, c2), cherryPickup(grid, n, r1, c1 + 1, r2, c2 + 1)));
+
+    return cherries;
+  }
+}
+
+/*
+Let that above solution sink in. Now think about memoization. 
+To make this solution use memoization, we have to think what states we have to preserve. 
+Here we want to track r1,c1 and r2,c2 positions. 
+So, if we create Integer[][][][] dp = new Integer[N][N][N][N];  
+and track all these states then it will reduce the time complexity to N^4.
+
+dp[r1][c1][r2][c2] will identify each state. 
+if dp[r1][c1][r2][c2] is null then that means we haven't computed subanswer for that state. 
+if dp[r1][c1][r2][c2] is NOT null then we just return calculated subanswer. 
+
+Personally I think if you come up with N^4 solution in the interview then it is awesome. 
+
+Runtime: 100 ms, faster than 6.59% of Java online submissions for Cherry Pickup.
+Memory Usage: 135.1 MB, less than 5.09% of Java online submissions for Cherry Pickup.
+*/
+class Solution {
+  public int cherryPickup(int[][] grid) {
+    int N = grid.length;
+    return Math.max(0, cherryPickup(grid, grid.length, 0, 0, 0, 0, new Integer[N][N][N][N]) );
+  }
+
+  private int cherryPickup(int[][] grid, int n, int r1, int c1, int r2, int c2, Integer dp[][][][]) {
+    /* First two lines are same as above */
+    
+    if(dp[r1][c1][r2][c2]!=null)
+        return dp[r1][c1][r2][c2];
+      
+   /*
+   This part is same as above 
+   */
+
+    dp[r1][c1][r2][c2] = new Integer(cherries);
+      
+    return dp[r1][c1][r2][c2];
+  }
+}
