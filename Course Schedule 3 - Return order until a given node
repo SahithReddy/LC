@@ -1,0 +1,128 @@
+/* QUESTION:
+To design algorithm to find dependencies of a specific node. Say for exampe there is an input stream 2d array in which nodes are given as [[7,11], [5,11], [3,8], [11,2], [11,9], [8,9],[3,10]] . Now for a given node say 2, the output should be [7,5,11,2] or [5,7,11,2]. Instead of numbers I was given characters.
+
+*/
+
+public static void main(String[] args) {
+	int[][] nodes =  {{7,11}, {5,11}, {3,8}, {11,2}, {11,9}, {8,9},{3,10}};
+	System.out.println(findNodes(nodes, 2));
+}
+
+private static List<Integer> findNodes(int[][] nodes, int startNode) {
+	List<Integer> res = new ArrayList<>();
+	Map<Integer, Set<Integer>> map = new HashMap<>();
+	for(int[] n : nodes) {
+		map.putIfAbsent(n[1], new HashSet<>());
+		map.get(n[1]).add(n[0]);
+	}
+	Set<Integer> visited = new HashSet<>();
+	bfs(map, res, visited, startNode);
+	Collections.reverse(res);
+	return res;
+}
+
+private static void bfs(Map<Integer, Set<Integer>> map, List<Integer> res, Set<Integer> visited, int startNode) {
+	Queue<Integer> q = new LinkedList<>();
+	q.offer(startNode);
+	while(!q.isEmpty()) {
+		int cur = q.poll();
+		if(!visited.contains(cur)) {
+			visited.add(cur);
+			res.add(cur);
+			for(int nei : map.getOrDefault(cur, new HashSet<>())) {
+				if(!visited.contains(nei)) {
+					q.offer(nei);
+				}
+			}
+		}
+	}
+}
+--------------------------------------------------
+// OPs solution with comments
+
+/*
+a -> d, b -> d, f -> a , h -> d , d -> i
+if d is the input character, then the result should be [f,a,b,h,d]
+*/
+
+import java.util.*;
+
+public class TopologicalSortOracle {
+private ArrayList findDependencyOfANode(char[][] input, char node){
+
+    ArrayList<Character> result = new ArrayList<>();
+    if(input == null || input.length == 0){
+        return result;
+    }
+
+    Map<Character, Set<Character>> graph = new HashMap<>();
+    Map<Character, Boolean> visited = new HashMap<>(); //
+    Set<Character> nodes = new HashSet<>();
+    Stack<Character> stackOfNodes = new Stack<>();
+
+    //find all unique nodes in the input
+    for(int i=0; i<input.length;i++){
+        nodes.add(input[i][0]);
+        nodes.add(input[i][1]);
+    }
+
+    for(char c : nodes){
+        graph.put(c , new HashSet<>());
+        visited.put(c, false);
+    }
+
+    //create adjacency list for each node in the input
+    for(int i=0; i<input.length; i++){
+        graph.get(input[i][0]).add(input[i][1]);
+    }
+    //find dependency of the input node using dfs
+    topologicalSortHelper(visited, stackOfNodes, node, graph);
+
+    while(!stackOfNodes.isEmpty()){
+        result.add(stackOfNodes.pop());
+    }
+
+    Collections.reverse(result);
+    return result;
+
+}
+
+private void topologicalSortHelper(Map<Character, Boolean> visited, Stack<Character> stackOfNodes, char node, Map<Character, Set<Character>> graph){
+    visited.put(node, true);
+    Set<Character> neighbours = graph.get(node);
+    for(char c : neighbours){
+        if (!visited.get(c)){
+            topologicalSortHelper(visited, stackOfNodes, c , graph);
+        }
+    }
+    //push node to determine topological sort
+    stackOfNodes.push(node);
+}
+
+public static void main(String[] args) {
+
+    TopologicalSortOracle obj = new TopologicalSortOracle();
+    char[][] input = new char[4][2];
+    input[0][0] = 'a';
+    input[0][1] = 'd';
+    input[1][0] = 'b';
+    input[1][1] = 'd';
+    input[2][0] = 'f';
+    input[2][1] = 'a';
+    input[3][0] = 'd';
+    input[3][1] = 'q';
+    ArrayList<Character> result = obj.findDependencyOfANode(input, 'b');
+    for(char c : result){
+        System.out.println(c);
+    }
+}
+}
+
+
+
+
+
+
+
+
+
