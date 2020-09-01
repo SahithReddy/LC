@@ -1,5 +1,4 @@
-/*
-QUESTION:
+/* QUESTION:
 Input:
 beginWord = "hit",
 endWord = "cog",
@@ -23,8 +22,7 @@ Explanation: The endWord "cog" is not in wordList, therefore no possible transfo
 
 */
 
-/*
-ALGORITHM:
+/* ALGORITHM: BFS
 
     1. Search from both ends.
             
