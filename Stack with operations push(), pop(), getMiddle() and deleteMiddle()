@@ -4,5 +4,96 @@ https://www.geeksforgeeks.org/design-a-stack-with-find-middle-operation/?ref=rp
 // Just Delete Middle : Uisng Recursion
 https://www.geeksforgeeks.org/delete-middle-element-stack/
 
-// Both Combined but I'm not sure if it works
-https://github.com/nkatre/Operations-on-Stack/blob/master/findMiddle%20and%20deleteMiddle%20in%20constant%20time%20in%20Stack
+/* 
+Both Combined but I'm not sure if it works
+Need Driver Code to Add Stack values
+For driver code refere first GFG link
+*/
+public class solution{
+    public static void main(String[] args){
+    class StackNode {
+
+    int data;
+    StackNode next;
+    StackNode previous;
+
+    StackNode() {
+        previous = null;
+        next = null;
+    }
+
+
+}
+    class Stack {
+
+    int top;
+    StackNode middle;
+    StackNode last;
+    boolean flag;
+
+    Stack() {
+
+        top = 0;
+        middle = null;
+        last = null;
+        flag = false;//odd elements -true
+    }
+
+    void push(int data) {
+        StackNode newNode = new StackNode();
+        newNode.data = data;
+        if (last == null) {
+
+            last = newNode;
+            middle = newNode;
+            flag = true;
+        } else {
+            StackNode temp = last;
+            last = newNode;
+            temp.next = newNode;
+            newNode.previous = temp;
+            flag = !flag;
+
+            if (flag) {
+
+                middle = middle.next;
+            }
+
+        }
+
+    }
+
+
+    void print() {
+
+        StackNode temp = last;
+
+        while (temp != null) {
+
+            System.out.println(temp.data);
+            temp = temp.previous;
+        }
+    }
+
+    int getMiddle() {
+
+        return middle.data;
+    }
+
+    void deletMiddle() {
+
+        StackNode temp=middle;
+        middle.previous.next=middle.next;
+        middle.next.previous=middle.previous;
+        flag=!flag;
+        if(!flag){
+            middle=temp.previous;
+        }
+    }
+}
+    }
+    
+}
+
+
+
