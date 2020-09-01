@@ -1,0 +1,13 @@
+/*
+Given a file structure, convert it into a tree
+Eg : If root is the main folder under which you have folders like src, js, etc and under each sub folder you may have many other sub-folders. Given this structure return a tree.
+
+I was a perplexed initially but I was able to solve the problem withing 40 min. I felt like I nailed the interview as I have never seen a question like this before but still solved it t
+*/
+
+https://stackoverflow.com/questions/18590694/how-to-convert-list-of-filepaths-to-a-hireachial-tree-in-java
+https://stackoverflow.com/questions/10929775/java-tree-to-represent-filesystem-files-dir-from-list-of-paths
+https://stackoverflow.com/questions/9084094/java-turning-strings-into-a-tree
+https://stackoverflow.com/questions/1005551/construct-a-tree-structure-from-list-of-string-paths
+
+https://stackoverflow.com/questions/35419096/converting-a-delimited-file-into-a-tree
