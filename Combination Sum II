@@ -26,6 +26,9 @@ A solution set is:
   [5]
 ]
 */
+
+// https://leetcode.com/problems/combination-sum/discuss/16502/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning)
+
 // BACKTRACKING:
 
 public List<List<Integer>> combinationSum2(int[] nums, int target) {
