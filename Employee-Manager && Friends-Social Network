@@ -1,0 +1,20 @@
+There are multiple sources for this problem with variations:
+
+/* https://www.careercup.com/question?id=5638836259389440
+A company's organizational structure is represented as
+1: 2, 3, 4
+In the above employees with id 2, 3 and 4 report to 1
+Assume the following hierarchy.
+1: 2, 3, 4
+3: 5, 6, 7
+5: 8, 9, 10
+Given an employee Id, return all the employees reporting to him directly or indirectly
+*/
+
+/* https://www.techiedelight.com/find-employees-who-reports-to-manager/
+Similar and on th elines of question posted above but this returns mapping of all employess/manager
+*/
+
+/* https://www.geeksforgeeks.org/find-number-of-employees-under-every-manager/
+This just calculates number of reportee/friends instead of listing them
+*/
