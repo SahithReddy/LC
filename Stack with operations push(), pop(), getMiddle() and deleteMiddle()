@@ -1,0 +1,8 @@
+// Find Middle:
+https://www.geeksforgeeks.org/design-a-stack-with-find-middle-operation/?ref=rp
+
+// Just Delete Middle : Uisng Recursion
+https://www.geeksforgeeks.org/delete-middle-element-stack/
+
+// Both Combined but I'm not sure if it works
+https://github.com/nkatre/Operations-on-Stack/blob/master/findMiddle%20and%20deleteMiddle%20in%20constant%20time%20in%20Stack
