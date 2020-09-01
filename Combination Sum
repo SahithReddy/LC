@@ -47,6 +47,8 @@ Here is the order that the elements get added to the list
 It is important to visual this order for easy understanding of the code.
 */
 
+// https://leetcode.com/problems/combination-sum/discuss/16502/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning)
+
 public List<List<Integer>> combinationSum(int[] nums, int target) {
     List<List<Integer>> list = new ArrayList<>();
     Arrays.sort(nums);
