@@ -10,6 +10,7 @@ Follow-up:
 Questions: What is the time complexity? What is the space complexity? Can you solve it in O(n) time? (I used an integer array to store the average and sorted it using Arrays.sort(). But then, I refined my code to store only the maximum average, when I calculated the average).
 
 https://leetcode.com/discuss/interview-question/394477/Goldman-Sachs-or-Phone-or-Highest-Average-Score-and-Power-of-10
+https://www.glassdoor.com/Interview/Coderpad-given-an-array-scores-jerry-65-bob-91-jerry-23-Eric-83-Find-the-student-with-hi-QTN_2587199.htm
 */
 -----------------------------------------------------------
 
