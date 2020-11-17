@@ -38,3 +38,127 @@ class Solution {
 Time complexity : O(N) since we go through the string of length N two times.
 space complexity is constant O(26) ~ O(1) for any length of string
 */
+-------------------------------------------
+
+// https://www.geeksforgeeks.org/given-a-string-find-its-first-non-repeating-character/.  -- this has hashmap method whoch does one iteration
+
+/*
+Method 2: HashMap and single string traversal.
+
+Approach: Make a count array instead of hash_map of maximum number of characters(256). We can augment the count array by storing not just counts but also the index of the first time you encountered the character e.g. (3, 26) for ‘a’ meaning that ‘a’ got counted 3 times and the first time it was seen is at position 26. So when it comes to finding the first non-repeater, we just have to scan the count array, instead of the string. Thanks to Ben for suggesting this approach.
+
+Algorithm :
+
+Make a count_array which will have two fields namely frequency, first occurence of a character.
+The size of count_array is ‘256’.
+Traverse the given string using a pointer.
+Increase the count of current character and update the occurence.
+Now here’s a catch, the array will contain valid first occurence of the character which has frequency has unity otherwise the first occurence keeps updating.
+Now traverse the count_array and find the character which has least value of first occurence and frequency value as unity.
+Return the character
+
+Pseudo Code :
+
+for ( i=0 to str.length())
+count_arr[str[i]].first++;
+count_arr[str[i]].second=i;
+
+int res=INT_MAX;
+for(i=0 to count_arr.size())
+  if(count_arr[str[i]].first==1)
+  res=min(min, count_arr[str[i]].second)
+
+return res
+*/
+
+// Java program to find first 
+// non-repeating character 
+// Note : hashmap is used 
+
+import java.util.*; 
+
+class CountIndex { 
+	int count, index; 
+
+	// constructor for first occurrence 
+	public CountIndex(int index) 
+	{ 
+		this.count = 1; 
+		this.index = index; 
+	} 
+
+	// method for updating count 
+	public void incCount() 
+	{ 
+		this.count++; 
+	} 
+} 
+class GFG { 
+	static final int NO_OF_CHARS = 256; 
+
+	static HashMap<Character, CountIndex> hm 
+		= new HashMap<Character, CountIndex>(NO_OF_CHARS); 
+
+	/* calculate count of characters 
+	in the passed string */
+	static void getCharCountArray(String str) 
+	{ 
+		for (int i = 0; i < str.length(); i++) { 
+			// If character already occurred, 
+			if (hm.containsKey(str.charAt(i))) { 
+				// updating count 
+				hm.get(str.charAt(i)).incCount(); 
+			} 
+
+			// If it's first occurrence, then store 
+			// the index and count = 1 
+			else { 
+				hm.put(str.charAt(i), new CountIndex(i)); 
+			} 
+		} 
+	} 
+
+	/* The method returns index of first non-repeating 
+	character in a string. If all characters are repeating 
+	then returns -1 */
+	static int firstNonRepeating(String str) 
+	{ 
+		getCharCountArray(str); 
+		int result = Integer.MAX_VALUE, i; 
+		for (Map.Entry<Character, CountIndex> entry : hm.entrySet()) 
+		{ 
+			int c=entry.getValue().count; 
+			int ind=entry.getValue().index; 
+			if(c==1 && ind < result) 
+			{ 
+				result=ind; 
+			} 
+		} 
+		
+
+		return result; 
+	} 
+
+	// Driver method 
+	public static void main(String[] args) 
+	{ 
+		String str = "geeksforgeeks"; 
+		int index = firstNonRepeating(str); 
+
+		System.out.println( 
+			index == Integer.MAX_VALUE 
+				? "Either all characters are repeating "
+					+ " or string is empty"
+				: "First non-repeating character is "
+					+ str.charAt(index)); 
+	} 
+} 
+
+/*
+Complexity Analysis:
+
+Time Complexity: O(n).
+As the string need to be traversed at-least once.
+Auxiliary Space: O(n).
+The space is occupied by the use of count_array/hash_map to keep track of frequency.
+*/
