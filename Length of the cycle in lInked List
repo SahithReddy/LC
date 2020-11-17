@@ -1,0 +1,100 @@
+/* QUESTION: https://www.geeksforgeeks.org/find-length-of-loop-in-linked-list/
+Write a function detectAndCountLoop() that checks whether a given Linked List contains loop and if loop is present then returns count of nodes in loop. For example, the loop is present in below-linked list and length of the loop is 4. If the loop is not present, then the function should return 0.
+
+*/
+
+/*
+APPROACH: It is known that Floyd’s Cycle detection algorithm terminates when fast and slow pointers meet at a common point. It is also known that this common point is one of the loop nodes. Store the address of this common point in a pointer variable say (ptr). Then initialize a counter with 1 and start from the common point and keeps on visiting the next node and increasing the counter till the common pointer is reached again.
+At that point, the value of the counter will be equal to the length of the loop.
+
+ALGORITHM:
+Find the common point in the loop by using the Floyd’s Cycle detection algorithm
+Store the pointer in a temporary variable and keep a count = 0
+Traverse the linked list until the same node is reached again and increase the count while moving to next node.
+Print the count as length of loop
+*/
+
+// http://tpcg.io/BHioDsvR
+
+import java.io.*; 
+  
+public class GFG { 
+      
+  
+/* Link list node */
+static class Node  
+{  
+    int data; 
+    Node next; 
+    Node(int data) 
+    { 
+        this.data =data; 
+        next =null; 
+    } 
+} 
+  
+/* This function detects and counts loop  
+nodes in the list. If loop is not there  
+in then returns 0 */
+static int countNodesinLoop( Node list)  
+{  
+    Node slow_p = list, fast_p = list;  
+  
+    while (slow_p !=null && fast_p!=null && fast_p.next!=null)  
+    {  
+        slow_p = slow_p.next;  
+        fast_p = fast_p.next.next;  
+  
+        /* If slow_p and fast_p meet at some point  
+        then there is a loop */
+        if (slow_p == fast_p)  
+            return countNodes(slow_p);  // implemented below
+    }  
+  
+    /* Return 0 to indeciate that ther is no loop*/
+    return 0;  
+}  
+
+// Returns count of nodes present in loop.  
+static int countNodes( Node n)  
+{  
+int res = 1;  
+Node temp = n;  
+while (temp.next != n)  
+{  
+    res++;  
+    temp = temp.next;  
+}  
+return res;  
+} 
+
+static Node newNode(int key)  
+{  
+    Node temp = new Node(key); 
+      
+    return temp;  
+}  
+  
+/* Driver program to test above function*/
+    public static void main (String[] args) { 
+    Node head = newNode(1);  
+    head.next = newNode(2);  
+    head.next.next = newNode(3);  
+    head.next.next.next = newNode(4);  
+    head.next.next.next.next = newNode(5);  
+  
+    /* Create a loop for testing */
+    head.next.next.next.next.next = head.next;  
+  
+    System.out.println( countNodesinLoop(head));  
+    } 
+}
+
+/*
+Complexity Analysis:
+
+Time complexity:O(n).
+Only one traversal of the linked list is needed.
+Auxiliary Space:O(1).
+As no extra space is required.
+*/
