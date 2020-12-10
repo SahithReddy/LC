@@ -1,0 +1,46 @@
+// O(nlogn)
+int[] arr = new int[]{34, 45, 21, 12, 54, 67, 15};
+Arrays.sort(arr);
+System.out.println(arr[1]);
+
+-------------------------------------------
+// Time: O(n)
+// https://stackoverflow.com/questions/30427857/finding-the-second-smallest-integer-in-array
+
+int[] elements = {-5, -4, 0, 2, 10, 3, -3};
+int smallest = Integer.MAX_VALUE;
+int secondSmallest = Integer.MAX_VALUE;
+for (int i = 0; i < elements.length; i++) {
+    if (elements[i] < smallest) {
+        secondSmallest = smallest;
+        smallest = elements[i];
+    } else if (elements[i] < secondSmallest) {
+        secondSmallest = elements[i];
+    }
+}
+
+-----------------------------------------------------
+// Bit refined with error throwing
+
+  public static int secondSmallest(int[] arr) {
+    if(arr==null || arr.length < 2) {
+        throw new IllegalArgumentException("Input array too small");
+    }
+
+    //implement
+    int firstSmall = -1;
+    int secondSmall = -1;
+
+    //traverse to find 1st small integer on array
+    for (int i = 0; i<arr.length;i++)
+        if (firstSmall == -1 || arr[firstSmall]>arr[i])
+            firstSmall = i;
+
+     //traverse to array find 2 integer, and skip first small
+    for (int i = 0;i<arr.length;i++) {
+        if (i != firstSmall && (secondSmall == -1 || arr[secondSmall] > arr[i]))
+            secondSmall = i;
+    }
+
+    return arr[secondSmall];
+}
