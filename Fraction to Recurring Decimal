@@ -1,0 +1,142 @@
+/* 166. Fraction to Recurring Decimal
+
+Given two integers representing the numerator and denominator of a fraction, return the fraction in string format.
+
+If the fractional part is repeating, enclose the repeating part in parentheses.
+
+If multiple answers are possible, return any of them.
+
+It is guaranteed that the length of the answer string is less than 104 for all the given inputs.
+
+Example 1:
+
+Input: numerator = 1, denominator = 2
+Output: "0.5"
+Example 2:
+
+Input: numerator = 2, denominator = 1
+Output: "2"
+Example 3:
+
+Input: numerator = 2, denominator = 3
+Output: "0.(6)"
+Example 4:
+
+Input: numerator = 4, denominator = 333
+Output: "0.(012)"
+Example 5:
+
+Input: numerator = 1, denominator = 5
+Output: "0.2"
+
+Constraints:
+-231 <= numerator, denominator <= 231 - 1
+denominator != 0
+*/
+-------------------------------------------------------------
+/* ALGORITHM:
+The important thing is to consider all edge cases while thinking this problem through, including: negative integer, possible overflow, etc.
+
+Use HashMap to store a remainder and its associated index while doing the division so that whenever a same remainder comes up, we know there is a repeating fractional part.
+*/
+-------------------------------------------------------------
+
+/*
+Numerator = -1
+Denominator = -2147483648
+This test case is pure evil. It turns this question into a dumb / trick question. I just changed the function signature to long to submit my answer.
+*/
+
+public class Solution {
+
+public String fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0) return "0";
+        
+        // Determine the sign of the result
+        String sign = (numerator > 0) == (denominator > 0) ? "" : "-"; //Sign
+    
+        long num = Math.abs((long) numerator);
+        
+        long den = Math.abs((long) denominator); 
+    
+        return sign + (num / den) + fraction(num % den, den);
+    } 
+    
+    private static String fraction(long numerator, long denominator) {
+        if (numerator == 0) return "";
+        
+        StringBuilder res = new StringBuilder();
+        res.append("."); // dot between number & decimal
+        
+        HashMap<Long, Integer> map = new HashMap<Long, Integer>(); //Numerator->Index
+        map.put(numerator, res.length());
+        
+        while (numerator != 0) {
+            numerator *= 10;
+            res.append(numerator / denominator);
+            numerator %= denominator;
+            
+            //If the same numerator is observed before
+            // Add the brackets to index where that numerator was observed
+            if (map.containsKey(numerator)) {
+                int index = map.get(numerator);
+                res.insert(index, "(");
+                res.append(")");
+                break;
+            }
+            
+            map.put(numerator, res.length());
+        }
+        return res.toString();
+    }
+}
+------------------------------------------------------------------
+// The time complexity should be O (denominator), cause the mod must be less than denominator. so you can run from 1 to mod times
+// I think the space complexity is O(n), because the space linearly increase.
+
+/* MORE DETAILED COMPELXITY EXPLANATION:
+I think the best example to test time complexity is the Worst Case which would be 4/333, the While loop is crux here. It runs for rem=4, rem=40,rem=67,rem=4 in this flow, i.e 4 times
+
+Consider another example 41413/9990 gives 4.1454454454... => 4.1(454)
+414130/9990 yield 4(long)
+so string is 4. length 2
+
+focus on the while loop:
+1st iteration: rem = 1453 not in map so put (1453,2) in map
+update rem to 14530, append 14530/9990 which is 1 to string. string becomes 4.1 (length 3)
+update rem to 14530% 9990 = 4540
+
+Map :
+1453 . 2
+
+2nd iteration: rem = 4540 not in map so put (4540,3) in map
+update rem to 45400, append 45400/9990 which is 4 to string. string becomes 4.14 (length 4)
+update rem to 45400% 9990 = 5440
+
+Map :
+1453 . 2
+4540 , 3
+
+3rd iteration: rem = 5440 not in map so put (5440,4) in map
+update rem to 54400, append 54400/9990 which is 5 to string. string becomes 4.145 (length 5)
+update rem to 54400% 9990 = 4450
+
+Map :
+1453 . 2
+4540 , 3
+5440 , 4
+
+4th iteration: rem = 4450 not in map so put (4450 , 5) in map
+update rem to 44500, append 44500/9990 which is 4 to string. string becomes 4.1454 (length 6)
+update rem to 44500% 9990 = 4540
+
+Map :
+1453 . 2
+4540 , 3
+5440 , 4
+4450 , 5
+
+5th iteration Bingo! rem 4540 is in the map, pick the value at 4450 in map, i.e 3 and insert '(' then append ')' at the end.
+
+Loop ran for 5 iterations, length(divisor)+1, So Time complexity is linear, O(N) . Space is O(length(divisor)), just look at the Map size in the end and divisor length again. O(N) linear.
+*/
