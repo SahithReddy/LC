@@ -61,7 +61,7 @@ Output: 5
 Explanation: After calling your read method, buf should contain "leetc". We read a total of 5 characters from the file, so return 5.
 
 */
-
+----------------------------------------------------------------
 /* ALGORITHM:
 1.We need a temporary array to pass to read4 to read the characters.
 2. Count gives the characters read.
@@ -120,7 +120,7 @@ public class Solution extends Reader4 {
 }
 
 ---------------------------------------
-/*
+/* COMPLEXITY:
 Time O (N) Space O (1)
 */
 
