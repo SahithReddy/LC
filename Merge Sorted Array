@@ -13,6 +13,12 @@ nums2 = [2,5,6],       n = 3
 
 Output: [1,2,2,3,5,6]
 
+Constraints:
+nums1.length == m + n
+nums2.length == n
+0 <= m, n <= 200
+1 <= m + n <= 200
+-109 <= nums1[i], nums2[i] <= 109
 */
 
 
@@ -70,8 +76,8 @@ destPos : starting position in destination array, where to copy in
 len : total no. of components to be copied.
 
 
-Time complexity : \mathcal{O}((n + m)\log(n + m))O((n+m)log(n+m)).
-Space complexity : \mathcal{O}(1)O(1).
+Time complexity : O((n+m)log(n+m)).
+Space complexity : O(1).
 ---------------------------------------------------------------------------------------------------
 
 
