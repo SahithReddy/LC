@@ -23,6 +23,9 @@ You must not use any built-in BigInteger library or convert the inputs to intege
 Remember how we do multiplication?
 
 Start from right to left, perform multiplication on every pair of digits, and add them together. Let's draw the process!
+
+Thing to note:
+1. The product of two numbers cannot exceed the sum of the two lengths. (e.g. 99 * 99 cannot be five digit)
     
         1 2 3 | s1[0,1,2] index i
           4 5 |   s2[0,1] index j
