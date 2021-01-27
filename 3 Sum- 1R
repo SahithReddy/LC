@@ -16,10 +16,10 @@ A solution set is:
 ]
 
 */
--------------------------------------
+---------------------------------------------
 // Explanation is here https://www.youtube.com/watch?v=qJSPYnS35SE
 
-/* ALGORITHM: TWO POINTER
+/* ALGORITHM: TWO POINTER // BUT DOWN THERE IS ONE WITH HASHSET. SHORT CODE TO WRITE
 The idea is to sort an input array and then run through all indices of a possible first element of a triplet.
 For each possible first element we make a standard bi-directional 2Sum sweep of the remaining part of the array.
 Also we want to skip equal elements to avoid duplicates in the answer without making a set or smth like that.
@@ -52,15 +52,18 @@ class Solution {
 public List<List<Integer>> threeSum(int[] num) {
     Arrays.sort(num);
     List<List<Integer>> res = new LinkedList<>(); 
-    for (int i = 0; i < num.length-2; i++) {
-        if(nums[i]>0) break;
+    // num.length-2 is because we need at least 3 numbers to continue.
+    for (int i = 0; i < num.length-2; i++) { 
+        // Since the array is sorted there won't be any chance the next entries sum to 0.
+        if(nums[i]>0) break; 
+        // nums[i] != nums[i-1] ischecking duplicate again.
         if (i == 0 || num[i] != num[i-1]) {
             int lo = i+1, hi = num.length-1, sum = 0 - num[i];
             while (lo < hi) {
                 if (num[lo] + num[hi] == sum) {
                     res.add(Arrays.asList(num[i], num[lo], num[hi]));
-                    while (lo < hi && num[lo] == num[lo+1]) lo++;
-                    while (lo < hi && num[hi] == num[hi-1]) hi--;
+                    while (lo < hi && num[lo] == num[lo+1]) lo++; // skip same result/duplicates
+                    while (lo < hi && num[hi] == num[hi-1]) hi--; // skip same result/duplicates
                     lo++; hi--;
                 } else if (num[lo] + num[hi] < sum) {
                     // improve: skip duplicates
@@ -77,16 +80,21 @@ public List<List<Integer>> threeSum(int[] num) {
     return res;
    }
 }
-
-/* time O(n^2), space O(n)
+-------------------------------------------------
+/* time O(n^2) in total
 (1) Sort the array - O(nlogn)
-(2) Iterate the array - O(n)
-(3) Find valid triplets - O(n)
+(2) Iterate the array - O(n) for loop & (3) Find valid triplets - O(n)
+Explanation: Sorting takes O(nlogn) & 'for' loop and 'while' loop takes O(n^2) together. But since O(n^2) > O(nlogn). Therefore, O(n^2).
 Overall time complexity: O(n^2)
+
+Space: from O(logn) to O(n), depending on the implementation of the sorting algorithm.
 */
 
 ---------------------------------------------------------
-// Brilliant and SMall upto yhe point - Took HashSet to avoid duplicates
+/* ALGORITHM: HASHSET
+Brilliant and SMall upto the point - Took HashSet to avoid duplicates
+*/
+
 public  List<List<Integer>> threeSum(int[] nums) {
         Set<List<Integer>> res  = new HashSet<>();
         if(nums.length==0) return new ArrayList<>(res);
@@ -114,6 +122,13 @@ As the array is already sorted. j being the left pointer (pointing to lower numb
 (pointing to higher numbers), with a static index i. If nums[i] + nums[j] + nums[k] is greater than target then we know 
 we need to select the next highest number hence k--. Same way when the sum is lower we need to select a number just 
 higher than the lowest.
+*/
+---------------------------------------------------------------------------------------------------------
+/*
+Time complexity: O(n^2)
+Explanation: Sorting takes O(nlogn) & 'for' loop and 'while' loop takes O(n^2) together. But since O(n^2) > O(nlogn). Therefore, O(n^2).
+Space complexity: O(n), For HashSet
+Explanation: As the total elements are n and the space complexity will be some factor of n. Therefore, after removing constant, we are left with O(n).
 */
 ------------------------------------------------------
 // There is one solutiomn without Sorting the input array. Refer Official solution Approach 3 for that.
