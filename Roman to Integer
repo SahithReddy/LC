@@ -41,11 +41,17 @@ Input: "MCMXCIV"
 Output: 1994
 Explanation: M = 1000, CM = 900, XC = 90 and IV = 4.
 */
+------------------------------------------------------------------
+/* ALGORITHM: HashMap and Calculation Logic
+Take a HashMap<Character, Integer> and insert given values in it. The trick here is to traverse/scan the strings backwards(tail to head). Put last character value(s.charAt(len - 1)) from the map into 'reult' variable. Iterate from last but one character as we pushed last char to result variable. While doing this iteration, if s.charAt(i)'s corresponding integer is greater than or equal to the previous one(s.charAt(i + 1)), add it to the result; otherwise, subtract it from the result.
+
+*/
 
 class Solution {
     	public static int romanToInt(String s) {
-	if (s == null || s.length() == 0)
-		return -1;
+	// edge case
+	if (s == null || s.length() == 0) return -1;
+	
 	HashMap<Character, Integer> map = new HashMap<Character, Integer>();
 	map.put('I', 1);
 	map.put('V', 5);
@@ -54,7 +60,9 @@ class Solution {
 	map.put('C', 100);
 	map.put('D', 500);
 	map.put('M', 1000);
-	int len = s.length(), result = map.get(s.charAt(len - 1));
+	int len = s.length();
+	int result = map.get(s.charAt(len - 1)); // assigning last char value from map
+	// Iterating from last but one character as we pushed last char to result variable
 	for (int i = len - 2; i >= 0; i--) {
 		if (map.get(s.charAt(i)) >= map.get(s.charAt(i + 1)))
 			result += map.get(s.charAt(i));
@@ -68,18 +76,15 @@ class Solution {
 
 /* 
 Time: O(1)
-
 As there is a finite set of roman numerals, the maximum number possible number can be 3999, which in roman numerals is MMMCMXCIX. As such the time complexity is O(1).
 
 O(n) time complexity represents how your code complexity grows with the increase in the size of the input. For example if the input is of size 10 your for loop runs 10 times but what if it was 1 million ? It will run 1 million times. But in this problem there is a
 constant number of inputs that you can use as input. 3999, which in roman numerals is MMMCMXCIX. Your for loop will run say a maximum of 9 times which is a constant time. So code time complexity is O(1).
 
 -->If the roman numerals had an arbitrary number of symbols, then the time complexity would be proportional to the length of the input, i.e. O(n). This is assuming that looking up the value of each symbol is O(1).
-
 */
 
 /*
-
 Space: O(1) n=7 different romans
 Because only a constant number of single-value variables are used, the space complexity is O(1).
 */
