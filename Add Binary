@@ -21,16 +21,24 @@ Each string is either "0" or doesn't contain any leading zero.
 */
 ----------------------------------------------------------------------
 public String addBinary(String a, String b) {
-    StringBuilder sb = new StringBuilder(); // Google immutability or string vs stringbuilder if you don't know why we use this instead of regular string
-    int i = a.length() - 1, j = b.length() -1, carry = 0; //two pointers starting from the back, just think of adding two regular ints adding from back
+    StringBuilder sb = new StringBuilder(); // immutability
+    // two pointers starting from the back, just think of adding two regular ints adding from back
+    int i = a.length() - 1, j = b.length() -1, carry = 0; 
     while (i >= 0 || j >= 0) {
-        int sum = carry; //if there is a carry from the last addition, add it to carry 
-        if (j >= 0) sum += b.charAt(j--) - '0'; //we subtract '0' to get the int value of the char from the ascii
+        int sum = carry; //if there is a carry from the last addition, add it to sum
+        //we subtract '0' to get the int value of the char from the ascii
+        if (j >= 0) sum += b.charAt(j--) - '0'; 
         if (i >= 0) sum += a.charAt(i--) - '0';
-        sb.append(sum % 2); // sum==0 and if sum==2 this will append 0 because 1+1=0 in this case as this is binary(base 2) (just like 1+9 is 0 if adding ints(base 10) in columns)
-        carry = sum / 2; //if sum==2 we have a carry of 1, else no carry. 1/2 rounds down to 0 in integer arithematic.
+        /* if sum==2 this will append 0 because 1+1=0 in this case as this is binary(base 2) (just like 1+9 is 0 if adding ints(base 10) in columns)
+        or if suum==0
+        */
+        sb.append(sum % 2); 
+        
+        /* if sum==2 we have a carry of 1, else no carry. 1/2 rounds down to 0 in integer arithematic.
+        */
+        carry = sum / 2; 
     }
-    if (carry != 0) sb.append(carry); //leftover carry, add it
+    if (carry != 0) sb.append(carry); // leftover carry, add it
     return sb.reverse().toString();
 }
 --------------------------------------------------------------------------
