@@ -12,6 +12,8 @@ Example 2:
 Input: "race a car"
 Output: false
 
+Constraints:
+s consists only of printable ASCII characters.
 */
 
 public class Solution {
