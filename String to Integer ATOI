@@ -27,10 +27,10 @@ Explanation: The number "-91283472332" is out of the range of a 32-bit signed in
 
 /*
 I think we only need to handle four cases:
-discards all leading whitespaces
-sign of the number
-overflow
-invalid input
+1.discards all leading whitespaces
+2.sign of the number
+3.overflow
+4.invalid input
 */
 
 
