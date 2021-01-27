@@ -16,13 +16,13 @@ All inputs will be in lowercase.
 The order of your output does not matter.
 */
 ---------------------------------------------------------
-/* ALGORITHM: Int [26] + HashMap
+/* ALGORITHM: Int [26] + HashMap<String, List<String>>
 INTUITON:
 Two strings are anagrams if and only if their character counts (respective number of occurrences of each character) are the same.
 
-ALGORITHM:
+ALGORITHM: 
 
-We can transform each string \text{s}s into a character count, \text{count}count, consisting of 26 non-negative integers representing the number of a's, b's, c's, etc. We use these counts as the basis for our hash map.
+We can transform each string S into a character count, char[26] ca, consisting of 26 non-negative integers representing the number of a's, b's, c's, etc. We use these counts as the basis for our hash map.
 */
 
 // Optimal Solution
@@ -51,7 +51,7 @@ class Solution {
 /*
 Time Complexity: O(NK), where N is the length of strs, and K is the maximum length of a string in strs. Counting each string is linear in the size of the string, and we count every string.
 
-Space Complexity: O(NK), the total information content stored in ans.
+Space Complexity: O(NK), the total information content stored in map.
 */
 ---------------------------------------------------------------------------------------------------------------
 
