@@ -5,8 +5,12 @@ Example:
 
 Input:  [1,2,3,4]
 Output: [24,12,8,6]
-Constraint: It's guaranteed that the product of the elements of any prefix or suffix of the array (including the whole array) fits in a 32 bit integer.
 
+CONSTRAINT: It's guaranteed that the product of the elements of any prefix or suffix of the array (including the whole array) fits in a 32 bit integer.
+NOTE: Please solve it without division and in O(n).
+
+FOLLOW UP:
+Could you solve it with constant space complexity? (The output array does not count as extra space for the purpose of space complexity analysis.)
 */
 
 /* ALGORITHM: NO DIVISION ALLOWED 
@@ -37,7 +41,7 @@ class Solution {
 // Time: O(n), Space: O(N) because of FB interview constraints the extra array for result is considered as extra space
 
 ----------------------------------------
-// If DIVISION is allowed is performed and keep track of 0s here then O(1) space complexity can be achieved
+// If DIVISION is ALLOWED is performed and keep track of 0s here then O(1) in-place space complexity can be achieved
 
 class Solution {
     public int[] productExceptSelf(int[] nums) {
@@ -47,7 +51,8 @@ class Solution {
 	{
 		if(n == 0)
 		{
-			if(++zeroCount > 1) break; // if 2 or more zeroes then all will be zero, we can quit computing
+            // if 2 or more zeroes then all will be zero, we can quit computing
+			if(++zeroCount > 1) break; 
 		}
 		else 
 			product *= n;
