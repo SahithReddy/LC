@@ -3,9 +3,14 @@ Question:
 A linked list is given such that each node contains an additional random pointer which could point to any node in the list or null.
 
 Return a deep copy of the list.
-*/
 
-// The best official solution without HashMap -> No Extra Space
+The Linked List is represented in the input/output as a list of n nodes. Each node is represented as a pair of [val, random_index] where:
+
+val: an integer representing Node.val
+random_index: the index of the node (range from 0 to n-1) where random pointer points to, or null if it does not point to any node.
+*/
+---------------------------------------------------------------------
+// This is the best official solution without HashMap -> O(1) No Extra Space | HashMap solution with O(N) space is below.
 /*
 For a pictorial understanding of below algo and explain--> Go to 1st comment on the top most solution --> It got a good picture
 
@@ -18,7 +23,7 @@ The algorithm is composed of the follow three steps which are also 3 iteration r
 3. Now that the random pointers are assigned to the correct node, the next pointers need to be correctly assigned to unweave the current linked list and get back the original list and the cloned list.
 
 */
-
+------------------------------------------------------
 /*
 // Definition for a Node.
 class Node {
@@ -89,7 +94,7 @@ The problem always requires O(n) space because it has to make the copy, but the 
 You need at least O(n) space to keep the list copy, which is for the output. So IMHO, it is correct to say that the space complexity is O(1).
 */
 -----------------------------------------------------------------
-/*
+/* FIRST INTUITIVE SOLUTION - HASHMAP
 Got a better solution without HashMap(Space O(1)) above this.
 An intuitive solution is to keep a hash table for each node in the list, via which we just need to iterate the list in 2 rounds respectively to create nodes and assign the values for their random pointers. As a result, the space complexity of this solution is O(N), although with a linear time complexity.
 */
@@ -137,7 +142,7 @@ class Solution {
         return map.get(head);
     }
 }
-
+-------------------------------------------------
 // Time: O(N), because we make one pass over the original linked list.
 // Space is O(N) because of HashMap. as we have a dictionary containing mapping from old list nodes to new list nodes. Since there are N nodes, we have O(N) space complexity.
 // Above is a better solution without HashMap i.e Space:O(1)
