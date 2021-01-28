@@ -1,4 +1,4 @@
-/*
+/* QUESTION:
 Given a string, find the length of the longest substring T that contains at most k distinct characters.
 
 Example 1:
@@ -11,9 +11,13 @@ Example 2:
 Input: s = "aa", k = 1
 Output: 2
 Explanation: T is "aa" which its length is 2.
+
+CONSTRAINTS:
+1 <= s.length <= 5 * 104
+0 <= k <= 50
 */
 -------------------------
-/* ALGORITHM: ALSO SEE LINKED HASHMAP SOLUTION for all O(N) solution
+/* ALGORITHM: SLIDING WINDOW with int count[256] for counting distinct | O(N) BC and O(Nk) WC |ALSO SEE IMPROVED LINKED HASHMAP SOLUTION BELOW for O(N) WC solution
 
 To solve the problem in one pass let's use here sliding window approach with two set pointers left and right serving as the window boundaries.
 
@@ -60,10 +64,15 @@ public int lengthOfLongestSubstringKDistinct(String s, int k) {
     return res;
 }
 }
+/* COMPLEXITY:
+For the best case when input string contains not more than k distinct characters the answer is yes. It's the only one pass along the string with N characters and the time complexity is )O(N).
+
+For the worst case when the input string contains N distinct characters, the answer is no. In that case, In order to find and delete the key in hashmap that has the lowest value (In this case the hashmap has k values), It is of the order of O(k). Why do you have to find and delete? Because we are storing the leftmost index of each character in the hashmap and hashmap in itself is not ordered.So worst case O(N*k) when all the characters in the string are distinct. LinkedHashMap is ordered by insertion order
 
 Time complexity : O(N) in the best case of k distinct characters in the string and O(Nk) in the worst case of N distinct characters in the string.
 
 Space complexity : O(k) since additional space is used only counter with at most k + 1 elements.
+*/
 ---------------------------------------------------
 
 /* LINKED HASHMAP ALGO: There is a structure which combines behind both hashmap and linked list - Linked HashMap
