@@ -4,9 +4,16 @@ Given an array of integers and an integer k, you need to find the total number o
 Example 1:
 Input:nums = [1,1,1], k = 2
 Output: 2
-Note:
-The length of the array is in range [1, 20,000].
-The range of numbers in the array is [-1000, 1000] and the range of the integer k is [-1e7, 1e7].
+
+Example 2:
+Input: nums = [1,2,3], k = 3
+Output: 2
+ 
+
+Constraints:
+1 <= nums.length <= 2 * 104
+-1000 <= nums[i] <= 1000
+-107 <= k <= 107
 
 */
 
@@ -39,11 +46,11 @@ Space complexity : O(1). Constant space is used.
 ---------------------------------------------------------
 
 /* ALGORITHM: PreSum + HashMap<PreSum, Frequency>
-we make use of a hashmap map which is used to store the cumulative sum upto all the indices possible along with the number of times the same sum occurs. 
+We make use of a hashmap map which is used to store the cumulative sum upto all the indices possible as Key along with the number of times that same sum occurs as Value. 
 We store the data in the form: (sum_i, no. of occurences of sum_i) 
 We traverse over the array nums and keep on finding the cumulative sum. 
 Every time we encounter a new sum, we make a new entry in the hashmap corresponding to that sum. 
-If the same sum occurs again, we increment the count corresponding to that sum in the hashmap. 
+If the same sum occurs again, we increment the count(Value) corresponding to that sum(Key) in the hashmap. 
 Further, for every sum encountered, we also determine the number of times the sum sum−k has occured already, since it will determine the number of times a subarray with sum k has occured upto the current index. 
 We increment the count by the same amount.
 
@@ -73,18 +80,56 @@ public class Solution {
         */
         
         HashMap < Integer, Integer > map = new HashMap < > ();
+	/* Below line we put map.put(0,1) because it is for those (sum - k) == 0 calculations which are valid subarrays but need to get counted. e.g. if k = 7 and sum = 7 (at second element for array is : 3, 4, 3, 8) at some iteration.....then sum - k = 0....this 0 will get counted in statement result += preSum.get(sum - k);
+	*/
         map.put(0, 1);
         for (int i = 0; i < nums.length; i++) {
             sum += nums[i];
+	    // there exist a key, that [hashmap-key  =  sum - k]
             if (map.containsKey(sum - k))
                 count += map.get(sum - k);
+	/* Below code means that if sum exists in the hashmap as key, get its value and increment it by 1, else create a new entry in the hashmap for it and set its value to 1. since we can have negative numbers in the given array, it's possible that we may run into the same preSum again.
+	*/
             map.put(sum, map.getOrDefault(sum, 0) + 1);
         }
         return count;
     }
 }
+------------------------------------------------
+/* EXAMPLE ILLISTRATION
+Let's illustrate it with an example and questions:
+
+nums = [1, 1, 1];
+k = 2;
+result = 0;
+
+// loop
+i = 0;
+sum = 1;
+map[sum] = map[1] = 1;
+map[sum-k] = map[1-2] = null
+result = 0;
 
 
+// loop
+i = 1;
+sum = 2;
+map[sum] = map[2] = 1;
+map[sum-k] = map[2-2] = map[0] =  1 // we already init map[0] = 1;
+result = 1;
+
+
+// loop
+i = 2;
+sum = 3;
+map[sum] = map[3] = 1;
+map[sum-k] = map[3-2] = map[1] =  1
+result = 2;
+
+// so, result == 2
+return result
+*/
+------------------------------------------------------------
 /*
 Complexity Analysis
 Time complexity : O(n). The entire nums array is traversed only once.
