@@ -4,11 +4,14 @@ Given a non-empty string s, you may delete at most one character. Judge whether 
 Example 1:
 Input: "aba"
 Output: True
+
 Example 2:
 Input: "abca"
 Output: True
 Explanation: You could delete the character 'c'.
 
+CONSTRAINT:
+The string will only contain lowercase characters a-z. The maximum length of the string is 50000.
 */
 
 /* ALGO: 
@@ -30,7 +33,7 @@ class Solution {
             b++;
             e--;
             }
-            else return isPalindrome(s, b+1, e) || isPalindrome(s,b, e-1); // // delete char at left or right
+            else return isPalindrome(s, b+1, e) || isPalindrome(s,b, e-1); // delete char at left or right
         } return true;
     }
     
