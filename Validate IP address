@@ -27,6 +27,17 @@ Example 3:
 Input: "256.256.256.256"
 Output: "Neither"
 Explanation: This is neither a IPv4 address nor a IPv6 address.
+
+Example 4:
+Input: IP = "2001:0db8:85a3:0:0:8A2E:0370:7334:"
+Output: "Neither"
+
+Example 5:
+Input: IP = "1e1.4.5.6"
+Output: "Neither"
+
+CONSTRAINTS:
+IP consists only of English letters, digits and the characters '.' and ':'.
 */
 
 /*
