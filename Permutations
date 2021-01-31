@@ -27,7 +27,7 @@ cuz java "pass by reference", after you pass "tempList" in the recursion, the "t
 
 -->
 tempList.remove(tempList.size() - 1);
-This ststement is used to remove the element whose all the subsets has been found.
+This statement is used to remove the element whose all the subsets has been found.
 Consider an example
 Array -> {1,2,3}
 when we start from 1st element i.e index 0
@@ -45,6 +45,7 @@ public List<List<Integer>> permute(int[] nums) {
 }
 
 private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] nums){
+   // When a permutaiton will be of same length as input add it to result
    if(tempList.size() == nums.length){
       list.add(new ArrayList<>(tempList));
    } else{
