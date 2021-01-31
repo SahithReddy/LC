@@ -39,7 +39,7 @@ And get all the subsets of next element. (Observe all the subsets containg the c
 
 
 public List<List<Integer>> permute(int[] nums) {
-   List<List<Integer>> list = new ArrayList<>();
+   List<List<Integer>> list = new ArrayList<>(); //result
    backtrack(list, new ArrayList<>(), nums);
    return list;
 }
@@ -50,20 +50,45 @@ private void backtrack(List<List<Integer>> list, List<Integer> tempList, int [] 
       list.add(new ArrayList<>(tempList));
    } else{
       for(int i = 0; i < nums.length; i++){ 
-         if(tempList.contains(nums[i])) continue; // element already exists, skip
+         // element already exists, skip
+         if(tempList.contains(nums[i])) continue;
+         // place i-th integer first in the current permutation
          tempList.add(nums[i]);
+         // use next integers to complete the permutations
          backtrack(list, tempList, nums);
+         // see explanation above
          tempList.remove(tempList.size() - 1);
       }
    }
 } 
 
-/*
-Time Complexity: For the complexity, I think you can explain in this way: in the first level of the tree, 
-you have N options and for each of the option, you have N-1 option, and for each of these N-1 options, 
-you have another N-2 options, so putting them together you would end up N*(N-1)*(N-2).... = N!
+/* TIME COMPLEXITY: 
+First, I think the time complexity should be N x N!.
 
-Space:  O(N!) since one has to keep N! solutions.
+Initially we have N choices, and in each choice we have (N - 1) choices, and so on. Notice that at the end when adding the list to the result list, it takes O(N).
+------->
+
+Time Complexity: O(n*n!)
+
+backtrack method is called n! times
+
+e.g. [0,1,2]
+in 1st iteration backtrack is called 3 times ( for 0,1,2 )
+in 2nd iteration ( for 0 ) backtrack is called 2 times ( for 1,2 )
+in 2nd iteration ( for 1 ) backtrack is called 2 times ( for 0,2 )
+in 2nd iteration ( for 2 ) backtrack is called 2 times ( for 0,1 )
+in 3rd iteration ( for 0,1 ) backtrack is called 1 times ( for 2 )
+and so on.
+
+So no. of times backtrack is called in above example is 3 * 2 * 1, which is 3!
+for n elements, its n!
+
+And for each of these n! times, the condition tempList.size() == nums.length will be true and a new ArrayList is created from existing ArrayList.. This is O(n) operation
+new ArrayList<>(tempList)
+
+So total time complexity is O(n*n!)
+
+SPACE COMPLEXITY:  the space complexity should also be N x N! since we have N! solutions and each of them requires N space to store elements.
 */
 
 /* LOGS of TempList
