@@ -7,17 +7,20 @@ Example 1:
 
 Input:  "69"
 Output: true
-Example 2:
 
+Example 2:
 Input:  "88"
 Output: true
-Example 3:
 
+Example 3:
 Input:  "962"
 Output: false
 
-*/
+Input: num = "1"
+Output: true
 
+*/
+------------------------------------------------------------------
 // BOTH SOLUTIONS ARE SELF EXPLANATORY
 
 // USING HASHMAP - INTUITIVE SOLUTION
@@ -40,9 +43,11 @@ public boolean isStrobogrammatic(String num) {
     
     return true;
 }
-------------------------------------------
+-----------------------------------------------
 
-// TC: O(N). SC: O(1). Only five cases here, so using switch or conditional operation might be even faster
+// TC: O(N) SC: O(1) because only five cases here, space is limited
+------------------------------------------------
+// Only five cases here, so using switch or conditional operation might be even faster
 
 public boolean isStrobogrammatic(String num) {
     int left, right;
