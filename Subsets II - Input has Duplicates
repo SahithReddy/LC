@@ -1,8 +1,29 @@
-// Variation of pattern shown below
+// Variation of pattern shown here
 
 https://leetcode.com/problems/subsets/discuss/27281/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning)
 
+/* QUESTION:
+Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
 
+The solution set must not contain duplicate subsets. Return the solution in any order.
+
+Example 1:
+Input: nums = [1,2,2]
+Output: [[],[1],[1,2],[1,2,2],[2],[2,2]]
+
+Example 2:
+Input: nums = [0]
+Output: [[],[0]]
+ 
+
+Constraints:
+1 <= nums.length <= 10
+-10 <= nums[i] <= 10
+*/
+--------------------------------------------------------------
+/* ALGORITHM:
+Very Similar to Subsets. Refert that. The only change is input array consists of duplicates
+*/ 
 class Solution {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         List<List<Integer>> subsets = new ArrayList<>();
@@ -14,7 +35,7 @@ class Solution {
         private void allSubsetsWithDup(int index, int[] nums, List<Integer> current, List<List<Integer>> subsets){
             subsets.add(new ArrayList<>(current));
             for(int i = index; i<nums.length; i++){
-                if(i>index && nums[i]==nums[i-1]) continue;
+                if(i>index && nums[i]==nums[i-1]) continue; // Skipping Duplicates
                 current.add(nums[i]);
                 allSubsetsWithDup(i+1, nums, current, subsets);
                 current.remove(current.size()-1);
@@ -23,6 +44,8 @@ class Solution {
         }
     
 }
+--------------------------------------------------------
+/* COMPLEXITY:
 
 T=O(2^n) as total 2^n possible subsets can be there for n items.
 S=O(n+n)=O(n) is the (maximum depth of recursion tree+ 'num' list space)
@@ -49,15 +72,18 @@ can we make ... at size n, etc.
 So total is call stack of n + output of n2^n = O(n2^n). If we don't include the output (eg if just asked to print in an 
 interview) then just O(n) of course.
 
+*/
+
+/*
 Image of the problem explanation:
 
 https://leetcode.com/problems/subsets/discuss/27281/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning)/139968
 
 https://leetcode.com/problems/subsets/discuss/27281/A-general-approach-to-backtracking-questions-in-Java-(Subsets-Permutations-Combination-Sum-Palindrome-Partitioning)/26331
-
+*/
 ---------------------------------------------------------------------------------------
 
-//ITERATIVE
+/*ALGORITHM: ITERATIVE
 
 To solve this problem, it is helpful to first think how many subsets are there. If there is no duplicate element, 
 the answer is simply 2^n, where n is the number of elements. This is because you have two choices for each element, 
@@ -76,6 +102,7 @@ treat it as one special element 5, but this element has more than two choices: y
 or put ONE 5 into the subset, or put TWO 5s into the subset. Therefore, we are given an array (a1, a2, a3, ..., an) with 
 each of them appearing (k1, k2, k3, ..., kn) times, the number of subset is (k1+1)(k2+1)...(kn+1). We can easily see how 
 to write down all the subsets similar to the approach above.
+*/
 
 
 
