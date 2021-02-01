@@ -2,30 +2,45 @@
 Implement pow(x, n), which calculates x raised to the power n (xn).
 
 Example 1:
-
 Input: 2.00000, 10
 Output: 1024.00000
-Example 2:
 
+Example 2:
 Input: 2.10000, 3
 Output: 9.26100
-Example 3:
 
+Example 3:
 Input: 2.00000, -2
 Output: 0.25000
 Explanation: 2-2 = 1/22 = 1/4 = 0.25
 
 NOTE:
 -100.0 < x < 100.0
-n is a 32-bit signed integer, within the range [−231, 231 − 1]
+n is a 32-bit signed integer, within the range [−2^31, 2^31 − 1]
+-10^4 <= xn <= 10^4
+*/
+-------------------------------------------------------
+/* INTUITON:
+Assuming we have got the result of x ^ nhow can we get x ^ {2 * n}?
+Obviously we do not need to multiply x for another n times. Using the formula (x ^ n) ^ 2 = x ^ {2 * n}, we can get x ^ {2 * n} 
+at the cost of only one computation. Using this optimization, we can reduce the time complexity of our algorithm.
 */
 
+/* ALGORITHM:
+For example how can we evaluate x^20? We can just multiply x in loop 20 times, but we also can evaluate x^10 and multiply it by itself! Similarly, x^10 = x^5 * x^5. Now we have odd power, but it is not a problem, we evaluate x^5 = x^2 * x^2 * x. We also need to deal with some border cases, here is the full algorithm:
 
-/* As we know MAX_INT32 < -MIN_INT32, 
+1.If we have very small value of x we can directly return 0, the smallest value of float is 1.175494 × 10^(-38).
+2.If we have n = 0, return 1.
+3. Now, we have two cases: for even and for odd n, where we evaluate power n//2.
+4. If we have negative power, return positive power of 1/x.
+
+*/
+
+/* Edge Case: As we know MAX_INT32 < -MIN_INT32, 
 so if we directly write like this n = -n then overflow will happen. However, 
 if we write n = n/2, n = -n or just n = -(n/2), then we will avoid overflow
 */
-
+-------------------------------------------------------------------------------------
 //Recursive Solution
 
 class Solution {
@@ -35,24 +50,27 @@ class Solution {
         return 1;
     } else {  
         double half = myPow(x, n/2);
+        // n is even
         if (n%2 == 0){
             return half*half;
-        } else {
-            if (n > 0){
+        } else { // n is odd
+            if (n > 0){ // n is positive
                 return half*half*x;
-            } else {
+            } else { // n is negative
                 return half*half/x;
             }                
         }   
     }
 }
 }
-
+----------------------------------------------------
+/*
 Time complexity : O(logn). Each time we apply the formula (x ^ n) ^ 2 = x ^ {2 * n}
 
 n is reduced by half. Thus we need at most O(logn) computations to get the result.
 
-Space complexity : O(logn). For each computation, we need to store the result of x ^ {n / 2}. We need to do the computation for O(logn) times, so the space complexity is O(logn).
+Space complexity : O(logn). For each computation, we need to store the result of x ^ {n / 2}. We need to do the computation for O(logn) times, so the space complexity is O(logn). Can be reduced to O(1) in Iterative Approach
+*/
 --------------------------------------------------------------------------------------
 /* ITERATIVE SOLUTION:
 
@@ -73,7 +91,7 @@ x >>= 1 means "set x to itself shifted by one bit to the right". The expression 
 
 Below is solution:
 */
-
+----------------------------------------------------
 public class Solution {
     public double myPow(double x, int n) {
         double ans = 1;
@@ -90,7 +108,7 @@ public class Solution {
         return n < 0 ?  1/ans : ans;
     }
 }
-
+-----------------------------------------------------
 /*
 TC: Yes, since you're dividing N by 2 every iteration that's why it is O(Log N). However, since N is a fixed number of bits (32) you could view it as O(1) where the maximum number iterations is 32. Hope this helps.
 
