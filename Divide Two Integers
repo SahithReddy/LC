@@ -5,23 +5,32 @@ Return the quotient after dividing dividend by divisor.
 
 The integer division should truncate toward zero, which means losing its fractional part. For example, truncate(8.345) = 8 and truncate(-2.7335) = -2.
 
-Example 1:
-
-Input: dividend = 10, divisor = 3
-Output: 3
-Explanation: 10/3 = truncate(3.33333..) = 3.
-Example 2:
-
-Input: dividend = 7, divisor = -3
-Output: -2
-Explanation: 7/-3 = truncate(-2.33333..) = -2.
-
 NOTE:
 Both dividend and divisor will be 32-bit signed integers.
 The divisor will never be 0.
 Assume we are dealing with an environment which could only store integers within the 32-bit signed integer range: [−2^31,  2^31 − 1]. For the purpose of this problem, assume that your function returns 2^31 − 1 when the division result overflows.
 
+Example 1:
+Input: dividend = 10, divisor = 3
+Output: 3
+Explanation: 10/3 = truncate(3.33333..) = 3.
 
+Example 2:
+Input: dividend = 7, divisor = -3
+Output: -2
+Explanation: 7/-3 = truncate(-2.33333..) = -2.
+
+Example 3:
+Input: dividend = 0, divisor = 1
+Output: 0
+
+Example 4:
+Input: dividend = 1, divisor = 1
+Output: 1
+
+Constraints:
+-231 <= dividend, divisor <= 231 - 1
+divisor != 0
 */
 
 /* LEARNING:
@@ -31,12 +40,58 @@ While you might be tempted to use multiplication and division for a few "simple"
 1. Instead of a = a * -1 for making numbers negative, use a = -a.
 2. Instead of using a / 2 for dividing by 2, use the right shift operator; a >> 1.
 3. Instead of using a * 2 for doubling, use a = a + a, a += a, or even the left shift operator; a << 1.
-
 */
 
-/* ALGORITHM: SEE Approach 3: Adding Powers of Two in OFFICIAL SOLUTION with TC & SC of O(logN).
+/* ALGORITHM: REPEATED EXPONENTIAL SEARCH
+APPROACH 3: Adding Powers of Two in OFFICIAL SOLUTION with TC & SC of O(logN). APPROACH 4 BELOW CAN MAKE SPACE OPTIMIZED TO O(1). SEE THAT BELOW USING BIT WISE OPERATORS.
 
-APPROACH 4 CAN MAKE BE SPACE OPTIMIZED TO O(1). SEE THAT BELOW USING BIT WISE OPERATORS.
+One way of quickly increasing numbers, without using multiplication, is to double them repeatedly. So let's try doubling the divisor until it no longer fits into the dividend.
+
+It'll be easiest to understand with an example, so let's say we have a dividend of 93706 and a divisor of 157. We'll now just see what happens when we repeatedly double 157 until it's bigger than 93706.
+
+157
+314
+628
+1256
+2512
+5024
+10048
+20096
+40192
+80384
+160768 # Too big
+From this, we know that we can fit 80384 into 93706, and that 80384 must be a multiple of 157. But how many copies of 157 is this?
+
+Well, each time we double a number we also double the amount of copies of the original number. So because we doubled 157 nine times, we must have had 2⁹ copies of 157. Indeed, 2⁹ · 157 = 80384. Yay!
+
+But, we still have some left over—in fact we have 93706 - 80384 = 13322 left over! That's still a lot of copies of 157 we haven't counted! So what could we do about this? Well, if we work out how many times 157 fits into 13322, we could just add that to 512 to get our result.
+
+How can we work out how many times 157 fits into 13322? Well, we just repeat the same process, adding to the result as we go, until there's nothing left for 157 to fit into.
+
+On the second step we repeated this process again with 13322:
+
+157
+314
+628
+1256
+2512
+5024
+10048
+20096 # Too big
+
+If we do this, we'll find that 157 · 2⁶ = 10048 is the highest power that fits into 13322, leaving us with 13322 - 10048 = 3274 and a quotient so far of 2⁶ + 2⁹ = 576.
+
+We repeat this process until the dividend is less than 157.
+
+Notice that we've just recomputed the first seven terms of the doubles again!
+
+Instead of doing this, we should find a way so that we can compute the sequence just once and then use the results from this to compute our quotient.
+
+In order to do this, we need to notice one more property about the difference. 
+=====>>>That property is that the difference will always be less than the previous doubling of the divisor that fits into it. That is 3274<10048 && 13222<80384 <<<========
+Why? Well, if it were equal, or bigger, than the largest doubling, then we must've stopped doubling too soon. So, the difference is always less than the biggest doubling.
+
+So to use these properties, we'll put all the "doubles" of 157 into a List. Then we'll iterate backwards over the list taking all the numbers that will fit into the dividend.
 
 */
 
