@@ -1,0 +1,85 @@
+/* QUESTION:
+You are given an integer array nums sorted in ascending order (not necessarily distinct values), and an integer target.
+
+Suppose that nums is rotated at some pivot unknown to you beforehand (i.e., [0,1,2,4,4,4,5,6,6,7] might become [4,5,6,6,7,0,1,2,4,4]).
+
+If target is found in the array return its index, otherwise, return -1.
+
+
+Example 1:
+Input: nums = [2,5,6,0,0,1,2], target = 0
+Output: true
+
+Example 2:
+Input: nums = [2,5,6,0,0,1,2], target = 3
+Output: false
+ 
+
+Constraints:
+1 <= nums.length <= 5000
+-104 <= nums[i] <= 104
+nums is guaranteed to be rotated at some pivot.
+-104 <= target <= 104
+ 
+
+Follow up: This problem is the same as Search in Rotated Sorted Array, where nums may contain duplicates. Would this affect the run-time complexity? How and why?
+*/
+
+/* ALGORITHM: SAME AS ROTATED SEACH ARRAY WITH AN EXTRA ADDED CONDITION
+
+1) everytime check if targe == nums[mid], if so, we find it.
+2) otherwise, we check if the first half is in order (i.e. nums[left]<=nums[mid]) 
+  and if so, go to step 3), otherwise, the second half is in order,   go to step 4)
+3) check if target in the range of [left, mid-1] (i.e. nums[left]<=target < nums[mid]), if so, do search in the first half, i.e. right = mid-1; otherwise, search in the second half left = mid+1;
+4)  check if target in the range of [mid+1, right] (i.e. nums[mid]<target <= nums[right]), if so, do search in the second half, i.e. left = mid+1; otherwise search in the first half right = mid-1;
+
+THE DIFFERENCE IS THE FOURTH CASE: 
+1. target == nums[mid], then we find it;
+2. nums[left] < nums[mid], then the left part must be sorted;
+3. nums[left] > nums[mid], then the right part must be sorted;
+4. nums[left] == nums[mid], we can not make sure which part is sorted, the only thing we can do is scale in the problem size. Since target != nums[mid] == nums[left], we just offset right by left++.
+
+duplicates, we know nums[mid] != target & then nums[start] != target
+Now, we can only move left pointer to skip one cell
+Thus in the worest case, we would have target: 2, and array like 11111111, then the running time would be O(n)
+*/
+
+public boolean search(int[] nums, int target) {
+    int left= 0;
+    int right= nums.length - 1;
+    while (left<= right) {
+        int mid = left + (right - left) / 2;
+        if (target == nums[mid]) {
+            return true;
+        } 
+        if (nums[mid] > nums[left]) {
+            if (target >= nums[left] && target < nums[mid]) {
+                right= mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        } else if(nums[left] == nums[mid]){ // Extra Condition
+            left++;
+        }else{
+            if (target > nums[mid] && target <= nums[right]) {
+                left= mid + 1;
+            } else {
+                right= mid - 1;
+            }
+        }
+    }
+    return false;
+}
+
+/*COMPLEXITY:
+TC: (o(logn) on average, o(n) worst case)
+Worst case: This happens when all the elements are the same and we search for some different element. At each step, we will only be able to reduce the search space by 1 since arr[mid] equals arr[start] and it's not possible to decide the relative position of target from arr[mid]. Example: [1, 1, 1, 1, 1, 1, 1], target = 2.
+
+Best case: This happens when all the elements are distinct. At each step, we will be able to divide our search space into half just like a normal binary search.
+
+SPACE: O(1)
+--------------------------------------------
+Would this (having duplicate elements) affect the run-time complexity? How and why?
+As we can see, by having duplicate elements in the array, we often miss the opportunity to apply binary search in certain search spaces. Hence, we get O(N)O(N) worst case (with duplicates) vs O(\log N)O(logN) best case complexity (without duplicates).
+
+*/
