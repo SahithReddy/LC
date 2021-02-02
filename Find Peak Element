@@ -17,11 +17,16 @@ Input: nums = [1,2,1,3,5,6,4]
 Output: 1 or 5 
 Explanation: Your function can return either index number 1 where the peak element is 2, 
              or index number 5 where the peak element is 6.
-Note:
-Your solution should be in logarithmic complexity.
+
+Constraints:
+1 <= nums.length <= 1000
+-231 <= nums[i] <= 231 - 1
+nums[i] != nums[i + 1] for all valid i.
+
+Follow up: Could you implement a solution with logarithmic complexity?
 */
 ---------------------------------------
-/* BINARY SEARCH ALGORITHM: WHY AND HOW?
+/* ALGORITHM: BINARY SEARCH ALGORITHM: WHY AND HOW?
 What we are essentially doing is going in the direction of the rising slope(by choosing the element which is greater than current). How does that guarantee the result? Think about it, there are 2 possibilities.
 a) rising slope has to keep rising till end of the array 
 b) rising slope will encounter a lesser element and go down.
@@ -31,7 +36,9 @@ b) the answer is the largest element before the slope falls. Hope this makes thi
 
 ONE MORE:
 Lets say you have a mid number at index x, nums[x]
-if (num[x+1] > nums[x]), that means a peak element HAS to exist on the right half of that array, because (since every number is unique) 1. the numbers keep increasing on the right side, and the peak will be the last element. 2. the numbers stop increasing and there is a 'dip', or there exists somewhere a number such that nums[y] < nums[y-1], which means number[x] is a peak element.
+if (num[x+1] > nums[x]), that means a peak element HAS to exist on the right half of that array, because (since every number is unique) 
+1. the numbers keep increasing on the right side, and the peak will be the last element. 
+2. the numbers stop increasing and there is a 'dip', or there exists somewhere a number such that nums[y] < nums[y-1], which means number[x] is a peak element.
 
 This same logic can be applied to the left hand side (nums[x] < nums[x-1]).
 -------------------------------------------------------
@@ -56,7 +63,7 @@ VISUAL:
              l>m r                         l=5, m=6, r= 7
 
 */
-
+--------------------------------------------------------------
 // ITERATIVE BINARY SEARCH
 public int findPeakElement(int[] nums) {
     int left = 0;
@@ -72,7 +79,11 @@ public int findPeakElement(int[] nums) {
     return left;
 }
 
-// TC: logN
+/* 
+Time complexity : O(log_2(n)). We reduce the search space in half at every step. Thus, the total search space will be consumed in log_2(n) steps. Here, n refers to the size of nums array.
+Space complexity : O(1). Constant extra space is used.
+*/
+
 ------------------------------------------------------------------
 // SEQWUENTIAL
  public int findPeakElement(int[] nums) {
@@ -85,4 +96,8 @@ public int findPeakElement(int[] nums) {
         }
         return nums.length-1;
     }
-// TC: O(N)
+    
+/*
+Time Complexity: O(N)
+Space complexity : O(1). Constant extra space is used.
+*/
