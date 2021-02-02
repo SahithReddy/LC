@@ -1,16 +1,15 @@
 /* 350 QUESTION
-Given two arrays, write a function to compute their intersection.
+Given two arrays, write a function to compute their intersection. Basically it is asking all common number including duplicate ones.
 
 Example 1:
-
 Input: nums1 = [1,2,2,1], nums2 = [2,2]
 Output: [2,2]
-Example 2:
 
+Example 2:
 Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
 Output: [4,9]
-Note:
 
+Note:
 Each element in the result should appear as many times as it shows in both arrays.
 The result can be in any order.
 
@@ -19,7 +18,7 @@ Follow up:
 2. What if nums1's size is small compared to nums2's size? Which algorithm is better?
 3. What if elements of nums2 are stored on disk, and the memory is limited such that you cannot load all elements into the memory at once?
 */
-
+--------------------------------------------
 /* ALGOTRITHM:
 Create a hashmap base on number frequency of nums1(whichever one is longer). Then for every element of nums2, look upon the hashmap. If we found an intersection, deduct by 1 to avoid duplicate.
 */
@@ -45,7 +44,8 @@ public int[] intersect(int[] nums1, int[] nums2) {
     }
 
 /*
-This solution is O(N + M) time complexity, O(N) for iterate one of the array to create a hashmap and O(M) to iterate the other array. O(N) space to store such hashmap.
+This solution is O(N + M) time complexity, O(N) for iterate one of the array to create a hashmap and O(M) to iterate the other array. 
+O(N) space to store such hashmap.
 */
 ---------------------------------------------------
 // FOLLOW-UP 1
