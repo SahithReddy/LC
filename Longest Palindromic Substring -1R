@@ -7,10 +7,21 @@ Note: "aba" is also a valid answer.
 
 Input: "cbbd"
 Output: "bb"
+
+Example 3:
+Input: s = "a"
+Output: "a"
+
+Example 4:
+Input: s = "ac"
+Output: "a"
+
+Constraints:
+1 <= s.length <= 1000
+s consist of only digits and English letters (lower-case and/or upper-case),
 */
-
-
-/* ALGORITHM:
+------------------------------------------------------------------------
+/* ALGORITHM: Below solutions are easy to understand and write because of global variables. SEE THEM
 We observe that a palindrome mirrors around its center. Therefore, a palindrome can be expanded from its center, and there are only 2n−1 such centers.
 
 You might be asking why there are 2n−1 but not n centers? The reason is the center of a palindrome can be in between two letters. Such palindromes have even number of letters (such as "abba") and its center are between the two 'b's.
@@ -23,7 +34,9 @@ public String longestPalindrome(String s) {
     if (s == null || s.length() < 1) return "";
     int start = 0, end = 0;
     for (int i = 0; i < s.length(); i++) {
+    	// odd case, like "aba"
         int len1 = expandAroundCenter(s, i, i);
+	// even case, like "abba"
         int len2 = expandAroundCenter(s, i, i + 1);
         int len = Math.max(len1, len2);
         if (len > end - start) {
@@ -31,77 +44,33 @@ public String longestPalindrome(String s) {
             end = i + len / 2;
         }
     }
+    // get start and end of palindrome substring
     return s.substring(start, end + 1);
 }
 
 private int expandAroundCenter(String s, int left, int right) {
     int L = left, R = right;
+    // Must be inbounds within limits and Equal to continue moving..
     while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R)) {
         L--;
         R++;
     }
-    return R - L - 1;
+    return R - L - 1; // (R-1) - (L+1) + 1;
 }
 
 /*
-Time complexity : O(n^2). Since expanding a palindrome around its center could take O(n) time, the overall complexity is O(n^2).
+Time complexity : O(n^2) where n is the length of the input string. Since expanding a palindrome around its center could take O(n) time, the overall complexity is O(n^2).
 
 Space complexity : O(1).
 */
 
 // Explanation: https://www.youtube.com/watch?v=y2BD4MJqV20
- 
- -------------------------------------------------------------------------------------------------------
- // MANACHERS ALGORITHM: TC O(N)
- // https://www.baeldung.com/java-palindrome-substrings
- 
-/* ALGORITHM: 
-First, we'll guard the input string with a boundary character at the beginning and end before converting the resulting string to a character array:
-String formattedInput = "@" + input + "#";
-char inputCharArr[] = formattedInput.toCharArray();
 
-Then, we'll use a two-dimensional array radius with two rows — one to store the lengths of odd-length palindromes, and the other to store lengths of even-length palindromes:
-int radius[][] = new int[2][input.length() + 1];
-
-Next, we'll iterate over the input array to find the length of the palindrome centered at position i and store this length in radius[][]:
-*/
-
-Set<String> palindromes = new HashSet<>();
-int max;
-for (int j = 0; j <= 1; j++) {
-    radius[j][0] = max = 0;
-    int i = 1;
-    while (i <= input.length()) {
-        palindromes.add(Character.toString(inputCharArr[i]));
-        while (inputCharArr[i - max - 1] == inputCharArr[i + j + max])
-            max++;
-        radius[j][i] = max;
-        int k = 1;
-        while ((radius[j][i - k] != max - k) && (k < max)) {
-            radius[j][i + k] = Math.min(radius[j][i - k], max - k);
-            k++;
-        }
-        max = Math.max(max - k, 0);
-        i += k;
-    }
-}
-
-// Finally, we'll traverse through the array radius[][] to calculate the palindromic substrings centered at each position:
-
-for (int i = 1; i <= input.length(); i++) {
-    for (int j = 0; j <= 1; j++) {
-        for (max = radius[j][i]; max > 0; max--) {
-            palindromes.add(input.substring(i - max - 1, max + j + i - 1));
-        }
-    }
-}
- 
-// The time complexity of this approach is O(n).
- -------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
 // Solution with Global Variables - Easier One
 
 public class Solution {
-private int lo, maxLen;
+private int begin, maxLen;
 
 public String longestPalindrome(String s) {
 	int len = s.length();
@@ -109,20 +78,22 @@ public String longestPalindrome(String s) {
 		return s;
 	
     for (int i = 0; i < len-1; i++) {
-     	extendPalindrome(s, i, i);  //assume odd length, try to extend Palindrome as possible
-     	extendPalindrome(s, i, i+1); //assume even length.
+     	extendPalindrome(s, i, i);  //assume odd length, like "aba". Try to extend Palindrome as possible
+     	extendPalindrome(s, i, i+1); //assume even length like "abba"
     }
-    return s.substring(lo, lo + maxLen);
+    // get start and end of palindrome substring
+    return s.substring(begin, begin + maxLen);
 }
 
-private void extendPalindrome(String s, int j, int k) {
-	while (j >= 0 && k < s.length() && s.charAt(j) == s.charAt(k)) {
-		j--;
-		k++;
+private void extendPalindrome(String s, int left, int right) {
+	// Must be inbounds and Equal to continue moving
+	while (left >= 0 && right < s.length() && s.charAt(left) == s.charAt(right)) {
+		left--;
+		right++;
 	}
-	if (maxLen < k - j - 1) {
-		lo = j + 1;
-		maxLen = k - j - 1;
+	if (maxLen < right - left - 1) {
+		begin = left + 1; //left+1:  our l-- will go  unequal OR off bounds
+		maxLen = right - left - 1; //right-1:  our r++ will go  unequal OR off bounds
 	}
 }}
 
@@ -161,6 +132,53 @@ class Solution {
         
     }
 }
+
+-------------------------------------------------------------------------------------------------------
+ // MANACHERS ALGORITHM: TC O(N)
+ // https://www.baeldung.com/java-palindrome-substrings
+ 
+/* ALGORITHM: 
+First, we'll guard the input string with a boundary character at the beginning and end before converting the resulting string to a character array:
+String formattedInput = "@" + input + "#";
+char inputCharArr[] = formattedInput.toCharArray();
+
+Then, we'll use a two-dimensional array radius with two rows — one to store the lengths of odd-length palindromes, and the other to store lengths of even-length palindromes:
+int radius[][] = new int[2][input.length() + 1];
+
+Next, we'll iterate over the input array to find the length of the palindrome centered at position i and store this length in radius[][]:
+*/
+-------------------------------------------------
+Set<String> palindromes = new HashSet<>();
+int max;
+for (int j = 0; j <= 1; j++) {
+    radius[j][0] = max = 0;
+    int i = 1;
+    while (i <= input.length()) {
+        palindromes.add(Character.toString(inputCharArr[i]));
+        while (inputCharArr[i - max - 1] == inputCharArr[i + j + max])
+            max++;
+        radius[j][i] = max;
+        int k = 1;
+        while ((radius[j][i - k] != max - k) && (k < max)) {
+            radius[j][i + k] = Math.min(radius[j][i - k], max - k);
+            k++;
+        }
+        max = Math.max(max - k, 0);
+        i += k;
+    }
+}
+
+// Finally, we'll traverse through the array radius[][] to calculate the palindromic substrings centered at each position:
+
+for (int i = 1; i <= input.length(); i++) {
+    for (int j = 0; j <= 1; j++) {
+        for (max = radius[j][i]; max > 0; max--) {
+            palindromes.add(input.substring(i - max - 1, max + j + i - 1));
+        }
+    }
+}
+ 
+// The time complexity of this approach is O(n).
  -------------------------------------------------------------------------------------------------------
 /*DP - Watch this video. This has a good basic explanation of understanding this problem in DP
 https://www.youtube.com/watch?v=Fi5INvcmDos
