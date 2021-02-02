@@ -26,8 +26,8 @@ nums[i] != nums[i + 1] for all valid i.
 Follow up: Could you implement a solution with logarithmic complexity?
 */
 ---------------------------------------
-/* ALGORITHM: BINARY SEARCH ALGORITHM: WHY AND HOW?
-What we are essentially doing is going in the direction of the rising slope(by choosing the element which is greater than current). How does that guarantee the result? Think about it, there are 2 possibilities.
+/* ALGORITHM: BINARY SEARCH ALGORITHM: WHY AND HOW? IT IS UNSORTED ARRAY
+Why Binary Search? What we are essentially doing is going in the direction of the rising slope(by choosing the element which is greater than current). How does that guarantee the result? Think about it, there are 2 possibilities.
 a) rising slope has to keep rising till end of the array 
 b) rising slope will encounter a lesser element and go down.
 In both scenarios we will have an answer. 
