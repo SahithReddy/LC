@@ -1,11 +1,11 @@
-/* 278 QUESTION
+/* 278 QUESTION: First Bad Version
 You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest version of your product fails the quality check. Since each version is developed based on the previous version, all the versions after a bad version are also bad.
 
 Suppose you have n versions [1, 2, ..., n] and you want to find out the first bad one, which causes all the following ones to be bad.
 
 You are given an API bool isBadVersion(version) which will return whether version is bad. Implement a function to find the first bad version. You should minimize the number of calls to the API.
 
-Example:
+Example 1 :
 
 Given n = 5, and version = 4 is the first bad version.
 
@@ -15,8 +15,14 @@ call isBadVersion(4) -> true
 
 Then 4 is the first bad version. 
 
+Example 2:
+Input: n = 1, bad = 1
+Output: 1
+ 
+Constraints:
+1 <= bad <= n <= 231 - 1
 */
-
+-------------------------------------------------------------
 /* ALGORITHM: BINARY SEARCH
 It is not difficult to see that this could be solved using a classic algorithm - Binary search. Let us see how the search space could be halved each time below.
 
@@ -37,7 +43,7 @@ left    mid    right
 The only scenario left is where isBadVersion(mid) \Rightarrow trueisBadVersion(mid)⇒true. This tells us that midmid may or may not be the first bad version, but we can tell for sure that all versions after midmid can be discarded. Therefore we set right = midright=mid as the new search space of interval [left,mid][left,mid] (inclusive).
 
 */
-
+----------------------------------------------------
 
 /* The isBadVersion API is defined in the parent class VersionControl.
       boolean isBadVersion(int version); */
@@ -53,7 +59,7 @@ public class Solution extends VersionControl {
     return start;
 }
 }
-
+-----------------------------------------------------------
 /*
 Time complexity : O(logn). The search space is halved each time, so the time complexity is O(logn).
 
