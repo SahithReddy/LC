@@ -28,7 +28,7 @@ The idea is the following:
 
 dp is an array that contains booleans
 
-dp[i] is True if there is a word in the dictionary that ends at ith index of s AND d is also True at the beginning of the word
+dp[i] is True if there is a word in the dictionary that ends at ith index of s AND dp[startIndex] is also True at the beginning of the word
 
 Example:
 
