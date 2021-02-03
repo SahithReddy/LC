@@ -33,10 +33,19 @@ All characters in words[i] and order are English lowercase letters.
 
 Build a transform mapping from order,
 
-For example, if we have order = "xyz..."
-We can map the word "xyz" to "0123"(indexes) 
+1. Hash indexes of each character for better runtime
+For example,
+words = ["hello","leetcode"]
+order = "hlabcdefgijkmnopqrstuvwxyz"
 
-Compare adjacent words(i-1, i) char by char according to mapping we've created using a custom comparator.
+Create a dic, key is each word in new order, value is its index, which means its new position in the new order.
+dic = {u'a': 2, u'c': 4, u'b': 3, u'e': 6, u'd': 5, u'g': 8, u'f': 7, u'i': 9, u'h': 0, u'k': 11, u'j': 10, u'm': 12, u'l': 1, u'o': 14, u'n': 13, u'q': 16, u'p': 15, u's': 18, u'r': 17, u'u': 20, u't': 19, u'w': 22, u'v': 21, u'y': 24, u'x': 23, u'z': 25}
+
+2. Compare adjacent words(i-1, i) char by char according to mapping we've created using a custom comparator.
+3. If any letter of former word is in higher order, return False
+4. If current letter of former word is in lower order, forget the rest of word
+5. If lenght of former word is longer and latter word is substring of former, return False (apple & app etc.)
+6. Return True
 
 */
 
