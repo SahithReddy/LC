@@ -8,6 +8,11 @@ The Linked List is represented in the input/output as a list of n nodes. Each no
 
 val: an integer representing Node.val
 random_index: the index of the node (range from 0 to n-1) where random pointer points to, or null if it does not point to any node.
+
+Constraints:
+-10000 <= Node.val <= 10000
+Node.random is null or pointing to a node in the linked list.
+The number of nodes will not exceed 1000.
 */
 ---------------------------------------------------------------------
 // This is the best official solution without HashMap -> O(1) No Extra Space | HashMap solution with O(N) space is below.
