@@ -1,33 +1,70 @@
 /* QUESTION:
-Design and implement a data structure for Least Recently Used (LRU) cache. It should support the following operations: get and put.
+Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
 
-get(key) - Get the value (will always be positive) of the key if the key exists in the cache, otherwise return -1.
-put(key, value) - Set or insert the value if the key is not already present. When the cache reached its capacity, it should invalidate the least recently used item before inserting a new item.
+Implement the LRUCache class:
 
-The cache is initialized with a positive capacity.
-
+LRUCache(int capacity) Initialize the LRU cache with positive size capacity.
+int get(int key) Return the value of the key if the key exists, otherwise return -1.
+void put(int key, int value) Update the value of the key if the key exists. Otherwise, add the key-value pair to the cache. If the number of keys exceeds the capacity from this operation, evict the least recently used key.
 Follow up:
-Could you do both operations in O(1) time complexity?
+Could you do get and put in O(1) time complexity?
 
-Example:
-LRUCache cache = new LRUCache( 2 /* capacity */ );
+Example 1:
 
-cache.put(1, 1);
-cache.put(2, 2);
-cache.get(1);       // returns 1
-cache.put(3, 3);    // evicts key 2
-cache.get(2);       // returns -1 (not found)
-cache.put(4, 4);    // evicts key 1
-cache.get(1);       // returns -1 (not found)
-cache.get(3);       // returns 3
-cache.get(4);       // returns 4
+Input
+["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
+[[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
+Output
+[null, null, null, 1, null, -1, null, -1, 3, 4]
+
+Explanation
+LRUCache lRUCache = new LRUCache(2);
+lRUCache.put(1, 1); // cache is {1=1}
+lRUCache.put(2, 2); // cache is {1=1, 2=2}
+lRUCache.get(1);    // return 1
+lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+lRUCache.get(2);    // returns -1 (not found)
+lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+lRUCache.get(1);    // return -1 (not found)
+lRUCache.get(3);    // return 3
+lRUCache.get(4);    // return 4
+ 
+
+Constraints:
+1 <= capacity <= 3000
+0 <= key <= 3000
+0 <= value <= 104
+At most 3 * 104 calls will be made to get and put.
 */
 --------------------------------------------
 // The key to solve this problem is using a double linked list which enables us to quickly move nodes.
 
 // The LRU cache is a hash table of keys and double linked nodes. The hash table makes the time of get() to be O(1). The list of double linked nodes make the nodes adding/removal operations O(1).
 
-/* ALGORITHM: HASHMAP + DLL
+/* ALGORITHM: Node Class + HASHMAP + DLL
+
+Doubly Linked List to maintain the key and value pairs. 
+The one in the front is least recently used.
+The one in the rear is the most frequently used.
+
+Map/Dict will have the reference of each node for constant access.
+
+put():
+    -> If the key already exists in the Map, then just remove it.
+    -> create a new node with given (key,val)
+    -> insert it in the head/front.
+    -> update Map entry.
+    -> if size is > capacity,  then remove last/rear node.
+
+get():
+    -> Get the node reference from the Map.
+    -> retrive the node from DLL, remove it.
+    -> insert it in the head/front
+    -> return the value that you got from the node.
+
+
+For these two operations to work, I have to implement InsertTo Head() and Remove() methods. 
+----------------------------------------------------------------------------------
 The problem can be solved with a hashmap that keeps track of the keys and its values in the double linked list. 
 That results in O(1) time for put and get operations and allows to remove the first added node in O(1) time as well.
 
@@ -36,6 +73,8 @@ In addition, it takes constant time to add and remove nodes from the head or tai
 
 One particularity about the double linked list implemented here is that there are pseudo head and pseudo tail 
 to mark the boundary, so that we don't need to check the NULL node during the update.
+
+
 */
 
 // CODE:
