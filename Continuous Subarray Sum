@@ -28,6 +28,12 @@ Key point: if we can find any two subarray of prefix sum have same mod value, th
 
 This is because of Remainder Theorem - But dont say this directly in Interview
 
+the theory behind this solution is just as simple as this:
+a%k = x
+b%k = x
+(a - b) %k = x -x = 0
+here a - b = the sum between i and j.
+
 --->>(a+(n*k))%k is same as (a%k)<<----
 
 1. Running sum from first element to index i : sum_i. If we mod k, it will be some format like : sum_i = k * x + modk_1
@@ -59,7 +65,8 @@ class Solution {
 }
 ------------------------------------------------
 /*
-TC: O(N), N is no of elements in input, SC: O(k) of HashMap, k is given input target integer
+TC: O(N), N is no of elements in input, k is given input target integer
+Space complexity : O(min(n,k)). The HashMap can contain upto min(n,k) different pairings.
 */
 
 
