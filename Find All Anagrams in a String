@@ -8,7 +8,6 @@ The order of output does not matter.
 Example 1:
 Input:
 s: "cbaebabacd" p: "abc"
-
 Output:
 [0, 6]
 
@@ -19,7 +18,6 @@ The substring with start index = 6 is "bac", which is an anagram of "abc".
 Example 2:
 Input:
 s: "abab" p: "ab"
-
 Output:
 [0, 1, 2]
 
@@ -75,7 +73,7 @@ SLIDING WINDOW: READ THROUGH THIS FOR UNDERSTANDING THE ALGORITHM AND EXPLAIN TO
 3. To check if it is anagram we take help of the 'count' variable. While moving right pointer forward, decrease it if a character of S is found in P and while moving left pointer forward Increase it if character we're moving away from is part of the anagram(if the character is in p).
 
 4. return result.
-------------------------------------
+-------------------SIMILAR MORE EXPLANATION---------------------------------
   Let's see how to find anagrams using an example.
   
   Take,  s = cbaebabacd , p = abc , result = [ ]
@@ -109,7 +107,7 @@ So, result is [ 0 , 6 ]
 
 return result.
 */
-------------------------------------
+---------------CODE WITH COMMENTS-------------------------
 public class Solution {
     public List<Integer> findAnagrams(String s, String p) {
         List<Integer> list = new ArrayList<>();
