@@ -44,8 +44,9 @@ At most 3 * 104 calls will be made to get and put.
 /* ALGORITHM: Node Class + HASHMAP + DLL
 
 Doubly Linked List to maintain the key and value pairs. 
-The one in the front is least recently used.
-The one in the rear is the most frequently used.
+The one in the front is the most recently used because I will insert new ones at the head
+The one in the rear is least recently used.
+
 
 Map/Dict will have the reference of each node for constant access.
 
