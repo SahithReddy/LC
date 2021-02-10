@@ -1,3 +1,30 @@
+/*
+Median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle value.
+
+For example,
+[2,3,4], the median is 3
+
+[2,3], the median is (2 + 3) / 2 = 2.5
+
+Design a data structure that supports the following two operations:
+
+void addNum(int num) - Add a integer number from the data stream to the data structure.
+double findMedian() - Return the median of all elements so far.
+ 
+
+Example:
+addNum(1)
+addNum(2)
+findMedian() -> 1.5
+addNum(3) 
+findMedian() -> 2
+ 
+
+Follow up:
+If all integer numbers from the stream are between 0 and 100, how would you optimize it?
+If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
+*/
+------------------------------------------------------------------
 // Watch this wonderful explanation: https://www.youtube.com/watch?v=1CxyVdA_654
 
 // One more : https://www.youtube.com/watch?v=6N6QQpoU7H4
@@ -8,7 +35,9 @@
 
 /* ALGORITHM:
 
-We can use heap to solve this problem. In Java, the PriorityQueue class is a priority heap. We can use two heaps to store the lower half and the higher half of the data stream. The size of the two heaps differs at most 1.
+The basic idea is to maintain two heaps: a max-heap and a min-heap. The max heap stores the smaller half of all numbers while the min heap stores the larger half. The sizes of two heaps need to be balanced each time when a new number is inserted so that their size will not be different by more than 1. Therefore each time when findMedian() is called we check if two heaps have the same size. If they do, we should return the average of the two top values of heaps. Otherwise we return the top of the heap which has one more element.
+
+To do that, we first need to add two PriorityQueues to the class as the max-heap and min-heap. By default, the sorting order of a PriorityQueue is natural order which means it is a min-heap by default.Hence we need to provide a new Comparator to the constructor of the max heap to specify the reversed order.
 
 First of all, it seems that the best time complexity we can get for this problem is O(log(n)) of add() and O(1) of getMedian(). This data structure seems highly likely to be a tree.
 */
@@ -22,17 +51,18 @@ class MedianFinder {
         
     }
     
-    // we know the large will gain one more item and small will remain the same size, but we cannot just push 
+    /* we know the large will gain one more item and small will remain the same size, but we cannot just push 
     the item into large. What we should do is we push the new number into small and pop the maximum item from small 
     then push it into large
     Therefore to add a number, we have 3 O(log n) heap operations
+        */
     
     public void addNum(int num) {
-        min.offer(num); --->(1) // EACH ELEMENT IS ADDEDD TO MIN HEAP FIRST
-        max.offer(min.poll()); ----> (2) // MINIMUM ELEMENT FROM THE TOP OF MIN HEAP IS POPPED AND GIVEN TO MAX HEAP
+        min.offer(num); //--->(1) EACH ELEMENT IS ADDEDD TO MIN HEAP FIRST
+        max.offer(min.poll()); // ----> // MINIMUM(Smallest) ELEMENT FROM THE TOP OF MIN HEAP IS POPPED AND GIVEN TO MAX HEAP
         // ABOVE TWO STEPS ENSURES THAT ALL ELEMEMNTS IN MIN HEAP ARE GREATER THAN MAX HEAP
         if(max.size() > min.size()){
-            min.offer(max.poll());  ------>(3) // THE TWO HEAPS NEEDS TO BE LOAD BALANCED
+            min.offer(max.poll());  // ------>(3) THE TWO HEAPS NEEDS TO BE LOAD BALANCED
         }
     }
     
@@ -47,7 +77,7 @@ class MedianFinder {
 --------------------------------
 /* COMPLEXITY:
 At worst, there are three heap insertions and two heap deletions from the top. Each of these takes about O(logn) time.
-Finding the mean takes constant O(1)O(1) time since the tops of heaps are directly accessible. So O(logN).
+Finding the mean takes constant O(1) time since the tops of heaps are directly accessible. So O(logN).
 
 Space complexity: O(n) linear space to hold input in containers.
 */
