@@ -32,7 +32,7 @@ If 99% of all integer numbers from the stream are between 0 and 100, how would y
 // VERY INTELLIGENT/CLEVER/SHORT SOLUTION
 // Read this blogpost: https://www.programcreek.com/2015/01/leetcode-find-median-from-data-stream-java/  (has a picture)
 // Hint to self: Follow the code line by line and you fill figure it out. It is clever but easy.
-
+------------------------------
 /* ALGORITHM:
 
 The basic idea is to maintain two heaps: a max-heap and a min-heap. The max heap stores the smaller half of all numbers while the min heap stores the larger half. The sizes of two heaps need to be balanced each time when a new number is inserted so that their size will not be different by more than 1. Therefore each time when findMedian() is called we check if two heaps have the same size. If they do, we should return the average of the two top values of heaps. Otherwise we return the top of the heap which has one more element.
@@ -74,7 +74,7 @@ class MedianFinder {
         else return min.peek();
     }
 }
---------------------------------
+
 /* COMPLEXITY:
 At worst, there are three heap insertions and two heap deletions from the top. Each of these takes about O(logn) time.
 Finding the mean takes constant O(1) time since the tops of heaps are directly accessible. So O(logN).
@@ -84,7 +84,7 @@ Space complexity: O(n) linear space to hold input in containers.
 ------------------------------------------------------------------------------
 // IF FACEING PROBLEM TO UNDERSTAND OR JUSTIFY ABOVE SOLUTION TO OTHERS FOLLOW TH EBELOW ONE. MORE INTUTIVE, EASY BUT ALSO VEY FAST
 
-// Find it here: https://leetcode.com/problems/find-median-from-data-stream/discuss/74144/Easy-to-understand-double-heap-solution-in-Java
+// Find it here: https://leetcode.com/problems/find-median-from-data-stream/discuss/74144/Easy-to-understand-double-heap-solution-in-Java. - comment
 
 
 class MedianFinder {
@@ -121,3 +121,17 @@ class MedianFinder {
         }
     }
 };
+--------------------FOLLOW_UP-------------------------------
+/* FOLLOW- UP
+If all integer numbers from the stream are between 0 and 100, how would you optimize it?
+If 99% of all integer numbers from the stream are between 0 and 100, how would you optimize it?
+
+ANSWER:
+We can bucket sort if the range of value is predefined. So we can initiate an array with size 100 and a count variable. addNum() would just increment the value in the corresponding bucket and the count variable. findMedian() you can iterate all the buckets(fixed size) and find the one median is in which costs O(1). Because O(100) = O(1), you have a constant number of buckets.
+
+Then if 99% is between 0 ~100, guess we can use 100 buckets and We can just keep track of how many outliers there are (i.e. a 101st bucket). To be exact, you'll need 2 additional buckets, one for all outliers smaller than 0, another for greater than 100. By definition, the median could never be larger than 100.
+---------------------ONE MORE-------------------------------
+-we maintain HashMap<number,frequency>
+-we also maintain total number of elements, so that median is just total-nums/2 th element from sorted array.
+-then we go over Map from 1-100 and count element, when we hit total-nums/2 th element , that is our median
+*/
