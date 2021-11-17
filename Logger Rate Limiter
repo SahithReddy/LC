@@ -31,7 +31,8 @@ logger.shouldPrintMessage(11,"foo"); returns true;
 
 /* NOOB/ NAIVE ALGORITHM: HASHMAP
 
-The idea is that we keep a hashtable/dictionary with the message as key, and its timestamp as the value. The hashtable keeps all the unique messages along with the latest timestamp that the message was printed.
+The idea is that we keep a hashtable/dictionary with the message as key, and its timestamp as the value. The hashtable keeps all the unique messages
+ along with the latest timestamp that the message was printed.
 
 1. We initialize a hashtable/dictionary to keep the messages along with the timestamp.
 
@@ -75,13 +76,16 @@ class Logger {
 /*
 Time Complexity: O(1). The lookup and update of the hashtable takes a constant time.
 
-Space Complexity: O(M) where M is the size of all incoming messages. Over the time, the hashtable would have an entry for each unique message that has appeared. The disadvantage to this solution is that the memory usage never stops growing.
+Space Complexity: O(M) where M is the size of all incoming messages. 
+Over the time, the hashtable would have an entry for each unique message that has appeared. 
+The disadvantage to this solution is that the memory usage never stops growing.
 */
 -------------------------------------
 /* ALGORITHM: Use a Queue and Set -- Space efficient Solution
 
 1- Use a Queue that contains Object(timestamp, message)
-2- When new message comes in, remove from Queue any message where timestamp + 10 < new message's timestamp. If any Queue element is deleted, remove that message from the Set (because the last occured of this message is now too old)
+2- When new message comes in, remove from Queue any message where timestamp + 10 < new message's timestamp. 
+If any Queue element is deleted, remove that message from the Set (because the last occured of this message is now too old)
 3- If new message is still in Set, return false (because the Queue still contains it, so it is not too old yet)
 4- Add the message to the Set
 
